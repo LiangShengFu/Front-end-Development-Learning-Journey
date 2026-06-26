@@ -1,10 +1,10 @@
 /**
  * 模块 03：JavaScript 核心语法
  *
- * 严格遵循 docx/模块三.md 设计文档：
- * - 19 个知识点（18 章节 + 1 小测验）
- * - 25 个可视化演示（#1-#25）
- * - 新增 3 个知识点：JS 发展历程 / 异步编程演进 / 小测验
+ * 严格遵循 docx/模块三.md 设计文档，并按模块标准自查文档补全评估与实战环节：
+ * - 21 个知识点（16 章节 + 2 综合实战 + 面试题 / 速查表 / 小测验）
+ * - 27 个可视化演示（含 2 个带 checks 断言的综合实战沙盒）
+ * - 新增综合实战：手写防抖节流 / 发布订阅 EventEmitter
  *
  * 适配到项目现有 React+TS+Vite 架构，使用 ModuleMeta 数据驱动：
  * - #1 知识图谱（KnowledgeGraph）
@@ -23,15 +23,14 @@
  * - #14 原型链（ArchitectureDiagram）
  * - #15 Generator（CodeStepper）
  * - #16 待办事项（Sandbox）
- * - #17 JS 发展历程（Timeline）
- * - #18 操作符优先级（CompareTable）
- * - #19 异步编程演进（Timeline）
- * - #20 作用域类型对比（CompareTable）
- * - #21 JS 内存模型（ArchitectureDiagram）
- * - #22 this 绑定规则（CodeStepper）
- * - #23 ES 模块体系（Accordion）
- * - #24 原型链 vs Class（CompareTable）
- * - #25 JavaScript 小测验（QuizCard）
+ * - #17 综合实战：手写防抖与节流（Sandbox + checks）
+ * - #18 综合实战：发布订阅 EventEmitter（Sandbox + checks）
+ * - #19 面试题（Accordion，16 题含场景/对比题）
+ * - #20 知识点速查表（Table）
+ * - #21 小测验（QuizCard，15 题含梯度标注）
+ * - 其它可视化：JS 发展历程（Timeline）/ 操作符优先级（CompareTable）/ 异步编程演进（Timeline）/
+ *   作用域类型对比（CompareTable）/ JS 内存模型（ArchitectureDiagram）/ this 绑定规则（CodeStepper）/
+ *   ES 模块体系（Accordion）/ 原型链 vs Class（CompareTable）
  */
 import type { ModuleMeta } from '../lib/types'
 
@@ -43,8 +42,8 @@ export const javascriptCoreModule: ModuleMeta = {
   stageLabel: '基础阶段 · 第 3 模块',
   icon: '03',
   summary: '数据类型、作用域、闭包、原型链、this、事件循环、Promise、ES6+。',
-  knowledgePointCount: 19,
-  visualizationCount: 25,
+  knowledgePointCount: 21,
+  visualizationCount: 27,
   points: [
     // ========================================================================
     // 知识点 1：变量与数据类型
@@ -1552,49 +1551,353 @@ String.prototype.isWellFormed(); // 检查 UTF-16 完整性`,
     },
 
     // ========================================================================
-    // 知识点 17：面试题
+    // 知识点 17：综合实战：手写防抖与节流工具函数
     // ========================================================================
     {
       order: 17,
-      title: '面试题',
+      title: '综合实战：手写防抖与节流工具函数',
       difficulty: 3,
-      visualizationType: 'accordion',
+      isNew: true,
+      visualizationType: 'sandbox',
       blocks: [
         {
           id: 'p17-1',
           type: 'paragraph',
-          text: 'JavaScript 面试高频考点：闭包、原型链、this、事件循环、Promise。理解原理比背答案更重要。',
+          lead: true,
+          text: '防抖（debounce）与节流（throttle）是前端性能优化的两把利器，二者都借助闭包保存定时器/时间戳。本实战串联闭包、定时器、this 与高阶函数，是面试与工程实践的高频考点。',
         },
         {
           id: 'p17-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '搜索框防抖、滚动节流、按钮防连点都依赖这两个函数。手写一遍能真正理解"闭包持有变量引用"与"高阶函数返回新函数"的工程价值，而非停留在调用 lodash 的层面。',
+        },
+        {
+          id: 'p17-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'js',
+            hint: '在下方骨架中实现 debounce 与 throttle，右侧任务清单会实时校验你的代码并给出教学提示。',
+            initialCode: `// 综合实战：手写防抖（debounce）与节流（throttle）
+// 提示：两者都借助闭包保存"定时器"或"上次执行时间"
+
+// 1. debounce：事件停止触发 wait 毫秒后才执行，期间再次触发则重新计时
+function debounce(fn, wait) {
+  // TODO: 用 let timer 保存定时器（闭包）
+  // TODO: 返回一个新函数：每次触发 clearTimeout 旧定时器，再 setTimeout 重新计时
+
+}
+
+// 2. throttle：wait 毫秒内最多执行一次，稀释触发频率
+function throttle(fn, wait) {
+  // TODO: 用 let lastTime = 0 保存上次执行时间（闭包）
+  // TODO: 返回一个新函数：用 Date.now() - lastTime 判断是否到达间隔，到了才执行并更新 lastTime
+
+}
+
+// 测试（可自由修改观察行为）
+const log = (v) => console.log(v);
+const debounced = debounce(log, 300);
+const throttled = throttle(log, 300);`,
+            checks: [
+              {
+                description: '定义 debounce 函数',
+                pattern: 'function\\s+debounce\\s*\\(',
+                hint: '需用 function debounce(fn, wait) 声明防抖函数，接收回调与等待时间。',
+              },
+              {
+                description: 'debounce 借助闭包保存定时器',
+                pattern: 'let\\s+timer|var\\s+timer|let\\s+timeout',
+                hint: '在 debounce 内部用 let timer = null 保存定时器引用——这正是闭包"持有变量"的体现。',
+              },
+              {
+                description: 'debounce 每次触发清除旧定时器',
+                pattern: 'clearTimeout',
+                hint: '每次触发应先 clearTimeout(timer) 清除旧定时器，再 setTimeout 重新计时，否则无法实现"重新计时"。',
+              },
+              {
+                description: 'debounce 返回新函数（高阶函数）',
+                pattern: 'return\\s+function|return\\s*\\([^)]*\\)\\s*=>',
+                hint: 'debounce 要 return 一个新函数，调用者拿到的是包装后的函数——这是高阶函数的典型模式。',
+              },
+              {
+                description: '定义 throttle 函数',
+                pattern: 'function\\s+throttle\\s*\\(',
+                hint: '需用 function throttle(fn, wait) 声明节流函数。',
+              },
+              {
+                description: 'throttle 使用时间戳判断间隔',
+                pattern: 'Date\\.now\\(\\)|performance\\.now',
+                hint: '节流需记录上次执行时间，用 Date.now() - lastTime >= wait 判断是否到达间隔，到则执行并更新 lastTime。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p17-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思：边界与陷阱',
+          text: '注意 leading/trailing 选项：防抖默认只在"停止后"触发（trailing），是否首次立即执行需额外参数；节流要考虑首尾是否触发。另外闭包持有的 timer 若组件卸载未清理会导致内存泄漏，React 中应在 useEffect 清理函数里 clearTimeout。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 18：综合实战：实现发布订阅 EventEmitter
+    // ========================================================================
+    {
+      order: 18,
+      title: '综合实战：实现发布订阅 EventEmitter',
+      difficulty: 4,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'p18-1',
+          type: 'paragraph',
+          lead: true,
+          text: '发布订阅（Pub/Sub）是解耦模块通信的核心模式，Node 的 EventEmitter、浏览器事件、Vue 总线都基于此。本实战串联 class、this 绑定、Map 集合与数组方法，是理解响应式与组件通信的基石。',
+        },
+        {
+          id: 'p18-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '手写 EventEmitter 能贯通"类的设计、this 指向、数据结构选型"三条主线。理解它之后，再看 Vue 的 $emit/$on、Node 的 stream、Redux 的 subscribe 会发现本质相同。',
+        },
+        {
+          id: 'p18-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'js',
+            hint: '在下方骨架中实现一个完整的 EventEmitter，右侧任务清单会实时校验关键方法。',
+            initialCode: `// 综合实战：实现发布订阅 EventEmitter
+// 提示：用 Map 存储 "事件名 → 回调数组"，注意 this 指向
+
+class EventEmitter {
+  // TODO: constructor 初始化事件存储，如 this.events = new Map()
+
+  // TODO: on(event, listener) 订阅：把 listener 加入对应数组（首次需初始化数组）
+
+  // TODO: emit(event, ...args) 触发：遍历执行该事件的所有 listener，传入 args
+
+  // TODO: off(event, listener) 取消订阅：从数组中移除指定 listener（过滤而非清空）
+
+  // TODO（选做）: once(event, listener) 订阅一次：触发后自动 off
+}
+
+// 测试
+const bus = new EventEmitter();
+const onLogin = (user) => console.log('登录:', user);
+bus.on('login', onLogin);
+bus.emit('login', { name: 'JS' });  // 应输出: 登录: { name: 'JS' }
+bus.off('login', onLogin);
+bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
+            checks: [
+              {
+                description: '定义 EventEmitter 类',
+                pattern: 'class\\s+EventEmitter',
+                hint: '需用 class EventEmitter { ... } 定义发布订阅类，而非普通构造函数。',
+              },
+              {
+                description: 'constructor 初始化事件存储',
+                pattern: 'constructor\\s*\\(',
+                hint: '需在 constructor 中初始化事件存储（如 this.events = new Map() 或 {}），供 on/emit/off 共享状态。',
+              },
+              {
+                description: '实现 on(event, listener) 订阅方法',
+                pattern: '\\bon\\s*\\(',
+                hint: '需实现 on 方法：将 listener 加入 event 对应的回调数组；数组不存在时先初始化为 []。',
+              },
+              {
+                description: '实现 emit(event, ...args) 触发方法',
+                pattern: '\\bemit\\s*\\(',
+                hint: '需实现 emit 方法：遍历 event 对应的回调数组并依次调用，把 args 透传给每个 listener。',
+              },
+              {
+                description: '实现 off(event, listener) 取消订阅',
+                pattern: '\\boff\\s*\\(',
+                hint: '需实现 off 方法：用 filter 从回调数组中移除指定 listener，而非直接清空整个数组（否则会误删其他订阅）。',
+              },
+              {
+                description: '使用 Map 或对象存储事件',
+                pattern: 'new\\s+Map|this\\.events',
+                hint: '事件存储建议用 new Map()（键可为任意类型、有 size、频繁增删更优）或普通对象 {}。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p18-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思：内存与边界',
+          text: '忘记 off 是内存泄漏的常见来源——listener 持有外部引用，事件总线长期存活会导致订阅者无法回收。生产中应配 once、命名空间、移除全部监听等方法，并搭配 WeakMap 在必要时实现弱引用订阅。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 19：面试题
+    // ========================================================================
+    {
+      order: 19,
+      title: '面试题',
+      difficulty: 3,
+      isNew: true,
+      visualizationType: 'accordion',
+      blocks: [
+        {
+          id: 'p19-1',
+          type: 'paragraph',
+          text: 'JavaScript 面试高频考点：闭包、原型链、this、事件循环、Promise。理解原理比背答案更重要。',
+        },
+        {
+          id: 'p19-2',
           type: 'demo',
           visualizationType: 'accordion',
           data: {
-            title: '高频面试题',
+            title: '高频面试题（含场景题 / 对比题）',
             items: [
               {
-                title: 'Q: 解释闭包及其应用场景',
-                content: '闭包是函数与其词法环境的组合。内部函数可以访问外部函数的变量，即使外部函数已返回。应用：模块模式（私有变量）、柯里化、防抖节流、事件监听器。注意：闭包持有变量引用，可能导致内存泄漏。',
+                title: 'Q1: 解释闭包及其应用场景',
+                content: '闭包是函数与其词法环境的组合。内部函数可以访问外部函数的变量，即使外部函数已返回。应用：模块模式（私有变量）、柯里化、防抖节流、事件监听器。注意：闭包持有变量引用，若闭包长期存活（如未移除的监听器）可能导致内存泄漏，应及时解绑或用 WeakMap。',
               },
               {
-                title: 'Q: typeof null 为什么是 "object"',
-                content: 'JavaScript 诞生时，值在内存中以类型标签存储。对象的类型标签低位是 000，而 null 在多数平台被表示为空指针（全 0），因此 typeof 误判为 "object"。这是历史遗留 bug，已无法修复（破坏兼容性）。',
+                title: 'Q2: typeof null 为什么是 "object"',
+                content: 'JavaScript 诞生时，值在内存中以类型标签存储。对象的类型标签低位是 000，而 null 在多数平台被表示为空指针（全 0），因此 typeof 误判为 "object"。这是历史遗留 bug，已无法修复（破坏兼容性）。精确判 null 应使用 value === null。',
               },
               {
-                title: 'Q: == 和 === 的区别',
+                title: 'Q3: == 和 === 的区别',
                 content: '== 宽松相等会触发隐式类型转换（如 0 == "" 为 true），规则复杂易错。=== 严格相等不转换类型，类型不同直接返回 false。始终使用 ===，需要转换时显式 Number()/String()。特殊场景用 Object.is()（处理 NaN 和 ±0）。',
               },
               {
-                title: 'Q: 解释事件循环（Event Loop）',
-                content: 'JS 单线程，通过事件循环处理异步。主线程执行同步代码 → 清空微任务队列（Promise.then、MutationObserver）→ UI 渲染 → 取一个宏任务（setTimeout、IO）→ 循环。微任务优先于宏任务，每次宏任务后清空所有微任务。',
+                title: 'Q4: 解释事件循环（Event Loop）',
+                content: 'JS 单线程，通过事件循环处理异步。主线程执行同步代码 → 清空微任务队列（Promise.then、queueMicrotask、MutationObserver）→ UI 渲染 → 取一个宏任务（setTimeout、IO、UI 事件）→ 循环。微任务优先于宏任务，每次宏任务后清空所有微任务，因此 Promise.then 总先于 setTimeout 执行。',
               },
               {
-                title: 'Q: var / let / const 区别',
-                content: 'var：函数作用域，变量提升（初始化为 undefined），可重复声明。let：块作用域，暂存性死区（TDZ），不可重复声明。const：块作用域，必须初始化，不可重新赋值（但对象属性可变）。默认用 const，可变用 let，避免 var。',
+                title: 'Q5: var / let / const 区别',
+                content: 'var：函数作用域，变量提升（初始化为 undefined），可重复声明。let：块作用域，暂存性死区（TDZ），不可重复声明。const：块作用域，必须初始化，不可重新赋值（但对象属性可变）。默认用 const，可变用 let，避免 var。TDZ 使 let/const 在声明前访问抛 ReferenceError。',
               },
               {
-                title: 'Q: 箭头函数与普通函数的区别',
-                content: '箭头函数：没有自己的 this（继承外层）、没有 arguments、不能作为构造函数（不能 new）、没有 prototype。适合回调函数和需要词法 this 的场景。不适合对象方法（this 不指向对象）和需要 arguments 的场景。',
+                title: 'Q6: 箭头函数与普通函数的区别',
+                content: '箭头函数：没有自己的 this（继承外层词法作用域）、没有 arguments、不能作为构造函数（不能 new）、没有 prototype。适合回调和需要词法 this 的场景。不适合对象方法（this 不指向对象）和需要 arguments 的场景。普通函数 this 由调用方式决定（默认/隐式/显式/new 绑定）。',
+              },
+              {
+                title: 'Q7: 解释原型链及 instanceof 的原理',
+                content: '每个对象有 __proto__ 指向其构造函数的 prototype。访问属性时沿 __proto__ → 构造函数.prototype → ... → Object.prototype → null 逐层查找，形成原型链。instanceof 沿原型链检查右侧构造函数的 prototype 是否出现在左侧对象的原型链上。class extends 是原型链继承的语法糖，super() 调用父构造函数并自动设置原型链。',
+              },
+              {
+                title: 'Q8: this 的绑定规则有哪些',
+                content: '四种规则（优先级由低到高）：默认绑定（独立调用，非严格模式指向 window，严格模式 undefined）；隐式绑定（obj.fn() 指向 obj）；显式绑定（call/apply/bind 指定 this，bind 永久绑定）；new 绑定（指向新创建对象，优先级最高）。箭头函数不适用以上规则，this 由外层词法作用域决定。注意隐式丢失：把对象方法赋值给变量再调用会退化为默认绑定。',
+              },
+              {
+                title: 'Q9: Promise 的三种状态与链式调用原理',
+                content: 'Promise 有 pending（进行中）、fulfilled（已完成）、rejected（已拒绝）三态，状态一经改变不可逆。then 返回新 Promise，使链式调用成为可能：then 的回调返回值会被 Promise.resolve 包装，返回 thenable 会跟随其状态，抛错则进入 rejected。.catch 是 .then(null, onRejected) 的语法糖。链中任一 rejected 未捕获会冒泡到最近的 catch。',
+              },
+              {
+                title: 'Q10: async/await 的原理与错误处理',
+                content: 'async 函数自动返回 Promise，返回值被 Promise.resolve 包装；await 暂停函数执行等待 Promise 完成，本质是 Generator + 自动执行器的语法糖。错误处理用 try/catch 包裹 await（Promise 的 .catch 等价）。并发场景用 Promise.all 配合 await 提升效率。注意：多个独立 await 串行会浪费时间，应改 Promise.all 并发。',
+              },
+              {
+                title: 'Q11: ES Module 与 CommonJS 的区别',
+                content: 'ESM 是编译时静态分析，支持 tree-shaking，import 必须在顶层且异步加载；CommonJS 是运行时同步加载，require 可在条件块中。ESM 导出是引用绑定（导出方修改可见），CommonJS 导出是值拷贝。ESM 默认严格模式、顶层 this 为 undefined。Node 中 ESM 可 import CommonJS（默认导出 = module.exports），反之受限。',
+              },
+              {
+                title: 'Q12: 防抖与节流的区别及实现要点',
+                content: '防抖（debounce）：事件停止触发 n 秒后执行一次，期间再次触发则重新计时。用于搜索框输入、窗口 resize。节流（throttle）：n 秒内只执行一次，稀释执行频率。用于滚动、拖拽。两者都借助闭包保存定时器/时间戳。实现要点：debounce 用 setTimeout + clearTimeout 重置计时器；throttle 用 Date.now() 判断时间间隔，leading/trailing 控制首尾是否触发。',
+              },
+              {
+                title: 'Q13 【场景题】: 页面长时间运行后越来越卡，如何从 JS 角度排查内存泄漏',
+                content: '排查路径：1) Chrome DevTools Memory 面板做堆快照对比（Take heap snapshot 两次 Diff），定位未释放对象；2) Performance Monitor 观察 JS heap size 是否持续上涨不回落；3) 常见泄漏源：未移除的事件监听器、闭包持有大对象、脱离 DOM 的引用、定时器未清除、全局变量意外挂载、WeakMap 该用却用了 Map。4) 修复：及时 removeEventListener、clearInterval/timeout、用 WeakMap 存元数据、避免在闭包中持有无用引用。5) 验证：复现操作后强制 GC 看堆是否回落。',
+              },
+              {
+                title: 'Q14 【场景题】: 现有代码用回调嵌套发 3 个串行请求，慢且难维护，如何重构',
+                content: '重构步骤：1) 将回调式 API 包裹成 Promise（new Promise + resolve/reject）；2) 串行改用 async/await 顺序书写，逻辑清晰、错误用 try/catch 集中处理；3) 若三请求无依赖关系，改 Promise.all 并发执行，耗时从 sum 降为 max；4) 需容错用 Promise.allSettled 保留部分成功结果；5) 加请求超时（Promise.race 包裹 setTimeout reject）和取消（AbortController）；6) 加重试与限流。最终代码可读性、健壮性、性能都显著提升。',
+              },
+              {
+                title: 'Q15 【对比题】: Promise.all / allSettled / any / race 的区别',
+                content: '四者都接收可迭代 Promise，返回 Promise：all——全部 fulfilled 才 fulfilled，任一 reject 立即 reject（快速失败），结果数组有序；allSettled——等待全部完成，结果为 {status, value/reason}，永不 reject；any——任一 fulfilled 立即 fulfilled，全部 reject 才 reject（AggregateError），返回首个成功值；race——首个 settle（无论成功失败）即 adopt 其结果。选型：全部成功才继续用 all；容忍部分失败用 allSettled；任一成功即可用 any；超时控制用 race。',
+              },
+              {
+                title: 'Q16 【对比题】: 深拷贝与浅拷贝的区别及实现方式',
+                content: '浅拷贝只复制一层，嵌套对象仍共享引用（Object.assign、展开运算符 ...、Array.slice）。深拷贝递归复制所有层级，完全独立。实现方式：JSON.parse(JSON.stringify())（简单但不处理函数/undefined/循环引用/Date）；structuredClone()（现代原生 API，支持循环引用、Date、Map/Set，不支持函数）；手写递归（需处理循环引用用 WeakMap 缓存、特殊对象 Date/RegExp）。React 状态更新只需浅拷贝到改动层级即可保证新引用。',
+              },
+              {
+                title: 'Q17: 解释 JS 的弱类型与动态类型特征',
+                content: '动态类型：变量类型在运行时确定，同一变量可重新赋值为不同类型（let x = 1; x = "a"）。弱类型：隐式类型转换频繁（1 + "2" → "12"，[] == false → true），不同类型参与运算时由引擎按规则转换。弱类型易写出"能跑但语义错"的代码，TS 在编译期加静态类型检查缓解此问题，但运行时仍是 JS 弱类型。',
+              },
+              {
+                title: 'Q18: 为什么 0.1 + 0.2 !== 0.3？如何解决',
+                content: 'JS 采用 IEEE 754 双精度浮点数，0.1 / 0.2 在二进制下是无限循环小数，截断后产生舍入误差，相加结果为 0.30000000000000004。解决方案：1) 比较时用 Math.abs(a - b) < Number.EPSILON；2) 金额场景先乘以 100 转整数运算再除回；3) 用 toFixed(小数位) 显示（注意返回字符串）；4) 高精度需求用 decimal.js / big.js / BigInt（仅整数）。整数在 ±2^53 内可精确表示。',
+              },
+              {
+                title: 'Q19: 解释 JS 的垃圾回收机制',
+                content: 'V8 采用分代回收：新生代（Scavenge 算法，From/To 半区复制存活对象）+ 老生代（Mark-Sweep 标记清除 + Mark-Compact 标记整理解决碎片）。回收触发：分配失败时。可达性分析：从 GC Roots（全局变量、活动栈、DOM 引用等）出发不可达的对象被回收。常见泄漏：意外全局变量、未清除的定时器/监听器、闭包持有无用引用、脱离 DOM 仍被引用。WeakMap/WeakSet 的键是弱引用，不影响 GC。',
+              },
+              {
+                title: 'Q20: 解释 V8 引擎的执行流程与 JIT',
+                content: '流程：源码 → Parser 解析为 AST → Ignition 解释器生成字节码并执行（启动快）→ 热点代码经 TurboFan 优化编译为机器码（运行快）。若类型推测失败触发反优化（deopt）回退字节码。这就是为何同一段代码首次执行慢、反复执行后变快。理解 JIT 有助于写出"类型稳定"的代码（不在热路径上频繁改变对象形状）以避免反优化。',
+              },
+              {
+                title: 'Q21: 模块模式与 IIFE',
+                content: 'IIFE（立即调用函数表达式）创建独立作用域，避免污染全局：;(function(){ ... })()。模块模式利用闭包封装私有成员，仅暴露公共接口：const Counter = (function(){ let n=0; return { inc:()=>++n, get:()=>n } })()。ES6 前 IIFE + 闭包是实现私有与模块化的主流方案；ES6 后用 import/export + 私有字段 # 替代，但 IIFE 仍在 UMD 包装、避免变量提升冲突等场景有用。',
+              },
+              {
+                title: 'Q22: 柯里化（Currying）的原理与实现',
+                content: '柯里化把接收多参数的函数转换为一系列接收单参数的函数：f(a,b,c) → f(a)(b)(c)。原理：利用闭包逐层收集参数，参数凑齐后执行。实现：function curry(fn){ return function curried(...args){ return args.length >= fn.length ? fn(...args) : (...next)=>curried(...args, ...next) } }。应用：参数复用（如 log("INFO")("msg")）、延迟执行、函数组合。Lodash 的 _.curry 支持占位符。',
+              },
+              {
+                title: 'Q23 【对比题】: call / apply / bind 的区别',
+                content: '三者都用于显式绑定 this。call(thisArg, arg1, arg2...)——立即调用，参数逐个传递；apply(thisArg, [args])——立即调用，参数以数组传递（适合数组解构场景，如 Math.max.apply(null, arr)）；bind(thisArg, ...args)——不立即调用，返回一个永久绑定 this 的新函数，可预设部分参数（偏函数）。bind 返回的函数 this 已锁定，再 call 也无法改变。箭头函数无 this，三者对其无效。',
+              },
+              {
+                title: 'Q24: new 操作符的执行过程',
+                content: 'new Fn(args) 做四件事：1) 创建一个新的空对象 obj；2) 设置 obj.__proto__ = Fn.prototype（建立原型链）；3) 以 obj 为 this 执行 Fn 构造函数，初始化实例属性；4) 若 Fn 返回对象则用该返回值，否则返回 obj。手写：function myNew(Fn, ...args){ const obj = Object.create(Fn.prototype); const res = Fn.apply(obj, args); return res instanceof Object ? res : obj }。class 是 new + 原型链的语法糖。',
+              },
+              {
+                title: 'Q25: 手写一个简易 Promise',
+                content: '核心：状态机 + then 链。关键点：1) 三态 pending/fulfilled/rejected，状态不可逆；2) resolve/reject 用 setTimeout 包裹保证异步执行；3) then 返回新 Promise，根据回调返回值决定其状态（thenable 跟随、普通值 resolve、抛错 reject）；4) 用 then 链数组支持多次 then。完整实现还需处理 resolvePromise 循环引用、值穿透等。理解手写 Promise 才能真正掌握 async/await（其本质是 Promise + Generator）。',
+              },
+              {
+                title: 'Q26: 宏任务与微任务的区别及常见类型',
+                content: '微任务：Promise.then/catch/finally、queueMicrotask、MutationObserver、process.nextTick（Node）。宏任务：setTimeout/setInterval、setImmediate（Node）、I/O、UI 事件、MessageChannel、requestAnimationFrame（部分实现中视为独立队列）。区别：每次宏任务执行后、UI 渲染前，清空所有微任务；微任务队列空才取下一个宏任务。因此 Promise.then 总先于 setTimeout 回调执行。死循环的微任务会阻塞页面（队列无法清空）。',
+              },
+              {
+                title: 'Q27: requestAnimationFrame 的作用及与 setTimeout 的区别',
+                content: 'rAF 把回调安排在下一次浏览器重绘前执行，频率对齐显示器刷新率（通常 60fps/16.67ms）。优势：1) 与渲染同步，避免丢帧；2) 后台标签页时自动暂停，节省资源；3) 比手动 setTimeout(fn, 16) 更精准。适合动画循环：function loop(){ update(); draw(); requestAnimationFrame(loop) }。退出动画需保存 id 并用 cancelAnimationFrame(id) 取消。不适合短延时逻辑（rAF 不保证精确毫秒数）。',
+              },
+              {
+                title: 'Q28: Set / Map / WeakMap / WeakSet 的区别与适用场景',
+                content: 'Set：唯一值集合，自动去重，有 has/add/delete，可遍历。Map：键值对，键可为任意类型（含对象），保持插入顺序，有 size，频繁增删优于 Object。WeakMap：键只能是对象且为弱引用（不阻止 GC），不可遍历、无 size，适合给对象挂元数据（如 DOM 节点关联数据）而不阻碍回收。WeakSet：弱引用对象集合，适合标记对象（如"已处理"）而不影响生命周期。强引用（Map/Set）会阻止 GC，弱引用不会。',
+              },
+              {
+                title: 'Q29 【对比题】: Proxy 与 Object.defineProperty 的区别',
+                content: 'defineProperty：只能劫持已存在属性，新增/删除属性无法感知（Vue 2 需 $set/$delete）；无法监听数组索引与 length 变化（Vue 2 需重写 7 个数组方法）；深度监听需递归遍历一次性完成。Proxy：代理整个对象，能监听新增/删除（deleteProperty）、数组操作、in 等共 13 种陷阱；懒代理（访问时才递归）性能更好；Vue 3 据此实现响应式。但 Proxy 不能直接代理原始值，Vue 3 用 ref 包裹。Reflect 提供与 Proxy 陷阱一一对应的默认行为，推荐配合使用。',
+              },
+              {
+                title: 'Q30: Iterator 与 Generator 的原理',
+                content: 'Iterator：实现 [Symbol.iterator]() 方法返回一个含 next() 的对象，next() 返回 {value, done}。for...of、展开运算符、解构都依赖迭代协议。Generator：function* 声明，yield 暂停执行并返回值，next() 恢复，可传参作为上一个 yield 的返回值。生成器既是迭代器又是可迭代对象。应用：自定义数据结构遍历、惰性计算（无限序列）、状态机。async/await 借鉴了 Generator 的暂停/恢复语义，但前者基于 Promise。',
+              },
+              {
+                title: 'Q31 【场景题】: 后端返回深层嵌套数据（user.company.address.city），如何安全访问避免报错',
+                content: '方案对比：1) 链式 && 短路：user && user.company && user.company.address && user.company.address.city——冗长；2) 可选链 ?.：user?.company?.address?.city——简洁，遇 null/undefined 返回 undefined 不报错；3) 配合空值合并给默认值：user?.company?.address?.city ?? "未知"；4) 工具函数 get(obj, path, default) 用 reduce 逐层取。注意 ?. 仅对 null/undefined 短路，对 0/""/false 不短路。函数调用也支持 fn?.()。',
+              },
+              {
+                title: 'Q32 【场景题】: 数组去重有哪些方案？各有何优劣',
+                content: '方案对比：1) [...new Set(arr)]——简洁，但无法区分对象（引用不同）；2) filter + indexOf——只保留首次出现位置，O(n²)；3) reduce + includes——同上 O(n²)；4) Map/Set 记录 key——O(n)；5) 对象去重需自定义 key（如 JSON.stringify 或 id 字段）配合 Map。稳定排序去重：用 Set 去重保持首次出现顺序。注意 NaN：Set 中 NaN === NaN（去重成立），但 indexOf 无法找到 NaN（NaN !== NaN）。',
+              },
+              {
+                title: 'Q33 【对比题】: forEach / map / filter / reduce 的区别',
+                content: 'forEach(fn)：遍历无返回值，不能 break/continue（return 仅跳过本次），适合副作用操作。map(fn)：返回新数组，每项为 fn 返回值，适合数据转换。filter(fn)：返回新数组，保留 fn 返回真值的项。reduce(fn, init)：累加，fn 接收 (acc, cur, idx, arr)，适合聚合（求和/分组/扁平化）。三者都不改原数组（除非 fn 内手动改）。链式组合：arr.filter(...).map(...).reduce(...) 是函数式风格典型写法。需提前退出用 for...of 或 some/every。',
+              },
+              {
+                title: 'Q34 【对比题】: Object 与 Map 的区别及选型',
+                content: '键类型：Object 只能 string/symbol，Map 可任意类型（含对象、DOM 节点）。顺序：Object 键顺序依赖整数键优先规则（复杂），Map 严格按插入顺序。性能：Map 频繁增删更优，有 size 属性 O(1)。序列化：Object 可直接 JSON.stringify，Map 需转数组。迭代：Object 需 Object.keys/entries，Map 直接 for...of 或 forEach。选型：配置/数据传输用 Object（JSON 友好）；动态映射、键为对象、频繁增删用 Map。WeakMap 适合元数据挂载。',
               },
             ],
           },
@@ -1603,127 +1906,193 @@ String.prototype.isWellFormed(); // 检查 UTF-16 完整性`,
     },
 
     // ========================================================================
-    // 知识点 18：知识点速查表
+    // 知识点 20：知识点速查表
     // ========================================================================
     {
-      order: 18,
+      order: 20,
       title: '知识点速查表',
       difficulty: 1,
-      visualizationType: 'skillbar',
+      isNew: true,
       blocks: [
         {
-          id: 'p18-1',
+          id: 'p20-1',
           type: 'paragraph',
-          text: 'JavaScript 核心知识点掌握建议，按重要性排序。',
+          lead: true,
+          text: '浓缩 JavaScript 核心语法与高频 API，复习时快速定位关键点与易错提示。',
         },
         {
-          id: 'p18-2',
-          type: 'demo',
-          visualizationType: 'skillbar',
-          data: {
-            skills: [
-              { name: '数据类型与类型转换', level: 95, description: '基础中的基础，面试必考' },
-              { name: '作用域与闭包', level: 90, description: '理解模块模式、柯里化的前提' },
-              { name: '原型链与继承', level: 85, description: '理解 class 和 this 的关键' },
-              { name: '异步编程（Promise/async）', level: 90, description: '现代 JS 开发核心' },
-              { name: '事件循环', level: 80, description: '理解执行顺序' },
-              { name: 'ES6+ 新特性', level: 85, description: '日常开发必备' },
-              { name: 'this 指向', level: 75, description: '面试高频，需理解绑定规则' },
-              { name: '数组方法', level: 90, description: '函数式编程基础' },
-            ],
-          },
-        },
-        {
-          id: 'p18-3',
-          type: 'list',
-          items: [
-            '数据类型：7 原始类型 + 引用类型，typeof / instanceof 判断',
-            '作用域：全局 / 函数 / 块，var / let / const 区别',
-            '闭包：函数 + 词法环境，应用模块模式、柯里化',
-            '原型链：__proto__ → prototype → Object.prototype → null',
-            'this：默认 / 隐式 / 显式 / new 绑定，箭头函数继承外层',
-            '异步：回调 → Promise → async/await，微任务优先宏任务',
-            'ES6+：解构、展开、可选链、空值合并、私有字段',
-            '模块：ES Module（import/export）vs CommonJS（require）',
+          id: 'p20-2',
+          type: 'table',
+          caption: 'JavaScript 核心知识点速查',
+          headers: ['主题', '核心 API / 语法', '要点提示'],
+          rows: [
+            ['数据类型', 'typeof / instanceof / Array.isArray', '7 原始 + 引用；typeof null === "object" 是历史 bug'],
+            ['类型转换', 'Number() / String() / Boolean() / parseInt()', '显式优于隐式；6 个 Falsy；[] 与 {} 是 truthy'],
+            ['相等性', '=== / == / Object.is()', '始终用 ===；Object.is 区分 NaN 与 ±0'],
+            ['变量声明', 'var / let / const', 'const 优先；let/const 有 TDZ；var 有提升'],
+            ['作用域', '全局 / 函数 / 块 {}', 'let/const 块作用域；var 函数作用域'],
+            ['闭包', '函数 + 词法环境', '模块模式、柯里化、防抖节流；注意内存泄漏'],
+            ['this 绑定', 'call / apply / bind / new', '优先级 new > 显式 > 隐式 > 默认；箭头函数词法 this'],
+            ['原型链', '__proto__ / prototype', '查找至 Object.prototype → null；class 是语法糖'],
+            ['数组方法', 'map / filter / reduce / find / some', '不可变更新；reduce 求和/分组；支持链式组合'],
+            ['异步', 'Promise / async / await', 'then 返回新 Promise；await 暂停；try/catch 捕获'],
+            ['事件循环', '宏任务 / 微任务', '微任务优先；Promise.then 先于 setTimeout'],
+            ['模块', 'import / export / require', 'ESM 静态+引用；CJS 动态+值拷贝；支持 tree-shaking'],
+            ['ES6+', '解构 / 展开 / ?. / ?? / #', '可选链防 undefined；空值合并仅匹配 null/undefined'],
+            ['类', 'class / extends / super / #', '私有字段 #；static；getter/setter；super 必先调用'],
+            ['集合', 'Map / Set / WeakMap', 'Map 键任意类型；Set 去重；WeakMap 弱引用 GC 友好'],
+            ['Proxy', 'Proxy / Reflect', '拦截对象操作；Vue 3 响应式基础；Reflect 提供默认行为'],
           ],
         },
       ],
     },
 
     // ========================================================================
-    // 知识点 19：JavaScript 小测验（新增）
+    // 知识点 21：小测验
     // ========================================================================
     {
-      order: 19,
-      title: 'JavaScript 小测验',
-      difficulty: 1,
+      order: 21,
+      title: '小测验',
+      difficulty: 2,
       isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {
-          id: 'p19-1',
+          id: 'p21-1',
           type: 'paragraph',
           text: '通过测验检验 JavaScript 核心知识点的掌握程度。',
         },
         {
-          id: 'p19-2',
+          id: 'p21-2',
           type: 'demo',
           visualizationType: 'quiz',
           data: {
             questions: [
               {
-                question: '以下 typeof 返回 "object" 的是？',
+                question: '【记忆】以下 typeof 返回 "object" 的是？',
                 options: ['null', 'undefined', 'function', 'symbol'],
                 correctIndex: 0,
-                explanation: 'typeof null 返回 "object"，这是 JavaScript 的历史遗留 bug，因 null 在内存中的低位标志位与对象相同。',
+                explanation: 'typeof null 返回 "object"，这是 JavaScript 的历史遗留 bug，因 null 在内存中的低位标志位与对象相同。精确判 null 用 value === null。',
               },
               {
-                question: 'Promise.all 在以下哪种情况会进入 reject？',
+                question: '【记忆】Promise.all 在以下哪种情况会进入 reject？',
                 options: ['所有 Promise 都 resolve', '任一 Promise reject', '所有 Promise 都 reject', '任一 Promise pending'],
                 correctIndex: 1,
-                explanation: 'Promise.all 只要有一个 Promise reject，整个 Promise.all 就立即 reject（快速失败）。用 Promise.allSettled 等待全部完成。',
+                explanation: 'Promise.all 只要有一个 Promise reject，整个 Promise.all 就立即 reject（快速失败）。需容忍部分失败用 Promise.allSettled。',
               },
               {
-                question: '箭头函数有自己的 this 和 arguments 吗？',
+                question: '【理解】箭头函数有自己的 this 和 arguments 吗？',
                 options: ['正确', '错误'],
                 correctIndex: 1,
-                explanation: '箭头函数没有自己的 this 和 arguments，继承自外层作用域（词法 this）。因此不适合作为对象方法或构造函数。',
+                explanation: '箭头函数没有自己的 this 和 arguments，继承自外层词法作用域。因此不适合作为对象方法（this 不指向对象）或构造函数（不能 new）。',
               },
               {
-                question: '以下代码输出什么？\nconsole.log(1 + "2")',
+                question: '【应用】以下代码输出什么？\nconsole.log(1 + "2")',
                 options: ['3', '"12"', 'NaN', '"3"'],
                 correctIndex: 1,
-                explanation: '+ 运算符在任一操作数为字符串时执行字符串拼接。1 + "2" → "12"。要执行数值加法需 Number("2")。',
+                explanation: '+ 运算符在任一操作数为字符串时执行字符串拼接。1 + "2" → "12"。要执行数值加法需 Number("2") 显式转换。',
               },
               {
-                question: 'let 和 var 的主要区别是？',
+                question: '【理解】let 和 var 的主要区别是？',
                 options: ['let 有块作用域，var 有函数作用域', 'let 可重复声明', 'var 有暂存性死区', 'let 会变量提升'],
                 correctIndex: 0,
-                explanation: 'let/const 有块级作用域，var 有函数作用域。let/const 有暂存性死区（TDZ）不可在声明前访问，var 会提升并初始化为 undefined。',
+                explanation: 'let/const 有块级作用域，var 有函数作用域。let/const 有暂存性死区（TDZ）不可在声明前访问（抛 ReferenceError），var 会提升并初始化为 undefined。',
               },
               {
-                question: '以下代码输出顺序？\nconsole.log(1);\nsetTimeout(()=>console.log(2));\nPromise.resolve().then(()=>console.log(3));\nconsole.log(4);',
+                question: '【应用】以下代码输出顺序？\nconsole.log(1);\nsetTimeout(()=>console.log(2));\nPromise.resolve().then(()=>console.log(3));\nconsole.log(4);',
                 options: ['1 2 3 4', '1 4 3 2', '1 4 2 3', '1 3 4 2'],
                 correctIndex: 1,
-                explanation: '同步代码先执行（1 4），然后清空微任务队列（Promise.then 输出 3），最后取宏任务（setTimeout 输出 2）。即 1 4 3 2。',
+                explanation: '同步代码先执行（1 4），然后清空微任务队列（Promise.then 输出 3），最后取宏任务（setTimeout 输出 2）。微任务优先于宏任务，即 1 4 3 2。',
               },
               {
-                question: 'Object.is(NaN, NaN) 返回什么？',
+                question: '【理解】Object.is(NaN, NaN) 返回什么？',
                 options: ['false', 'true', 'undefined', '抛出错误'],
                 correctIndex: 1,
                 explanation: 'Object.is() 使用同值相等算法，能正确区分 NaN（Object.is(NaN, NaN) === true）和 ±0（Object.is(+0, -0) === false），而 === 做不到。',
               },
               {
-                question: '以下哪种方式可以实现真正的私有属性？',
+                question: '【应用】以下哪种方式可以实现真正的私有属性？',
                 options: ['_name 前缀约定', 'Object.defineProperty', '#name 私有字段（ES2022）', '闭包变量'],
                 correctIndex: 2,
                 explanation: 'ES2022 的 #name 私有字段是语言级私有，类外部无法访问。_name 只是约定，Object.defineProperty 仍可枚举，闭包变量无法被类方法共享。',
+              },
+              {
+                question: '【理解】关于闭包，以下说法正确的是？',
+                options: ['闭包是函数与其词法环境的组合', '闭包只能访问自身变量', '闭包不会持有外部变量引用', '闭包无法导致内存泄漏'],
+                correctIndex: 0,
+                explanation: '闭包 = 函数 + 词法环境，使内部函数可访问外部函数变量，即使外部函数已返回。闭包持有变量引用，若长期存活（如未移除监听器）可能导致内存泄漏。',
+              },
+              {
+                question: '【对比】Map 与 Object 在键类型上的区别是？',
+                options: ['两者键都只能是字符串', 'Map 键可为任意类型，Object 键只能是 string/symbol', 'Object 键可为任意类型', '两者完全相同'],
+                correctIndex: 1,
+                explanation: 'Object 的键只能是 string 或 symbol；Map 的键可以是任意类型（包括对象、函数）。Map 保持插入顺序、有 size、频繁增删性能更优，适合映射场景。',
+              },
+              {
+                question: '【对比】Promise.all 与 Promise.allSettled 的区别是？',
+                options: ['都会在任一 reject 时 reject', 'all 任一 reject 即 reject；allSettled 等待全部完成永不 reject', 'allSettled 会快速失败', '两者行为完全相同'],
+                correctIndex: 1,
+                explanation: 'all 任一 reject 立即 reject（快速失败），结果为值数组；allSettled 等待全部完成，结果为 {status, value/reason} 数组，永不 reject，适合容忍部分失败。',
+              },
+              {
+                question: '【场景】搜索框每输入一个字符都触发请求导致接口压力大，最佳优化方案是？',
+                options: ['加大请求超时时间', '对触发函数加防抖（debounce）', '改用同步请求', '禁用输入框'],
+                correctIndex: 1,
+                explanation: '防抖（debounce）在事件停止触发 n 秒后才执行，期间再次触发则重新计时，能有效合并高频输入为一次请求。节流适合滚动/拖拽等需固定频率的场景。',
+              },
+              {
+                question: '【场景】以下代码输出什么？\nfor (var i = 0; i < 3; i++) {\n  setTimeout(() => console.log(i), 0);\n}',
+                options: ['0 1 2', '3 3 3', '0 0 0', '报错'],
+                correctIndex: 1,
+                explanation: 'var 无块作用域，三个回调共享同一个 i。循环结束时 i=3，回调异步执行时都读到 3。修复：改 let（每次迭代新建绑定）或用 IIFE 闭包捕获当前 i。',
+              },
+              {
+                question: '【综合】以下代码输出什么？\nconst obj = {\n  a: 1,\n  fn() { return this.a; }\n};\nconst f = obj.fn;\nconsole.log(f());',
+                options: ['1', 'undefined', '报错', 'null'],
+                correctIndex: 1,
+                explanation: 'obj.fn 是隐式绑定（this 指向 obj），但赋值给 f 后独立调用 f() 退化为默认绑定，非严格模式 this 指向 window，window 无 a 属性返回 undefined。这是"隐式丢失"。',
+              },
+              {
+                question: '【综合】async 函数中 await 一个 reject 的 Promise 且未 try/catch，会发生什么？',
+                options: ['整个 async 函数返回的 Promise reject', '程序崩溃退出', '静默忽略', '变成 fulfilled'],
+                correctIndex: 0,
+                explanation: 'await 一个 rejected Promise 会抛出错误，未捕获则 async 函数返回的 Promise 也变为 rejected。调用方需 .catch() 或 try/catch 处理，否则触发 unhandledrejection。',
+              },
+              {
+                question: '【记忆】以下哪个不是 JS 的原始类型？',
+                options: ['symbol', 'bigint', 'object', 'undefined'],
+                correctIndex: 2,
+                explanation: 'JS 有 7 种原始类型：string/number/boolean/null/undefined/symbol/bigint。object 是引用类型，不是原始类型。typeof null === "object" 是历史 bug，但 null 本身是原始值。',
+              },
+              {
+                question: '【应用】0.1 + 0.2 === 0.3 的结果是？',
+                options: ['true', 'false', '报错', 'undefined'],
+                correctIndex: 1,
+                explanation: 'IEEE 754 双精度浮点数下，0.1 和 0.2 在二进制中是无限循环小数，截断后产生舍入误差，相加为 0.30000000000000004 ≠ 0.3。比较浮点数应用 Math.abs(a-b) < Number.EPSILON，金额场景转整数运算。',
+              },
+              {
+                question: '【对比】WeakMap 与 Map 的关键区别是？',
+                options: ['WeakMap 键只能是对象且为弱引用', 'WeakMap 性能更好', 'WeakMap 可遍历', '两者完全相同'],
+                correctIndex: 0,
+                explanation: 'WeakMap 的键只能是对象且为弱引用（不阻止 GC），不可遍历、无 size，适合给对象挂元数据而不阻碍回收。Map 键可为任意类型、强引用、可遍历、有 size。强引用会阻止 GC，弱引用不会。',
+              },
+              {
+                question: '【场景】以下代码输出什么？\nconsole.log([1,2,3].map(parseInt))',
+                options: ['[1, 2, 3]', '[1, NaN, NaN]', '[1, 2, 3]', '报错'],
+                correctIndex: 1,
+                explanation: 'map 回调签名是 (item, index, array)。parseInt 接收 (str, radix)，故实际调用 parseInt(1,0)=1、parseInt(2,1)=NaN（radix 1 非法）、parseInt(3,2)=NaN（3 不是二进制有效数字）。这是经典陷阱，需用 x => parseInt(x, 10) 显式传 radix。',
+              },
+              {
+                question: '【综合】以下代码输出什么？\nconst a = {n: 1};\nconst b = a;\na.x = a = {n: 2};\nconsole.log(a.x, b.x);',
+                options: ['{n:2} undefined', 'undefined {n:2}', '{n:2} {n:2}', 'undefined undefined'],
+                correctIndex: 1,
+                explanation: '赋值从右到左执行，但成员访问表达式 a.x 在赋值前已求值（此时 a 仍指向旧对象 {n:1}）。等价于：旧对象.x = (a = {n:2})。所以 a 指向新对象 {n:2}（无 x 属性 → undefined），b 仍指向旧对象（其 x 已被赋为新对象 {n:2}）。考查赋值表达式求值顺序与引用。',
               },
             ],
           },
         },
         {
-          id: 'p19-3',
+          id: 'p21-3',
           type: 'callout',
           variant: 'tip',
           title: '测验完成',
