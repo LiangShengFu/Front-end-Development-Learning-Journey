@@ -1,0 +1,76 @@
+/**
+ * MagicBento 样式 — 适配 DESIGN.md 规范
+ *
+ * 关键适配点：
+ * - 卡片背景 canvas-card (#191919)，hairline 边框（无 box-shadow）
+ * - 圆角 8px（rounded.sm），而非 20px
+ * - 边框发光使用 --glow-color（默认 accent-dusk #7c3aed）
+ * - 无 hover transform/box-shadow，仅保留发光边框作为悬停反馈
+ */
+
+.mb-card {
+  /* 默认 CSS 变量（可被内联 style 覆盖） */
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 200px;
+  --glow-color: 124, 58, 237; /* accent-dusk #7c3aed */
+}
+
+/* 边框跟随发光效果 — 使用 mask 技巧只在边框区域显示 */
+.mb-card--border-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px; /* hairline 宽度 */
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.5)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+/* 粒子容器基础样式 */
+.mb-particle-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.mb-particle::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: rgba(var(--glow-color), 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* 全局聚光灯 — 固定定位，跟随鼠标 */
+.mb-global-spotlight {
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  z-index: 200 !important;
+  pointer-events: none;
+}
+
+/* 聚光灯作用域容器 */
+.mb-section {
+  position: relative;
+}

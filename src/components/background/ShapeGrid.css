@@ -1,0 +1,7 @@
+/* ShapeGrid - 全局背景 Canvas */
+.shapegrid-canvas {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}

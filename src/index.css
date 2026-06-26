@@ -1,0 +1,165 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    @apply bg-white/20 text-white;
+  }
+
+  /* Scrollbar - subtle, on-brand */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-canvas;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-canvas-mid rounded-pill;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-body-mid;
+  }
+}
+
+@layer components {
+  /* The brand's universal pill button — translucent white outline on dark */
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-xs rounded-pill border border-hairline bg-transparent px-md py-xs text-button-md text-ink transition-colors duration-200 hover:border-white/40 hover:bg-canvas-soft;
+  }
+
+  .btn-pill-sm {
+    @apply inline-flex items-center justify-center gap-xs rounded-pill border border-hairline bg-transparent px-md py-xs text-button-md text-ink transition-colors duration-200 hover:border-white/40 hover:bg-canvas-soft;
+  }
+
+  /* The rare white-filled primary CTA */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-xs rounded-pill border border-primary bg-primary px-md py-xs text-button-md text-on-primary transition-colors duration-200 hover:bg-ink-hover;
+  }
+
+  /* Card chrome — tight 8px rectangle, hairline border, no shadow */
+  .card {
+    @apply rounded-sm border border-hairline bg-canvas-card p-xl text-ink;
+  }
+
+  .card-soft {
+    @apply rounded-sm border border-hairline bg-canvas-soft p-xl text-ink;
+  }
+
+  /* Eyebrow — uppercase tracked GeistMono label */
+  .eyebrow {
+    @apply font-mono text-caption-mono uppercase tracking-[1.4px] text-ink;
+  }
+
+  .eyebrow-sm {
+    @apply font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid;
+  }
+
+  /* Hairline divider */
+  .hairline {
+    @apply border-t border-hairline;
+  }
+
+  /* Mono code label */
+  .mono-label {
+    @apply font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid;
+  }
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-container px-xl;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      @apply px-2xl;
+    }
+  }
+
+  /* Display tracking utilities (negative letter-spacing per design spec) */
+  .tracking-display {
+    letter-spacing: -0.04em;
+  }
+
+  .tracking-display-lg {
+    letter-spacing: -0.06em;
+  }
+}
+
+/* ============================================================================
+ * CSS 模块交互组件动画 keyframes
+ * 用于 AnimationPlayground 组件演示
+ * ============================================================================ */
+
+/* Transition 触发态 */
+.anim-t-active {
+  transform: scale(1.5) rotate(45deg);
+  background: #539df5 !important;
+  border-radius: 50%;
+}
+
+/* @keyframes: spin 旋转 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* @keyframes: bounce 弹跳 */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+/* @keyframes: pulse 脉冲 */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Animation Playground 关键帧类 */
+.anim-kf-spin {
+  animation: spin var(--anim-dur, 1000ms) var(--anim-tf, linear) var(--anim-delay, 0ms)
+    var(--anim-iter, infinite) var(--anim-dir, normal);
+}
+
+.anim-kf-bounce {
+  animation: bounce var(--anim-dur, 1000ms) var(--anim-tf, linear) var(--anim-delay, 0ms)
+    var(--anim-iter, infinite) var(--anim-dir, normal);
+}
+
+.anim-kf-pulse {
+  animation: pulse var(--anim-dur, 1000ms) var(--anim-tf, linear) var(--anim-delay, 0ms)
+    var(--anim-iter, infinite) var(--anim-dir, normal);
+}
