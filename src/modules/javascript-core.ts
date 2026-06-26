@@ -1761,6 +1761,7 @@ bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
           type: 'demo',
           visualizationType: 'accordion',
           data: {
+            defaultMode: 'flashcard',
             title: '高频面试题（含场景题 / 对比题）',
             items: [
               {

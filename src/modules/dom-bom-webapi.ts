@@ -1500,6 +1500,7 @@ render()  // 首次加载渲染当前路径`,
           type: 'demo',
           visualizationType: 'accordion',
           data: {
+            defaultMode: 'flashcard',
             title: '高频面试题（含场景题 / 对比题）',
             items: [
               {

@@ -2139,6 +2139,7 @@ if (errors.length === 0) {
           type: 'demo',
           visualizationType: 'accordion',
           data: {
+            defaultMode: 'flashcard',
             items: [
               {
                 title: 'Q1: HTML 语义化是什么？为什么重要？',

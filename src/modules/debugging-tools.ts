@@ -2,8 +2,8 @@
  * 模块 05：前端调试与排错基础
  *
  * 严格遵循 docx/PROJECT_CONTENT.md 与 docx/模块五.md 设计文档：
- * - 16 个知识点（15 章节 + 1 小测验）
- * - 7 个可视化演示
+ * - 20 个知识点（15 章节 + 面试题 + 2 综合实战 + 速查表 + 小测验）
+ * - 13 个可视化演示
  *
  * 适配到项目现有 React+TS+Vite 架构，使用 ModuleMeta 数据驱动：
  * - KP1 DevTools 概览（KnowledgeGraph 知识图谱）
@@ -12,7 +12,11 @@
  * - KP8 接口 Mock 与拦截（CompareTable Mock 方案对比）
  * - KP10 Memory 面板（CompareTable 内存泄漏场景）
  * - KP15 调试方法论与排错思路（Timeline 排错流程）
- * - KP16 调试测验（QuizCard）
+ * - KP16 前端调试面试题精选（Accordion 闪卡模式）
+ * - KP17 综合实战：断点调试定位闭包泄漏（Sandbox checks）
+ * - KP18 综合实战：Performance 定位长任务卡顿（Sandbox checks）
+ * - KP19 前端调试速查表（CompareTable）
+ * - KP20 调试测验（QuizCard）
  *
  * 覆盖 Chrome DevTools 各面板、断点调试、网络抓包、性能分析、
  * 内存排查、移动端调试、SourceMap、Lighthouse 等核心调试技能。
@@ -27,8 +31,8 @@ export const debuggingToolsModule: ModuleMeta = {
   stageLabel: '基础阶段 · 第 5 模块',
   icon: '05',
   summary: 'Chrome DevTools 各面板、断点调试、性能与内存分析、调试方法论。',
-  knowledgePointCount: 16,
-  visualizationCount: 7,
+  knowledgePointCount: 20,
+  visualizationCount: 13,
   points: [
     // ========================================================================
     // 知识点 1：Chrome DevTools 概览
@@ -101,6 +105,7 @@ export const debuggingToolsModule: ModuleMeta = {
       order: 2,
       title: 'Elements 面板（DOM/CSS 调试）',
       difficulty: 2,
+      visualizationType: 'flipcard',
       blocks: [
         {
           id: 'p2-1',
@@ -144,6 +149,20 @@ export const debuggingToolsModule: ModuleMeta = {
           variant: 'warning',
           title: '修改不会持久化',
           text: 'Elements 面板的修改只在当前会话生效，刷新页面后丢失。修改后需手动复制到源码文件。可用 Local Overrides 持久化网络资源的修改。',
+        },
+        {
+          id: 'p2-4',
+          type: 'demo',
+          visualizationType: 'flipcard',
+          data: {
+            cards: [
+              { front: '$0', frontSub: 'Console 命令行 API', back: '引用上次在 Elements 面板选中的 DOM 元素。$1 是上上次，最多到 $4。仅 Console 可用，代码中不存在。' },
+              { front: '$(selector)', frontSub: 'Console 命令行 API', back: 'document.querySelector 的简写，返回首个匹配元素。$$(selector) 是 querySelectorAll 的简写，返回所有匹配元素。' },
+              { front: 'inspect(el)', frontSub: 'Console 命令行 API', back: '在 Elements 面板中定位并高亮指定元素，等价于手动点击选中。常配合 $0 使用快速跳转。' },
+              { front: 'copy(value)', frontSub: 'Console 命令行 API', back: '将值复制到剪贴板。适合复制大对象/接口返回值，避免手动选中复制。' },
+              { front: 'monitorEvents(el)', frontSub: 'Console 命令行 API', back: '监听元素事件并输出日志。unmonitorEvents(el) 取消。排查"元素触发了什么事件"很实用。' },
+            ],
+          },
         },
       ],
     },
@@ -365,6 +384,7 @@ function riskyCalc(a, b) {
       order: 6,
       title: 'DOM 断点 / XHR 断点',
       difficulty: 3,
+      visualizationType: 'codestepper',
       blocks: [
         {
           id: 'p6-1',
@@ -415,6 +435,30 @@ fetch('/api/user?id=1')  // 执行到这里暂停
             'Function 断点：debug(fn) 在函数调用时暂停',
             'Exception 断点：异常抛出时暂停，区分 Caught/Uncaught',
           ],
+        },
+        {
+          id: 'p6-4',
+          type: 'demo',
+          visualizationType: 'codestepper',
+          data: {
+            language: 'javascript',
+            lines: [
+              "fetch('/api/user?id=1')",
+              '  .then(res => res.json())',
+              '  .then(data => {',
+              "    console.log('用户数据:', data)",
+              '    renderUser(data)',
+              '  })',
+            ],
+            steps: [
+              { title: '设置 XHR 断点', description: 'Sources → XHR Breakpoints → 添加 "/api/user"，当请求 URL 含该子串时暂停。', highlightLines: [1] },
+              { title: '请求触发暂停', description: 'fetch 执行到 send() 时命中断点暂停，Call Stack 显示发起请求的调用链。', highlightLines: [1], output: 'Paused at send() in fetch' },
+              { title: '查看请求参数', description: '在 Scope 面板查看 arguments，确认 id=1 参数正确传入。Step over 跳过 Promise 内部。', highlightLines: [1, 2] },
+              { title: '响应到达', description: '请求返回后 .then 回调入队微任务，可在 then 行打断点查看 res。', highlightLines: [2, 3] },
+              { title: '数据处理', description: 'data 解析完成，查看实际数据结构是否与预期一致。', highlightLines: [4, 5], output: '用户数据: {id:1, name:"..."}' },
+              { title: '渲染调用', description: 'renderUser(data) 执行，若页面未正确渲染可在此断点排查。', highlightLines: [5] },
+            ],
+          },
         },
       ],
     },
@@ -1084,79 +1128,511 @@ if (process.env.NODE_ENV !== 'production') {
     },
 
     // ========================================================================
-    // 知识点 16：调试测验
+    // 知识点 16：前端调试面试题精选（Accordion）
     // ========================================================================
     {
       order: 16,
+      title: '前端调试面试题精选',
+      difficulty: 3,
+      isNew: true,
+      visualizationType: 'accordion',
+      blocks: [
+        {
+          id: 'p16-1-intro',
+          type: 'paragraph',
+          text: '精选前端调试高频面试题，涵盖 DevTools 各面板、断点调试、性能分析、内存排查、移动端调试与排错方法论。点击展开查看答案。',
+        },
+        {
+          id: 'p16-2-qa',
+          type: 'demo',
+          visualizationType: 'accordion',
+          data: {
+            defaultMode: 'flashcard',
+            items: [
+              {
+                title: 'Q1: Chrome DevTools 中 $0 和 $(selector) 分别是什么？',
+                content: '$0 引用上次在 Elements 面板选中的 DOM 元素（$1 是上上次，最多 $4）。$(selector) 是 document.querySelector 的简写，$$(selector) 是 querySelectorAll 的简写。这些是 DevTools 注入的命令行 API，仅在 Console 中可用，代码中不存在。常用场景：Console 里快速操作 Elements 选中的元素。',
+              },
+              {
+                title: 'Q2: 条件断点、日志断点、DOM 断点分别用于什么场景？',
+                content: '条件断点（Conditional Breakpoint）：表达式为真时暂停，适合循环中排查特定条件（如 i === 100）。日志断点（Logpoint）：输出日志但不暂停，是 console.log 的非侵入替代，不改源码即可加日志。DOM 断点：节点子树变更/属性变更/节点删除时暂停，适合排查"不知谁改了 DOM"的问题，免去全局 MutationObserver。',
+              },
+              {
+                title: 'Q3: Performance 面板中如何定位卡顿原因？',
+                content: '步骤：1) 录制操作过程；2) 看 FPS 图表找掉帧区域；3) 看主线程火焰图找长任务（>50ms 红色竖条）；4) 展开长任务看具体函数耗时；5) 关注紫色 Layout 和黄色 Recalculate Style（强制同步布局）。优化方向：拆分长任务（requestIdleCallback/scheduler.yield）、减少重排重绘、Web Worker 卸载计算、防抖节流。',
+              },
+              {
+                title: 'Q4: 如何排查内存泄漏？',
+                content: '步骤：1) Memory 面板 → Heap Snapshot；2) 操作页面（如进入/退出页面、增删列表）；3) 再拍一次快照；4) 选 "Objects allocated between Snapshot 1 and 2"；5) 按 Retained Size 排序找大对象；6) 看 Retainers 追溯引用链找泄漏源。常见泄漏：未清除的定时器、闭包持有大对象、detached DOM、全局变量、事件监听未解绑、WeakMap 未用导致强引用。',
+              },
+              {
+                title: 'Q5: SourceMap 在生产环境如何安全使用？',
+                content: '问题：直接公开 .map 文件会泄露源码。方案：用 hidden-source-map 生成 .map 但不在 JS 中引用（浏览器不自动加载），将 .map 部署到错误监控服务（Sentry/Bugsnag）。线上报错时监控服务用 .map 还原源码位置和堆栈。开发环境用 source-map 或 eval-cheap-module-source-map 追求快。注意：inline-source-map 内联到 JS 会增大体积且泄露源码，仅用于开发。',
+              },
+              {
+                title: 'Q6: Network 面板能排查哪些问题？',
+                content: '1) 请求失败（红色，看 Status/Response）；2) 慢请求（按 Time 排序，看 Waterfall 各阶段：Queueing/Stalled/TTFB/Content Download）；3) 重复请求；4) 缓存失效（看 from disk cache / from memory cache）；5) CORS 错误；6) 请求头/响应头/Cookie/_payload。技巧：右键 Copy as fetch/cURL；Disable cache 模拟首次访问；Throttling 模拟慢网；Block request URLs 测试容错。',
+              },
+              {
+                title: 'Q7: 移动端 H5 如何调试？',
+                content: '1) Android USB 调试：chrome://inspect 连接手机 Chrome，PC 远程调试（基于 CDP 协议，ADB 转发端口）；2) iOS：Safari 开发菜单连接 iPhone；3) 无 USB 场景：vConsole/eruda 注入式调试（生产必须移除）；4) 代理调试：Charles/Whistle 抓包改包；5) 远程真机：BrowserStack。注意 HTTPS 证书问题需安装代理证书。',
+              },
+              {
+                title: 'Q8: console 的哪些方法容易被忽略但很实用？',
+                content: 'console.table(data) 表格展示数组/对象；console.group/groupEnd 分组折叠；console.time/timeEnd 计时；console.trace() 打印调用栈；console.dir(element) 显示 DOM 对象属性（非 HTML）；console.assert(cond, msg) 条件为假才输出；%c 格式化样式如 console.log("%c红字", "color:red")。生产环境应按级别用 warn/error/info，便于日志聚合分级。',
+              },
+              {
+                title: 'Q9: Lighthouse 的核心指标有哪些？',
+                content: '四大维度：1) Performance（FCP/LCP/TBT/CLS/Speed Index）；2) Accessibility（可访问性）；3) Best Practices（HTTPS、错误处理、图片优化）；4) SEO。Core Web Vitals 三大核心：LCP < 2.5s（加载）、INP < 200ms（交互，2024 取代 FID）、CLS < 0.1（视觉稳定）。Lighthouse 基于真实浏览器运行，可在 CI 中集成自动监控。',
+              },
+              {
+                title: 'Q10: 如何调试 Service Worker / PWA？',
+                content: 'Application 面板 → Service Workers：查看注册状态、手动 Update/Unregister、Offline 模拟离线。Sources 面板对 SW 文件可直接断点调试（SW 运行在独立线程）。Cache Storage 查看缓存条目。常见问题：SW 不更新（skipWaiting + clients.claim 强制激活）、缓存策略错误（Cache-first vs Network-first）、作用域范围不对。',
+              },
+              {
+                title: 'Q11: Elements 面板修改的样式如何持久化？',
+                content: 'Elements 面板的修改只在内存生效，刷新即丢失。持久化方案：1) 手动复制到源码 CSS；2) DevTools 的 "Local Overrides"（Sources → Overrides）可把网络响应保存到本地，刷新仍生效，适合改 HTML/CSS/JS 做本地实验；3) Workspaces 把 DevTools 映射到本地文件系统，直接保存。注意 Overrides 不改源码只改浏览器拉取的副本。',
+              },
+              {
+                title: 'Q12: async/await 代码如何断点调试？',
+                content: '1) 直接在 await 行打断点，暂停后用 Step into 进入 Promise 链；2) 注意异步断点会跳到微任务队列，Call Stack 可能不完整，开启 "Async stack traces"（Settings）可看异步调用链；3) console.trace() 打印调用栈辅助；4) 无法断点时用日志断点输出变量。常见坑：try-catch 吞掉错误导致调试困难，确保 catch 中 console.error 重新抛出。',
+              },
+              {
+                title: 'Q13 【对比题】: 条件断点和 console.log 各自的优缺点？',
+                content: '条件断点优点：不改源码、可随时增删、表达式为真才暂停、适合精确条件。缺点：每次执行都求值表达式有性能开销（循环中可能拖慢）。console.log 优点：简单直观、可输出多个变量、保留历史记录。缺点：需改源码重新部署、输出过多难筛选、无法暂停执行。最佳实践：本地用 console.log，线上/复杂条件用条件断点或日志断点（不暂停的 console.log 替代）。',
+              },
+              {
+                title: 'Q14 【对比题】: Heap Snapshot 和 Allocation Timeline 的区别与适用场景？',
+                content: 'Heap Snapshot：记录某时刻所有对象快照，适合对比两次快照找"增量泄漏"（操作前后新增未释放的对象）。Allocation Timeline：实时记录每次内存分配，适合定位"持续分配不释放"的泄漏点，按时间轴看分配峰值。适用：Snapshot 适合已知操作引发的泄漏（进入/退出页面）；Timeline 适合不确定何时泄漏、需观察分配模式。两者常配合使用：Timeline 定位时间点，Snapshot 定位对象。',
+              },
+              {
+                title: 'Q15 【场景题】: 用户反馈页面偶发卡顿，但本地无法复现，如何排查？',
+                content: '步骤：1) 收集用户环境（浏览器版本/设备/网络/操作路径）；2) 查前端监控（RUM 如 Lighthouse CI / 自建性能埋点）确认卡顿时段的 Long Task / FPS 掉帧数据；3) 用 Performance 远程录制（Puppeteer 模拟用户环境跑 Performance trace）找长任务；4) 检查是否特定数据量导致（大数据列表渲染），本地用 mock 大数据复现；5) 检查是否内存泄漏导致（长时间使用后 GC 频繁），模拟长时间操作拍 Heap Snapshot；6) 修复后加性能测试防回归。',
+              },
+              {
+                title: 'Q16 【场景题】: 线上 JS 报错但本地正常，如何定位？',
+                content: '步骤：1) 查错误监控（Sentry）拿错误堆栈 + 用户环境；2) 用 hidden-source-map 还原堆栈到源码位置；3) 分析可能原因：浏览器兼容性（新 API 旧浏览器不支持）、数据格式差异（后端返回结构与本地不同）、时序问题（竞态条件本地难触发）、缓存问题（旧 JS 缓存）；4) 用 Network 抓包确认接口数据；5) 本地 mock 相同数据/浏览器环境复现；6) 修复后加测试覆盖该场景，防回归。原则：先缩小变量（环境/数据/版本），再针对性复现。',
+              },
+            ],
+          },
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 17：综合实战 —— 用断点调试定位闭包变量泄漏
+    // ========================================================================
+    {
+      order: 17,
+      title: '综合实战：用断点调试定位闭包变量泄漏',
+      difficulty: 4,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'p17-1',
+          type: 'paragraph',
+          lead: true,
+          text: '断点调试不只是"暂停看变量"，更是系统化定位根因的工具。本实战串联条件断点、调用栈查看、Watch 表达式、Scope 作用域面板，排查一个经典的闭包变量泄漏问题——循环中定时器捕获了错误的索引。',
+        },
+        {
+          id: 'p17-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '闭包陷阱是 JS 高频 bug：for 循环 + setTimeout 中 i 指向循环结束值而非每次迭代值。本练习训练用条件断点精确定位、用 Scope 面板看闭包捕获的变量、用 Watch 实时观察表达式，掌握"断点 + 作用域 + 调用栈"三位一体的调试法。',
+        },
+        {
+          id: 'p17-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'js',
+            hint: '在下方骨架中：用 let 修复闭包陷阱、用条件断点表达式模拟、用 console.trace 输出调用栈。右侧检查清单逐项校验。',
+            initialCode: `// 综合实战：用断点调试定位闭包变量泄漏
+// 背景：以下代码期望输出 0,1,2,3,4，但实际输出 5,5,5,5,5（闭包陷阱）
+
+// === 1. 复现问题的错误代码（注释状态，供参考）===
+// for (var i = 0; i < 5; i++) {
+//   setTimeout(() => console.log(i), 100)
+// }
+// 问题：var i 是函数作用域，所有闭包共享同一个 i，循环结束后 i=5
+
+// === 2. 修复：用 let 创建块级作用域
+// TODO: for (let i = 0; i < 5; i++) { setTimeout(() => console.log(i), 100) }
+//   - let 每次迭代创建新的 i，闭包捕获各自的 i
+
+// === 3. 模拟条件断点：只在 i === 3 时输出（调试技巧）
+// TODO: function debugLoop() {
+//   for (let i = 0; i < 5; i++) {
+//     if (i === 3) console.log('命中条件断点: i =', i)  // 模拟条件断点
+//   }
+// }
+
+// === 4. 用 console.trace 输出调用栈（定位调用来源）
+// TODO: function outer() {
+//   const name = 'leak'
+//   function inner() { console.trace('闭包调用栈') }  // 打印调用链
+//   inner()
+// }`,
+            checks: [
+              {
+                description: '使用 let 替代 var 修复闭包陷阱',
+                pattern: 'for\\s*\\(\\s*let\\s+i\\s*=',
+                hint: '把 var i 改为 let i。let 是块级作用域，每次循环迭代创建新的 i 变量，闭包捕获各自的值。var 是函数作用域，所有闭包共享同一个 i。',
+              },
+              {
+                description: '在循环体内有 setTimeout 捕获迭代变量',
+                pattern: 'setTimeout[\\s\\S]*?console\\.log\\s*\\(\\s*i\\s*\\)',
+                hint: '修复后的代码应保留 for (let i...) { setTimeout(() => console.log(i), 100) }。验证：用 let 后输出 0,1,2,3,4 而非 5,5,5,5,5。',
+              },
+              {
+                description: '用条件判断模拟条件断点（i === 3）',
+                pattern: "if\\s*\\(\\s*i\\s*===\\s*3\\s*\\)\\s*console\\.log",
+                hint: '条件断点在 Sources 面板设置，这里用 if (i === 3) console.log(...) 模拟。实际调试时在循环行右键 Add conditional breakpoint，输入 i === 3，只在第三次迭代暂停。',
+              },
+              {
+                description: '用 console.trace 输出调用栈',
+                pattern: "console\\.trace\\s*\\(",
+                hint: 'console.trace() 打印当前调用栈，用于定位函数调用来源。在 inner 函数中调用 console.trace("闭包调用栈") 可看到 outer → inner 的调用链，帮助理解闭包执行流程。',
+              },
+              {
+                description: 'inner 函数作为闭包定义在 outer 内部',
+                pattern: 'function\\s+outer[\\s\\S]*?function\\s+inner',
+                hint: '闭包结构：function outer() { ... function inner() { ... } inner() }。inner 访问 outer 的变量 name 即闭包。在 DevTools 断点暂停时，Scope 面板会显示 Closure(outer) 含 name 变量。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p17-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思',
+          text: '断点调试核心三件套：1) 条件断点——精确触发避免逐次暂停；2) Scope 面板——看 Local/Closure/Global 作用域链中变量的实际值；3) Call Stack——追溯调用链定位问题源头。闭包陷阱用 let 修复只是表面，更深的理解是：闭包捕获的是变量引用而非值，let 每次迭代创建新绑定从而隔离。面试常考此点。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 18：综合实战 —— 用 Performance 面板定位长任务卡顿
+    // ========================================================================
+    {
+      order: 18,
+      title: '综合实战：用 Performance 面板定位长任务卡顿',
+      difficulty: 4,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'p18-1',
+          type: 'paragraph',
+          lead: true,
+          text: '性能卡顿的定位离不开 Performance 火焰图。本实战串联 Performance 录制、长任务识别、火焰图分析、优化方案落地，排查一个大数据列表渲染导致的卡顿问题，掌握性能分析的完整工作流。',
+        },
+        {
+          id: 'p18-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '卡顿是前端高频线上问题，而 Performance 面板信息密集难读。本练习训练：识别长任务（>50ms 红条）、读火焰图找耗时函数、区分脚本/布局/绘制开销、选择正确优化策略（拆分任务 vs 减少重排 vs Web Worker）。这是中高级前端必备技能。',
+        },
+        {
+          id: 'p18-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'js',
+            hint: '在下方骨架中：实现同步渲染长列表（问题代码）、用 requestAnimationFrame 分帧渲染（优化1）、用 DocumentFragment 批量插入（优化2）。右侧检查清单校验。',
+            initialCode: `// 综合实战：用 Performance 面板定位长任务卡顿
+// 背景：渲染 10000 条列表项导致主线程阻塞 >200ms，页面卡顿
+
+// === 1. 问题代码：同步渲染全部项（长任务）
+// TODO: function renderSlow(items) {
+//   const list = document.querySelector('#list')
+//   items.forEach(item => {
+//     const li = document.createElement('li')
+//     li.textContent = item
+//     list.appendChild(li)  // 每次appendChild触发一次重排，极慢
+//   })
+// }
+
+// === 2. 优化1：DocumentFragment 批量插入（减少重排）
+// TODO: function renderFragment(items) {
+//   const list = document.querySelector('#list')
+//   const frag = document.createDocumentFragment()
+//   items.forEach(item => {
+//     const li = document.createElement('li')
+//     li.textContent = item
+//     frag.appendChild(li)  // 先插入fragment，不触发重排
+//   })
+//   list.appendChild(frag)  // 只触发一次重排
+// }
+
+// === 3. 优化2：requestAnimationFrame 分帧渲染（拆分长任务）
+// TODO: function renderRaf(items, batchSize = 100) {
+//   const list = document.querySelector('#list')
+//   let index = 0
+//   function renderBatch() {
+//     const frag = document.createDocumentFragment()
+//     const end = Math.min(index + batchSize, items.length)
+//     for (let i = index; i < end; i++) {
+//       const li = document.createElement('li')
+//       li.textContent = items[i]
+//       frag.appendChild(li)
+//     }
+//     list.appendChild(frag)
+//     index = end
+//     if (index < items.length) requestAnimationFrame(renderBatch)  // 下一帧继续
+//   }
+//   requestAnimationFrame(renderBatch)
+// }
+
+// === 4. 性能测量：用 performance.now() 计时对比
+// TODO: function measure(fn, name) {
+//   const start = performance.now()
+//   fn()
+//   const end = performance.now()
+//   console.log(name + '耗时:', end - start, 'ms')
+// }`,
+            checks: [
+              {
+                description: '问题代码用 forEach + appendChild 逐个插入（每次重排）',
+                pattern: 'renderSlow[\\s\\S]*?forEach[\\s\\S]*?appendChild',
+                hint: 'renderSlow 中 items.forEach(item => { ... list.appendChild(li) }) 每次插入触发一次重排，10000 次重排导致长任务。这是性能反模式。',
+              },
+              {
+                description: '优化1用 DocumentFragment 批量插入减少重排',
+                pattern: 'renderFragment[\\s\\S]*?createDocumentFragment[\\s\\S]*?appendChild\\s*\\(\\s*frag\\s*\\)',
+                hint: 'const frag = document.createDocumentFragment() 创建离屏容器，所有 li 先 append 到 frag（不触发重排），最后 list.appendChild(frag) 一次性插入，只触发一次重排。',
+              },
+              {
+                description: '优化2用 requestAnimationFrame 分帧渲染拆分长任务',
+                pattern: 'renderRaf[\\s\\S]*?requestAnimationFrame[\\s\\S]*?requestAnimationFrame',
+                hint: 'renderRaf 用 requestAnimationFrame 按批次（batchSize）渲染，每帧只渲染一小批，把 >200ms 长任务拆成多个 <50ms 小任务，主线程保持响应。递归调用 requestAnimationFrame(renderBatch) 直到渲染完。',
+              },
+              {
+                description: '分帧渲染使用 batchSize 参数控制每批数量',
+                pattern: 'batchSize\\s*=\\s*100|batchSize',
+                hint: 'function renderRaf(items, batchSize = 100) 每批渲染 100 条。batchSize 需平衡：太小帧数多总耗时长，太大单帧仍卡顿。50-200 是常见值，需 Performance 实测调整。',
+              },
+              {
+                description: '用 performance.now() 精确计时测量函数耗时',
+                pattern: 'performance\\.now\\s*\\(\\s*\\)[\\s\\S]*?performance\\.now\\s*\\(\\s*\\)',
+                hint: 'measure 函数用 const start = performance.now() 记录开始、const end = performance.now() 记录结束，差值即耗时。performance.now() 精度到微秒，比 Date.now() 更适合性能测量。也可用 Performance 面板的 User Timing API（performance.mark/measure）。',
+              },
+              {
+                description: '分帧渲染内也用 DocumentFragment 批量插入',
+                pattern: 'renderRaf[\\s\\S]*?createDocumentFragment',
+                hint: 'renderRaf 每批也应使用 DocumentFragment 批量插入（frag.appendChild + list.appendChild(frag)），而非逐个 appendChild。两种优化组合使用：fragment 减少重排 + rAF 拆分长任务。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p18-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思',
+          text: 'Performance 分析核心流程：录制 → 看 FPS 掉帧 → 找红色长任务 → 展开火焰图看耗时函数 → 区分 Scripting(黄)/Rendering(紫)/Painting(绿) 开销 → 针对性优化。本例三种优化策略：减少重排（fragment）、拆分长任务（rAF/scheduler.yield）、卸载计算（Web Worker）。虚拟列表（react-window/virtual-scroller）是大数据列表的终极方案，只渲染可视区域。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 19：前端调试知识点速查表
+    // ========================================================================
+    {
+      order: 19,
+      title: '前端调试知识点速查表',
+      difficulty: 1,
+      isNew: true,
+      visualizationType: 'comparetable',
+      blocks: [
+        {
+          id: 'p19-1',
+          type: 'paragraph',
+          text: '前端调试核心面板、快捷键与排查思路速查。涵盖 DevTools 各面板用途、断点类型、性能/内存指标、移动端调试方案。',
+        },
+        {
+          id: 'p19-2',
+          type: 'demo',
+          visualizationType: 'comparetable',
+          data: {
+            featureColumn: '分类',
+            columns: ['工具/概念', '要点提示'],
+            rows: [
+              { feature: 'Elements', values: ['DOM/CSS 实时编辑', '修改不持久化，用 Local Overrides 保存；F12 选中元素后 Console 用 $0 引用'] },
+              { feature: 'Console', values: ['日志调试 + 命令行 API', 'console.table/group/time/trace/dir/assert；$( )=querySelector，$$( )=querySelectorAll'] },
+              { feature: 'Sources', values: ['断点调试 + 源码查看', 'F10 Step over / F11 Step into / Shift+F11 Step out；Watch/Scope/Call Stack 面板'] },
+              { feature: '条件断点', values: ['表达式为真时暂停', '右键行号 Add conditional breakpoint；适合循环中排查特定条件'] },
+              { feature: '日志断点', values: ['输出日志不暂停', 'console.log 的非侵入替代；不改源码即可加日志'] },
+              { feature: 'DOM 断点', values: ['DOM 变更时暂停', 'subtree/attribute/node removal 三种；排查"谁改了DOM"'] },
+              { feature: 'Network', values: ['请求抓包分析', '看 Status/Waterfall/Timing；Disable cache 模拟首次；Throttling 模拟慢网'] },
+              { feature: 'TTFB', values: ['等待首字节时间', 'DNS+TCP+TLS+请求发送+服务器处理；反映服务端响应速度'] },
+              { feature: 'Performance', values: ['性能录制与火焰图', '找红色长任务(>50ms)；看 FPS 掉帧；区分 Scripting/Rendering/Painting'] },
+              { feature: '长任务', values: ['主线程任务 >50ms', '阻塞交互导致卡顿；优化：拆分任务/rAF/Web Worker/防抖节流'] },
+              { feature: 'Memory', values: ['内存排查', 'Heap Snapshot 对比快照找泄漏；Allocation Timeline 看分配模式'] },
+              { feature: '内存泄漏', values: ['常见泄漏模式', '未清除定时器/闭包持大对象/detached DOM/全局变量/事件未解绑'] },
+              { feature: 'Application', values: ['存储/缓存管理', 'localStorage(永久)/sessionStorage(会话)/IndexedDB/Cache Storage/Cookie'] },
+              { feature: 'Lighthouse', values: ['性能/可访问性/SEO 审计', 'Performance/Accessibility/Best Practices/SEO 四维度'] },
+              { feature: 'Core Web Vitals', values: ['核心体验指标', 'LCP<2.5s(加载) / INP<200ms(交互) / CLS<0.1(视觉稳定)'] },
+              { feature: 'SourceMap', values: ['源码映射', '开发 source-map；生产 hidden-source-map 不引用，部署到 Sentry'] },
+              { feature: '移动端调试', values: ['远程/注入调试', 'Android: chrome://inspect+USB(CDP)；iOS: Safari开发菜单；无USB: vConsole'] },
+              { feature: 'CDP', values: ['Chrome DevTools Protocol', 'DevTools与浏览器通信协议；Puppeteer/Playwright 基于此'] },
+              { feature: '调试方法论', values: ['排错五步法', '复现→隔离(二分法)→定位根因→最小修复→验证+复盘'] },
+              { feature: 'Git bisect', values: ['版本维度二分法', '自动定位引入问题的 commit；git bisect start/good/bad'] },
+            ],
+          },
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 20：调试测验
+    // ========================================================================
+    {
+      order: 20,
       title: '调试测验',
       difficulty: 1,
       isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {
-          id: 'p16-1',
+          id: 'p20-1',
           type: 'paragraph',
           text: '通过测验检验调试知识点的掌握程度。',
         },
         {
-          id: 'p16-2',
+          id: 'p20-2',
           type: 'demo',
           visualizationType: 'quiz',
           data: {
             questions: [
               {
-                question: '在 Console 中引用上次在 Elements 面板选中的元素，应使用？',
+                question: '【记忆】在 Console 中引用上次在 Elements 面板选中的元素，应使用？',
                 options: ['$0', '$1', 'this', 'event.target'],
                 correctIndex: 0,
                 explanation: '$0 引用上次选中的元素，$1 引用上上次，最多到 $4。$(selector) 是 querySelector 的简写，$$(selector) 是 querySelectorAll 的简写。',
               },
               {
-                question: '条件断点的行为是？',
+                question: '【理解】条件断点的行为是？',
                 options: ['每次执行都暂停', '表达式为真时暂停', '不暂停只输出日志', '抛出异常时暂停'],
                 correctIndex: 1,
                 explanation: '条件断点（Conditional Breakpoint）仅在表达式为真时暂停，适合循环中排查特定条件。日志断点（Logpoint）才是不暂停只输出日志。',
               },
               {
-                question: 'Network 面板中 TTFB 指的是？',
+                question: '【记忆】Network 面板中 TTFB 指的是？',
                 options: ['Total Time From Begin', 'Time To First Byte', 'Time To Fully Buffered', 'Transfer Time For Body'],
                 correctIndex: 1,
                 explanation: 'TTFB（Time To First Byte）是等待首字节时间，从发送请求到收到第一个字节响应的耗时。包含 DNS/TCP/TLS/请求发送/服务器处理。',
               },
               {
-                question: '以下哪种是常见的内存泄漏模式？',
+                question: '【理解】以下哪种是常见的内存泄漏模式？',
                 options: ['使用 const 声明', '未清除的 setInterval', '使用箭头函数', '启用严格模式'],
                 correctIndex: 1,
                 explanation: '未清除的 setInterval/setTimeout 会持续持有回调函数及其闭包变量，导致内存泄漏。应在组件卸载或不再需要时 clearInterval/clearTimeout。',
               },
               {
-                question: 'LCP 的性能目标是？',
+                question: '【记忆】LCP 的性能目标是？',
                 options: ['< 1s', '< 2.5s', '< 4s', '< 6s'],
                 correctIndex: 1,
                 explanation: 'LCP（Largest Contentful Paint）目标 < 2.5s。2.5-4s 需改善，> 4s 较差。优化方向：预加载关键资源、CDN、图片优化、减少阻塞脚本。',
               },
               {
-                question: '生产环境 SourceMap 的安全做法是？',
+                question: '【应用】生产环境 SourceMap 的安全做法是？',
                 options: ['inline-source-map 内联', '公开 .map 文件', 'hidden-source-map 不引用', '不生成 SourceMap'],
                 correctIndex: 2,
                 explanation: 'hidden-source-map 生成 .map 文件但不在 JS 中引用，避免源码泄露。.map 文件部署到错误监控服务（如 Sentry）用于线上错误定位。',
               },
               {
-                question: 'vConsole 适合哪种场景？',
+                question: '【场景】vConsole 适合哪种场景？',
                 options: ['开发环境桌面调试', '无 USB 的移动端 H5', 'Node.js 后端调试', '单元测试'],
                 correctIndex: 1,
                 explanation: 'vConsole 是注入式调试工具，适合无法连接 USB 的移动端 H5（如内网、嵌入 App）。注意生产环境必须移除，影响性能并暴露信息。',
               },
               {
-                question: '二分法调试的核心思路是？',
+                question: '【应用】二分法调试的核心思路是？',
                 options: ['逐行检查代码', '注释一半代码缩小范围', '重写整个模块', '增加日志输出'],
                 correctIndex: 1,
                 explanation: '二分法通过注释/禁用一半代码，观察问题是否消失，快速缩小问题范围。Git bisect 是版本维度的二分法，自动定位引入问题的 commit。',
+              },
+              {
+                question: '【记忆】Console 中 console.warn / console.error / console.info 的默认展示区别是？',
+                options: ['完全相同，仅图标颜色不同', 'warn 黄色三角，错误红色，info 蓝色 i', '只有 error 会暂停执行', 'info 不显示在 Console'],
+                correctIndex: 1,
+                explanation: 'Console 日志级别：log 灰色、info 蓝色 i、warn 黄色三角⚠、error 红色圆×。可按级别过滤。生产环境应按严重性选用合适级别，便于日志聚合工具分级告警。',
+              },
+              {
+                question: '【理解】Sources 面板中"逐步执行"（Step over）和"步入"（Step into）的区别是？',
+                options: ['两者相同', 'Step over 不进入函数内部，Step into 进入函数内部', 'Step over 跳出函数，Step into 跳过函数', 'Step into 只用于异步代码'],
+                correctIndex: 1,
+                explanation: 'Step over（F10）执行下一行但不进入函数内部（把函数当一行）。Step into（F11）进入函数内部逐行执行。Step out（Shift+F11）跳出当前函数。三者配合快速定位调用链。',
+              },
+              {
+                question: '【应用】Network 面板中"禁用缓存"（Disable cache）的作用是？',
+                options: ['删除所有缓存数据', '在 DevTools 打开时强制跳过 HTTP 缓存，模拟首次访问', '清空 Service Worker', '禁用 Cookie'],
+                correctIndex: 1,
+                explanation: '勾选 Disable cache 后，DevTools 打开期间所有请求强制跳过缓存（加 Cache-Control: no-cache），模拟首次访问。关闭 DevTools 后恢复正常缓存。注意只影响 DevTools 打开时的请求。',
+              },
+              {
+                question: '【对比】条件断点和日志断点的关键区别是？',
+                options: ['两者完全相同', '条件断点满足条件会暂停执行，日志断点输出日志但不暂停', '条件断点更快', '日志断点需要额外插件'],
+                correctIndex: 1,
+                explanation: '条件断点（Conditional Breakpoint）表达式为真时暂停，打断执行流。日志断点（Logpoint）输出日志但不暂停，适合循环中观察变量变化而不中断。日志断点是 console.log 的非侵入替代。',
+              },
+              {
+                question: '【理解】Performance 面板中"长任务"（Long Task）的阈值是？',
+                options: ['> 50ms', '> 100ms', '> 200ms', '> 500ms'],
+                correctIndex: 0,
+                explanation: '主线程任务超过 50ms 即为长任务（Long Task），会阻塞交互导致卡顿。Performance 面板用红色竖条标记。优化方向：拆分任务、requestIdleCallback、Web Worker、节流防抖。',
+              },
+              {
+                question: '【场景】线上页面偶发白屏，但本地无法复现，第一步排查应？',
+                options: ['重写整个页面', '查看 Sentry 等监控的错误堆栈 + SourceMap 定位', '逐行注释代码', '更换浏览器'],
+                correctIndex: 1,
+                explanation: '线上偶发问题本地难复现，应优先查错误监控（Sentry/Bugsnag）的报错堆栈，用 hidden-source-map 还原源码位置。结合用户环境（浏览器版本/网络/设备）缩小范围。盲目重写或逐行排查效率极低。',
+              },
+              {
+                question: '【应用】Memory 面板中 Heap Snapshot 主要用于排查？',
+                options: ['CPU 热点函数', '内存泄漏与对象引用链', '网络请求耗时', 'CSS 计算样式'],
+                correctIndex: 1,
+                explanation: 'Heap Snapshot（堆快照）记录某时刻所有 JS 对象，对比两次快照可定位泄漏对象。按 Retained Size 排序找最大泄漏源，用 Dominators/GC Roots 追溯引用链。GC 路径上的对象无法回收。',
+              },
+              {
+                question: '【记忆】Chrome DevTools 远程调试移动端的协议是？',
+                options: ['HTTP', 'WebSocket', 'Chrome DevTools Protocol (CDP)', 'FTP'],
+                correctIndex: 2,
+                explanation: 'Chrome DevTools Protocol (CDP) 是 DevTools 与浏览器通信的协议，远程调试基于它。USB 调试时 PC 通过 ADB 转发端口，用 CDP 与手机 Chrome 通信。Puppeteer/Playwright 也基于 CDP。',
+              },
+              {
+                question: '【对比】Application 面板中 localStorage 和 sessionStorage 的区别是？',
+                options: ['两者完全相同', 'localStorage 永久存储，sessionStorage 仅当前标签页会话', 'localStorage 容量更大且跨域共享', 'sessionStorage 可存对象'],
+                correctIndex: 1,
+                explanation: 'localStorage 永久存储（手动清除才消失），同源共享。sessionStorage 仅当前标签页会话有效（关闭标签即清除），不跨标签页共享。两者均约 5-10MB，仅存字符串。Application 面板可查看/编辑/清除。',
+              },
+              {
+                question: '【理解】DOM 断点（DOM Breakpoint）的触发时机是？',
+                options: ['JS 执行错误时', '指定 DOM 节点被修改/属性变化/子树变更时', '页面加载完成时', 'CSS 计算样式变化时'],
+                correctIndex: 1,
+                explanation: 'DOM 断点在指定节点发生 subtree modifications（子树变更）、attribute modifications（属性变更）、node removal（节点删除）时触发。适合排查"不知谁改了 DOM"的问题，避免全局 MutationObserver。',
+              },
+              {
+                question: '【综合】关于调试方法论，以下说法错误的是？',
+                options: [
+                  '先稳定复现再排查，无法复现的问题最难修',
+                  '二分法缩小范围比逐行检查更高效',
+                  '修复症状即可，根因不重要',
+                  '修复后需验证原场景 + 相关场景无回归',
+                ],
+                correctIndex: 2,
+                explanation: '修复必须针对根因而非症状。只修症状（如加 try-catch 吞错）会把问题隐藏并推迟爆发，导致更难排查。正确流程：复现→隔离→定位根因→最小修改修复→验证→复盘加测试防复发。',
               },
             ],
           },
         },
         {
-          id: 'p16-3',
+          id: 'p20-3',
           type: 'callout',
           variant: 'tip',
           title: '测验完成',

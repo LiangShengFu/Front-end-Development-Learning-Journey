@@ -1857,6 +1857,7 @@ background:
           type: 'demo',
           visualizationType: 'accordion',
           data: {
+            defaultMode: 'flashcard',
             items: [
               {
                 title: 'Q1: CSS 选择器优先级如何计算？',

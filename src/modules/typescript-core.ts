@@ -1,9 +1,10 @@
 /**
  * 模块 07：TypeScript 核心与进阶
  *
- * 完整实现 17 个知识点，涵盖 TypeScript 基础类型、类型收窄、接口与类型别名、
+ * 完整实现 19 个知识点，涵盖 TypeScript 基础类型、类型收窄、接口与类型别名、
  * 泛型约束、工具类型、条件类型、tsconfig 配置、API 类型安全、迁移策略、
- * 面试题、速查表和小测验。使用 16 个可视化组件辅助理解。
+ * 2 个综合实战沙盒（手写工具类型库 / 类型安全 API 解析器）、
+ * 面试题、速查表和小测验。使用 18 个可视化组件辅助理解。
  */
 import type { ModuleMeta } from '../lib/types'
 
@@ -15,8 +16,8 @@ export const typescriptCoreModule: ModuleMeta = {
   stageLabel: '通用前置 · 第 2 模块',
   icon: '07',
   summary: '类型系统、泛型、工具类型、条件类型、映射类型、类型守卫、tsconfig。',
-  knowledgePointCount: 17,
-  visualizationCount: 16,
+  knowledgePointCount: 19,
+  visualizationCount: 18,
   points: [
     // ========================================================================
     // 知识点 1：TypeScript 概述与核心能力（KnowledgeGraph）
@@ -1465,24 +1466,233 @@ const result = await post<CreateUserDto, {id: number}>(
     },
 
     // ========================================================================
-    // 知识点 15：TypeScript 面试题（Accordion）
+    // 知识点 15：综合实战 —— 手写工具类型库（映射/条件/infer）
     // ========================================================================
     {
       order: 15,
+      title: '综合实战：手写工具类型库',
+      difficulty: 4,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'ts-p15-1',
+          type: 'paragraph',
+          lead: true,
+          text: '工具类型是 TypeScript 类型系统的"乐高积木"。本实战串联映射类型、条件类型、infer 推断与键重映射，从零实现 Partial/Pick/Omit/ReturnType 四个核心工具类型，理解 TS 内置工具的底层原理。',
+        },
+        {
+          id: 'ts-p15-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '面试常考"手写工具类型"，且工程中自定义工具类型（如 DeepPartial、GetOptional）能大幅减少重复类型代码。掌握映射类型 [K in keyof T]、条件类型 extends ?、infer 三大支柱，等于掌握了 TS 类型编程的核心语法。',
+        },
+        {
+          id: 'ts-p15-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'typescript',
+            hint: '在下方骨架中实现四个工具类型：用映射类型写 MyPartial/MyPick，用键重映射 + 条件类型写 MyOmit，用 infer 写 MyReturnType。',
+            initialCode: `// 综合实战：手写工具类型库
+// 目标：实现 4 个核心工具类型，理解 TS 类型编程三大支柱
+
+// === 1. MyPartial<T>：所有属性变可选（映射类型 + ?）
+// TODO: type MyPartial<T> = { ... }
+//   - 用 [K in keyof T] 遍历键
+//   - 每个键加 ? 修饰符，值类型 T[K]
+
+// === 2. MyPick<T, K extends keyof T>：选取指定键
+// TODO: type MyPick<T, K extends keyof T> = { ... }
+//   - 用 [P in K] 遍历要选取的键
+//   - 值类型 T[P]
+
+// === 3. MyOmit<T, K>：排除指定键（键重映射 + 条件类型）
+// TODO: type MyOmit<T, K extends keyof T> = { ... }
+//   - 用 [P in keyof T as P extends K ? never : P]: T[P]
+//   - as 重映射：P 属于 K 时映射为 never（被过滤）
+
+// === 4. MyReturnType<T>：获取函数返回类型（infer）
+// TODO: type MyReturnType<T extends (...args: any[]) => any> = ...
+//   - 约束 T 为函数类型
+//   - 用 T extends (...args: any[]) => infer R ? R : never 捕获返回值
+
+// === 验证（取消注释自测）===
+interface User { id: number; name: string; age: number }
+// type PartialUser = MyPartial<User>          // { id?: number; name?: string; age?: number }
+// type PickUser = MyPick<User, 'id' | 'name'> // { id: number; name: string }
+// type OmitUser = MyOmit<User, 'age'>         // { id: number; name: number }
+// type R = MyReturnType<() => string>         // string`,
+            checks: [
+              {
+                description: 'MyPartial 使用映射类型 [K in keyof T] 加 ? 修饰符',
+                pattern: 'MyPartial[\\s\\S]*?\\{\\s*\\[K in keyof T\\]\\?:\\s*T\\[K\\]',
+                hint: 'MyPartial 应写成 type MyPartial<T> = { [K in keyof T]?: T[K] }。关键是 [K in keyof T] 遍历键 + ? 让属性可选。',
+              },
+              {
+                description: 'MyPick 约束 K extends keyof T 并用 [P in K] 遍历',
+                pattern: 'MyPick<T,\\s*K extends keyof T>[\\s\\S]*?\\{\\s*\\[P in K\\]:\\s*T\\[P\\]',
+                hint: 'MyPick<T, K extends keyof T> = { [P in K]: T[P] }。K 必须约束为 keyof T 的子集，[P in K] 遍历选取的键。',
+              },
+              {
+                description: 'MyOmit 用键重映射 as + 条件类型过滤键',
+                pattern: 'MyOmit[\\s\\S]*?\\[P in keyof T as P extends K\\s*\\?\\s*never\\s*:\\s*P\\]',
+                hint: 'MyOmit 应写成 { [P in keyof T as P extends K ? never : P]: T[P] }。as 把属于 K 的键重映射为 never，映射类型会自动过滤 never 键。',
+              },
+              {
+                description: 'MyReturnType 用 infer R 捕获函数返回类型',
+                pattern: 'MyReturnType[\\s\\S]*?extends\\s*\\([\\s\\S]*?\\)\\s*=>\\s*infer R\\s*\\?\\s*R\\s*:\\s*never',
+                hint: 'MyReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : never。infer R 只能出现在条件类型的 extends 子句中。',
+              },
+              {
+                description: 'MyReturnType 的类型参数约束 T 为函数类型',
+                pattern: 'MyReturnType<T extends \\(\\.\\.\\.[\\s\\S]*?\\)\\s*=>\\s*any>',
+                hint: 'MyReturnType 的泛型参数必须约束为函数：T extends (...args: any[]) => any。否则无法对非函数类型做条件匹配。',
+              },
+              {
+                description: 'MyOmit 的 K 约束为 keyof T',
+                pattern: 'MyOmit<T,\\s*K extends keyof T>',
+                hint: 'MyOmit 的 K 应约束为 K extends keyof T，确保只能排除实际存在的键（比内置 Omit 更严格，内置 Omit 不约束 K）。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'ts-p15-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思',
+          text: '内置 Omit 的 K 未约束为 keyof T，传不存在的键不报错（设计取舍）。手写 MyOmit 加 K extends keyof T 更严格但与内置行为不一致。工程中：库作者优先兼容内置行为，应用代码可加约束。键重映射（as）是 TS 4.1+ 特性，老项目需确认版本。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 16：综合实战 —— 类型安全的 API 响应解析器
+    // ========================================================================
+    {
+      order: 16,
+      title: '综合实战：类型安全的 API 响应解析器',
+      difficulty: 4,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'ts-p16-1',
+          type: 'paragraph',
+          lead: true,
+          text: '真实 API 返回的数据不可信——字段可能缺失、类型可能不符。本实战串联泛型、unknown、自定义类型守卫与错误处理，构建一个类型安全的 API 响应解析器，在编译期和运行时双重保障类型安全。',
+        },
+        {
+          id: 'ts-p16-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: 'fetch/axios 返回 any，直接断言 as User 是"相信网络"的危险做法——接口变更时运行时崩溃。正确做法是声明 unknown + 类型守卫逐层校验。这是 any/unknown/类型守卫三个知识点的综合应用，也是工程中最常见的类型安全场景。',
+        },
+        {
+          id: 'ts-p16-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'typescript',
+            hint: '在下方骨架中实现：泛型 fetchJson、unknown 收窄、自定义类型守卫 isUser、错误处理。右侧检查清单逐项校验。',
+            initialCode: `// 综合实战：类型安全的 API 响应解析器
+// 目标：用泛型 + unknown + 类型守卫构建安全的 API 解析层
+
+interface User {
+  id: number
+  name: string
+  email: string
+}
+
+// === 1. 自定义类型守卫：判断未知值是否为 User
+// TODO: function isUser(data: unknown): data is User { ... }
+//   - 先 typeof data === 'object' && data !== null
+//   - 再用 'id' in data / 'name' in data / 'email' in data 检查键存在
+//   - 用 typeof 校验每个字段的类型（id 是 number、name/email 是 string）
+
+// === 2. 泛型 fetchJson：请求并返回 unknown（而非 any）
+// TODO: async function fetchJson<T>(url: string): Promise<T> { ... }
+//   - const res = await fetch(url)
+//   - if (!res.ok) throw new Error(\`HTTP \${res.status}\`)
+//   - return await res.json() as T  // 注意：json() 返回 any，断言为 T 由调用方守卫
+
+// === 3. 安全获取 User：fetch + 守卫 + 错误处理
+// TODO: async function getUser(id: number): Promise<User> { ... }
+//   - const data = await fetchJson<unknown>(\`/api/users/\${id}\`)  // 先当 unknown
+//   - if (!isUser(data)) throw new Error('Invalid user shape')
+//   - return data  // 此处 data 已收窄为 User
+
+// === 4. 批量获取：Promise.all + 守卫过滤
+// TODO: async function getValidUsers(ids: number[]): Promise<User[]> { ... }
+//   - const results = await Promise.all(ids.map(id => getUser(id).catch(() => null)))
+//   - return results.filter((u): u is User => u !== null)`,
+            checks: [
+              {
+                description: 'isUser 是返回 data is User 的自定义类型守卫',
+                pattern: 'function isUser\\s*\\(\\s*data:\\s*unknown\\s*\\)\\s*:\\s*data is User',
+                hint: '签名必须为 function isUser(data: unknown): data is User。"data is User" 是谓词返回类型，让 TS 在 if 分支内收窄 data 为 User。',
+              },
+              {
+                description: 'isUser 内用 typeof + in 检查对象结构与字段类型',
+                pattern: "isUser[\\s\\S]*?typeof\\s+data\\s*===\\s*['\"]object['\"][\\s\\S]*?['\"]id['\"]\\s+in\\s+data",
+                hint: '先 typeof data === "object" && data !== null（排除 null），再用 "id" in data / "name" in data / "email" in data 检查键存在，最后 typeof 校验字段类型（id 为 number 等）。',
+              },
+              {
+                description: 'fetchJson 是泛型函数 <T> 且返回 Promise<T>',
+                pattern: 'function fetchJson<T>\\s*\\(\\s*url:\\s*string\\s*\\)\\s*:\\s*Promise<T>',
+                hint: 'fetchJson<T>(url: string): Promise<T>。泛型 T 让调用方决定期望类型。注意 res.json() 返回 any，用 as T 断言但真实安全由调用方守卫保证。',
+              },
+              {
+                description: 'fetchJson 内检查 res.ok 并抛错',
+                pattern: '!res\\.ok[\\s\\S]*?throw',
+                hint: 'HTTP 错误需显式处理：if (!res.ok) throw new Error(`HTTP ${res.status}`)。fetch 不会因 4xx/5xx 抛错，只有网络错误才 reject。',
+              },
+              {
+                description: 'getUser 先按 unknown 请求再用 isUser 守卫收窄',
+                pattern: 'getUser[\\s\\S]*?fetchJson<unknown>[\\s\\S]*?isUser\\s*\\(',
+                hint: 'getUser 应 const data = await fetchJson<unknown>(...) 先当 unknown，再 if (!isUser(data)) throw，守卫通过后 data 自动收窄为 User。切勿直接 fetchJson<User> 跳过守卫。',
+              },
+              {
+                description: 'getValidUsers 用类型谓词 filter (u): u is User 过滤 null',
+                pattern: "filter\\s*\\(\\s*\\(u\\)\\s*:\\s*u is User\\s*=>\\s*u !== null\\s*\\)",
+                hint: '批量场景用 Promise.all + catch 兜底返回 null，再 filter((u): u is User => u !== null)。类型谓词 u is User 让 TS 知道过滤后数组是 User[] 而非 (User|null)[]。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'ts-p16-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思',
+          text: '手写守卫在大对象时冗长且易漏字段，工程中常用 zod / io-ts / valibot 等 schema 校验库——既做运行时校验又自动推导 TS 类型，一份 schema 两端受益。本练习手写守卫是为了理解原理，生产环境优先 schema 库。另外 fetchJson 的 as T 是"信任边界"标记，真正的安全在守卫层。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 17：TypeScript 面试题（Accordion）
+    // ========================================================================
+    {
+      order: 17,
       title: 'TypeScript 面试题精选',
       difficulty: 3,
       visualizationType: 'accordion',
       blocks: [
         {
-          id: 'ts-p15-1',
+          id: 'ts-p17-1',
           type: 'paragraph',
           text: '精选 TypeScript 高频面试题，涵盖类型系统、泛型、工具类型和工程实践。点击展开查看答案。',
         },
         {
-          id: 'ts-p15-2',
+          id: 'ts-p17-2',
           type: 'demo',
           visualizationType: 'accordion',
           data: {
+            defaultMode: 'flashcard',
             items: [
               {
                 title: 'Q1: interface 和 type 的区别是什么？什么场景用哪个？',
@@ -1508,6 +1718,46 @@ const result = await post<CreateUserDto, {id: number}>(
                 title: 'Q6: TypeScript 的 strict 模式包含哪些子选项？',
                 content: 'strict: true 开启以下子项：strictNullChecks（严格空值检查）、noImplicitAny（禁止隐式 any）、strictFunctionTypes（严格函数类型检查）、strictBindCallApply、strictPropertyInitialization、noImplicitThis、alwaysStrict、useUnknownInCatchVariables。',
               },
+              {
+                title: 'Q7: never 类型有什么用？什么时候会得到 never？',
+                content: 'never 表示"永不出现的值"。两种得到 never 的场景：1) 函数永不返回（抛错、无限循环）；2) 联合类型收窄到穷尽后剩余分支。用途：① 穷尽检查（exhaustive check）——在 switch 的 default 分支赋值给 never 类型变量，若漏处理一个 union 成员则编译报错；② 过滤联合类型，如 Exclude<T, never>；③ 表示不可能的状态。never 是所有类型的子类型，可赋值给任何类型。',
+              },
+              {
+                title: 'Q8: 协变与逆变是什么？TS 函数参数是协变还是逆变？',
+                content: '协变（Covariance）：子类型关系与参数化方向一致，Dog[] 是 Animal[] 的子类型。逆变（Contravariance）：方向相反，(x: Animal) => void 是 (x: Dog) => void 的子类型（参数更宽的函数可替代参数更窄的）。TS 中：方法参数（method shorthand）默认双变（bivariant，宽松），普通函数参数在 strictFunctionTypes 下逆变。这就是 strictFunctionTypes 能捕获回调参数类型错误的原理。',
+              },
+              {
+                title: 'Q9: 函数重载怎么写？实现签名为什么不能被外部调用？',
+                content: '重载写法：先写多个 overload signature（只有类型无函数体），最后写一个 implementation signature（含 body，参数用宽松类型如 any）。外部调用时只能匹配 overload signature，implementation signature 对外不可见。原因：实现签名是为编译器提供运行时实现，其参数类型通常比任意一个重载都宽（联合），直接暴露会失去重载的精确性。注意重载顺序：更具体的类型放前面，否则会被宽类型先匹配。',
+              },
+              {
+                title: 'Q10: as const 有什么用？和普通 const 有何区别？',
+                content: 'const 是运行时变量不可重新赋值，但类型仍被拓宽（const x = "hi" 推断为 string）。as const 是类型断言，把值断言为最窄的字面量类型并全部 readonly：const x = "hi" as const 推断为 "hi"；const arr = [1, 2] as const 推断为 readonly [1, 2]。用途：定义常量联合、精确对象类型、配合 satisfies 保留字面量。注意 as const 是编译期行为，不产生运行时冻结。',
+              },
+              {
+                title: 'Q11: 枚举（enum）有什么陷阱？为什么不推荐用？',
+                content: 'enum 陷阱：1) 数字枚举会生成反向映射代码（enum["A"]=0 和 enum[0]="A"），增大体积；2) 数字枚举不安全——任何 number 都可赋值给数字枚举；3) const enum 在 isolatedModules 下不可用，且不同编译器（如 esbuild/swc）对 const enum 的处理不一致，可能运行时报错；4) 字符串枚举虽安全但写法冗长。推荐替代：联合字面量类型 + as const，如 type Status = "active" | "inactive"。',
+              },
+              {
+                title: 'Q12: 类型断言 as 和类型守卫（narrowing）有什么本质区别？',
+                content: '类型断言 as 是"你说什么编译器就信什么"，不做运行时检查，编译器不验证断言是否成立，错用会把错误推迟到运行时。类型守卫（typeof/instanceof/in/自定义 is 函数）是基于运行时值的真实检查，编译器根据检查结果收窄类型，类型安全。原则：优先用类型守卫，仅在确认安全且无法用守卫表达时（如解析 JSON 后已知结构）才用 as，且最好紧跟运行时校验。unknown + 守卫是替代 any + as 的安全模式。',
+              },
+              {
+                title: 'Q13 【对比题】: Partial<T> 和 Readonly<T> 在实现上有何异同？',
+                content: '两者都是映射类型，遍历 keyof T：Partial 把每个属性变可选（加 ?），Readonly 把每个属性变只读（加 readonly）。实现：type Partial<T> = { [K in keyof T]?: T[K] }；type Readonly<T> = { readonly [K in keyof T]: T[K] }。相同点：都基于映射类型 [K in keyof T]，不改变属性类型本身。不同点：修饰符不同（? vs readonly），可叠加成 Readonly<Partial<T>>。TS 4.1+ 还支持修饰符增删：-readonly 移除只读、-? 移除可选（Required 的实现）。',
+              },
+              {
+                title: 'Q14 【对比题】: Omit<T,K> 和 Pick<T,K> 的关系？Omit 是 TS 内置还是可手写？',
+                content: 'Pick<T,K extends keyof T> 选取指定键：{ [P in K]: T[P] }。Omit<T,K> 排除指定键，TS 内置定义为 Omit = Pick<T, Exclude<keyof T, K>>，即"取反再 Pick"。关系：Omit 是 Pick + Exclude 的组合，二者互补。手写 Omit 注意点：直接 { [P in keyof T as P extends K ? never : P]: T[P] } 用键重映射更精确，因为内置 Omit 的 K 不约束为 keyof T，可能接受不存在的键而不报错（这是已知的设计取舍）。实践中 Omit 适合"排除少数字段"，Pick 适合"只取少数字段"。',
+              },
+              {
+                title: 'Q15 【场景题】: 一个 JS 项目要迁移到 TS，如何制定迁移策略避免影响线上？',
+                content: '渐进式迁移策略：1) allowJs + checkJs 开启，先让 TS 编译器能识别 JS 文件；2) strict: false 起步，逐个开启子选项（先 noImplicitAny，再 strictNullChecks），避免一次性开 strict 导致几千个报错阻塞；3) 按依赖顺序迁移：叶子模块（工具函数、类型定义）先迁，入口/业务后迁；4) 为第三方无类型库写 .d.ts 声明或装 @types；5) 用 // @ts-ignore / unknown 临时压制高风险报错，加 TODO 跟进；6) CI 卡新增报错（tsc --noEmit）但允许存量；7) 关键路径补类型测试。原则：类型安全是过程不是开关，优先保护核心数据流。',
+              },
+              {
+                title: 'Q16 【场景题】: 团队 TS 项目编译慢，如何排查与优化？',
+                content: '排查：1) tsc --extendedDiagnostics 看检查时间/文件数/类型数，定位是类型展开慢还是文件多；2) 检查是否有大量 any/断言导致类型推断退化；3) 检查复杂条件类型/映射类型是否在巨型联合上分发；4) 第三方 .d.ts 是否过大（如完整 DOM lib）。优化：1) project references 拆分，按子项目增量编译；2) isolatedModules + 用 esbuild/swc 转译（只做类型剥离不做类型检查），tsc 仅做 --noEmit 类型检查；3) 开启 incremental + tsBuildInfoFile 缓存；4) 收窄联合规模，用品牌类型/枚举替代超大字面量联合；5) 避免 any 回流污染推断。权衡：类型越精确检查越慢，按核心/非核心分级严格度。',
+              },
             ],
           },
         },
@@ -1515,21 +1765,21 @@ const result = await post<CreateUserDto, {id: number}>(
     },
 
     // ========================================================================
-    // 知识点 16：TypeScript 速查表
+    // 知识点 18：TypeScript 速查表
     // ========================================================================
     {
-      order: 16,
+      order: 18,
       title: 'TypeScript 速查表',
       difficulty: 1,
       visualizationType: 'comparetable',
       blocks: [
         {
-          id: 'ts-p16-1',
+          id: 'ts-p18-1',
           type: 'paragraph',
           text: 'TypeScript 核心概念与常用语法速查。涵盖基础类型、泛型、工具类型和编译配置的关键语法。',
         },
         {
-          id: 'ts-p16-2',
+          id: 'ts-p18-2',
           type: 'demo',
           visualizationType: 'comparetable',
           data: {
@@ -1557,51 +1807,51 @@ const result = await post<CreateUserDto, {id: number}>(
     },
 
     // ========================================================================
-    // 知识点 17：TypeScript 小测验（QuizCard）
+    // 知识点 19：TypeScript 小测验（QuizCard）
     // ========================================================================
     {
-      order: 17,
+      order: 19,
       title: 'TypeScript 小测验',
       difficulty: 1,
       visualizationType: 'quiz',
       blocks: [
         {
-          id: 'ts-p17-1',
+          id: 'ts-p19-1',
           type: 'paragraph',
           text: '通过以下测验检验你对 TypeScript 核心概念的掌握程度。每题附有详细解析。',
         },
         {
-          id: 'ts-p17-2',
+          id: 'ts-p19-2',
           type: 'demo',
           visualizationType: 'quiz',
           data: {
             questions: [
               {
-                question: '以下哪个类型是 any 的类型安全替代品？',
+                question: '【记忆】以下哪个类型是 any 的类型安全替代品？',
                 options: ['never', 'void', 'unknown', 'undefined'],
                 correctIndex: 2,
                 explanation: 'unknown 是 any 的类型安全替代品。unknown 类型的值不能直接使用，必须先做类型收窄（typeof、instanceof、自定义守卫）才能操作。any 则完全关闭类型检查。',
               },
               {
-                question: 'interface 相比 type 的独特优势是什么？',
+                question: '【记忆】interface 相比 type 的独特优势是什么？',
                 options: ['能定义联合类型', '能定义元组', '声明合并（同名自动合并）', '能使用泛型'],
                 correctIndex: 2,
                 explanation: '只有 interface 支持声明合并——同名的 interface 会自动合并属性。这在对第三方库或全局类型进行扩展时非常有用。type 定义联合类型和元组是 type 的独特优势。',
               },
               {
-                question: 'strictNullChecks 开启后，以下代码会怎样？\nlet name: string = null',
+                question: '【理解】strictNullChecks 开启后，以下代码会怎样？\nlet name: string = null',
                 options: ['正常运行', '编译报错：null 不能赋值给 string', '运行时错误', '警告但不影响编译'],
                 correctIndex: 1,
                 explanation: 'strictNullChecks 开启后，null 和 undefined 不能赋值给其他类型（string、number 等）。需要显式使用联合类型：let name: string | null = null。这是 strict 模式的核心功能之一。',
               },
               {
-                question: 'infer 关键字的正确使用位置是？',
+                question: '【理解】infer 关键字的正确使用位置是？',
                 options: ['类型别名的右侧', '条件类型的 extends 子句中', '函数的参数位置', '变量的类型标注中'],
                 correctIndex: 1,
                 explanation: 'infer 只能在条件类型（T extends U ? X : Y）的 extends 子句中使用，用于声明待推断的类型变量。如 T extends Promise<infer R> ? R : never。',
               },
               {
-                question: '以下关于泛型约束 extends 的说法，哪个是正确的？',
+                question: '【理解】以下关于泛型约束 extends 的说法，哪个是正确的？',
                 options: [
                   'extends 只能用于 interface 继承',
                   'extends 约束让泛型参数必须满足特定形状',
@@ -1612,7 +1862,7 @@ const result = await post<CreateUserDto, {id: number}>(
                 explanation: '泛型约束 extends 限制泛型参数必须满足特定的类型形状。例如 <T extends HasLength> 确保 T 一定有 length 属性，函数体内可以安全访问它。如果传入不满足约束的类型，编译器会报错。',
               },
               {
-                question: 'satisfies 运算符（TS 4.9+）的作用是？',
+                question: '【应用】satisfies 运算符（TS 4.9+）的作用是？',
                 options: [
                   '强制类型转换',
                   '验证表达式是否符合某个类型，同时保留最精确的推断类型',
@@ -1621,6 +1871,140 @@ const result = await post<CreateUserDto, {id: number}>(
                 ],
                 correctIndex: 1,
                 explanation: 'satisfies 验证表达式是否符合类型约束，但不改变 TS 的类型推断结果。这意味着可以同时获得类型验证和精确的字面量类型推断。const palette = { red: [255,0,0] } satisfies Record<string, Color> 中 palette.red 类型仍是 [255,0,0] 而非 Color。',
+              },
+              {
+                question: '【记忆】TS 中获取对象所有键名联合类型的操作符是？',
+                options: ['typeof', 'keyof', 'infer', 'instanceof'],
+                correctIndex: 1,
+                explanation: 'keyof T 获取类型 T 的所有键名组成的联合类型。typeof 在类型上下文获取 JS 值的类型。结合 type Keys = keyof typeof obj 可获取对象的键名联合。',
+              },
+              {
+                question: '【理解】以下哪个类型表示"永不出现的值"，可用于穷尽检查？',
+                options: ['void', 'null', 'never', 'undefined'],
+                correctIndex: 2,
+                explanation: 'never 表示永不出现的值。在 switch 的 default 分支把值赋给 never 类型变量，若漏处理联合的一个成员则编译报错，这就是穷尽检查（exhaustive check）。',
+              },
+              {
+                question: '【应用】const x = "hi" as const 推断出的类型是？',
+                options: ['string', '"hi"', 'readonly string', 'unknown'],
+                correctIndex: 1,
+                explanation: 'as const 把值断言为最窄的字面量类型。const x = "hi" as const 推断为 "hi"（字面量类型），而普通 const x = "hi" 推断为 string（类型被拓宽）。',
+              },
+              {
+                question: '【对比】any 和 unknown 的关键区别是？',
+                options: [
+                  '两者完全相同',
+                  'any 关闭检查可任意操作，unknown 安全需收窄后才能操作',
+                  'unknown 可任意操作，any 需收窄',
+                  'any 只能赋值给 any',
+                ],
+                correctIndex: 1,
+                explanation: 'any 关闭所有类型检查，可赋值给任何类型也可访问任意属性。unknown 是类型安全的 any——可接受任何值，但不能直接操作，必须先用类型守卫收窄。unknown 不能赋值给除 unknown/any 外的类型。',
+              },
+              {
+                question: '【对比】Partial<T> 和 Required<T> 的关系是？',
+                options: [
+                  '两者相同',
+                  'Partial 加 ?，Required 移除 ?（-?），互为逆操作',
+                  'Partial 加 readonly，Required 移除 readonly',
+                  'Partial 选取键，Required 排除键',
+                ],
+                correctIndex: 1,
+                explanation: 'Partial<T> = { [K in keyof T]?: T[K] } 把属性变可选；Required<T> = { [K in keyof T]-?: T[K] } 用 -? 移除可选修饰符。两者互为逆操作。Readonly 与 -readonly 同理。',
+              },
+              {
+                question: '【理解】关于数字枚举，以下说法错误的是？',
+                options: [
+                  '会生成反向映射代码增大体积',
+                  '任何 number 都可赋值给数字枚举（不安全）',
+                  'const enum 在 isolatedModules 下可用',
+                  '推荐用联合字面量类型替代',
+                ],
+                correctIndex: 2,
+                explanation: 'const enum 在 isolatedModules 下不可用，且 esbuild/swc 等编译器对 const enum 处理不一致可能运行时报错。数字枚举还有反向映射和类型不安全问题，故推荐 type Status = "a" | "b" 联合字面量替代。',
+              },
+              {
+                question: '【应用】手写 ReturnType<T>（获取函数返回类型）的正确写法是？',
+                options: [
+                  'type ReturnType<T> = T',
+                  'type ReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : never',
+                  'type ReturnType<T> = keyof T',
+                  'type ReturnType<T> = T extends infer R ? R : never',
+                ],
+                correctIndex: 1,
+                explanation: 'ReturnType 用条件类型 + infer：约束 T 为函数，在 extends 子句用 infer R 捕获返回类型，匹配则取 R 否则 never。infer 只能出现在条件类型的 extends 子句中。',
+              },
+              {
+                question: '【场景】解析 JSON.parse(res) 后想安全访问 data.user.name，最佳实践是？',
+                options: [
+                  'const r = JSON.parse(res) as any; r.data.user.name',
+                  'const r: unknown = JSON.parse(res); 用类型守卫逐层收窄后再访问',
+                  'const r = JSON.parse(res); r.data.user.name（依赖隐式 any）',
+                  'const r = JSON.parse(res) as {data:{user:{name:string}}}; 直接访问',
+                ],
+                correctIndex: 1,
+                explanation: 'JSON.parse 返回 any，直接断言为具体类型（选项4）跳过运行时校验，结构不符时运行时崩溃。安全做法：声明 unknown，用类型守卫（typeof/对象校验库）逐层收窄。unknown + 守卫是替代 any + as 的安全模式。',
+              },
+              {
+                question: '【理解】分布式条件类型：type T = (A | B) extends U ? X : Y 的求值结果是？',
+                options: [
+                  '(A extends U ? X : Y) & (B extends U ? X : Y)',
+                  '(A extends U ? X : Y) | (B extends U ? X : Y)',
+                  'A | B extends U ? X : Y 整体判断',
+                  '编译错误',
+                ],
+                correctIndex: 1,
+                explanation: '裸类型参数 T 在条件类型中会分发：联合类型 A | B 求值为 (A extends U ? X : Y) | (B extends U ? X : Y)。这就是 Exclude/Extract 的实现原理。避免分发用 [T] extends [U] 包裹。',
+              },
+              {
+                question: '【对比】类型断言 as 和类型守卫（如 typeof）的本质区别是？',
+                options: [
+                  '两者都是运行时检查',
+                  'as 是编译期断言不做运行时检查，类型守卫基于运行时值真实检查',
+                  'as 比 类型守卫更安全',
+                  '类型守卫会改变运行时行为',
+                ],
+                correctIndex: 1,
+                explanation: 'as 是"你说什么编译器就信什么"，不做运行时验证，错用会把错误推迟到运行时。类型守卫基于运行时值真实检查，编译器据结果收窄类型，类型安全。优先用守卫，确需 as 时应紧跟运行时校验。',
+              },
+              {
+                question: '【应用】以下哪段代码会触发 strictFunctionTypes 报错？',
+                options: [
+                  'const fn: (x: Animal) => void = (x: Dog) => {}（普通函数类型）',
+                  'const fn: (x: Dog) => void = (x: Dog) => {}',
+                  'const fn = (x: Dog) => {}',
+                  'interface Fn { (x: Dog): void } const f: Fn = (x: Animal) => {}',
+                ],
+                correctIndex: 0,
+                explanation: 'strictFunctionTypes 下普通函数类型参数逆变：参数更窄的函数 (x:Dog)=>void 不能赋给参数更宽的 (x:Animal)=>void，因为调用方可能传 Cat。选项4 用方法简写（method shorthand）是双变故不报错，这正是 strictFunctionTypes 只查普通函数类型的边界。',
+              },
+              {
+                question: '【理解】type Foo = { [K in keyof T]: T[K] } 这种语法叫什么？',
+                options: ['条件类型', '映射类型', '模板字面量类型', '交叉类型'],
+                correctIndex: 1,
+                explanation: '[K in keyof T]: NewType 是映射类型语法，遍历 T 的键生成新类型。Partial/Readonly/Pick 都基于映射类型。键重映射（as）和修饰符增删（-?/-readonly）是其扩展能力。',
+              },
+              {
+                question: '【场景】一个 10 万行 JS 老项目要迁 TS，第一步最该做什么？',
+                options: [
+                  '直接开启 strict: true 全量修复',
+                  'allowJs + checkJs 开启，strict: false 起步逐项开启子选项',
+                  '删除所有 JS 重写',
+                  '只迁入口文件',
+                ],
+                correctIndex: 1,
+                explanation: '渐进式迁移：allowJs 让编译器识别 JS，strict: false 起步避免一次性几千报错阻塞。先开 noImplicitAny 再开 strictNullChecks，按叶子模块→业务入口顺序迁移，CI 卡新增允许存量。类型安全是过程不是开关。',
+              },
+              {
+                question: '【综合】关于 TS 工具类型，以下说法正确的是？',
+                options: [
+                  'Pick<T,K> 排除指定键，Omit<T,K> 选取指定键',
+                  'Omit = Pick + Exclude，二者互补',
+                  'Record<K,V> 是映射类型的语法糖但不可遍历联合',
+                  'ReturnType 用 keyof 实现',
+                ],
+                correctIndex: 1,
+                explanation: 'Omit<T,K> 内置定义为 Pick<T, Exclude<keyof T, K>>，即"取反再 Pick"，与 Pick 互补。Pick 选取、Omit 排除。Record<K,V> = { [P in K]: V } 可遍历联合键（K 为联合时生成多键对象）。ReturnType 用 infer 实现非 keyof。',
               },
             ],
           },

@@ -482,7 +482,7 @@ export interface SandboxData {
   /** 初始代码 */
   initialCode: string
   /** 语言 */
-  language?: 'js' | 'html' | 'css'
+  language?: 'js' | 'html' | 'css' | 'typescript'
   /** 可选的提示说明 */
   hint?: string
   /** 可选的断言检查：实时校验学习者代码并给出教学反馈，形成动态反馈闭环 */
@@ -603,6 +603,14 @@ export interface AccordionData {
   multiple?: boolean
   /** 默认展开项索引 */
   defaultOpen?: number[]
+  /**
+   * 默认视图模式：
+   * - 'list'      手风琴列表（默认，全部题目平铺可折叠）
+   * - 'flashcard' 闪卡模式（一题一屏，翻转看答案 + 上下题导航）
+   * 题量较多（如面试题）时设为 'flashcard' 可避免列表过长。
+   * 学习者仍可通过切换按钮在两种模式间自由切换。
+   */
+  defaultMode?: 'list' | 'flashcard'
   /** 面板项 */
   items: Array<{
     /** 标题 */
