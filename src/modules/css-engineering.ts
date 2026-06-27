@@ -1811,123 +1811,403 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
             items: [
               {
                 title: 'Q1: CSS 样式方案的发展历程与各阶段解决的核心问题',
-                content: '阶段1 原生 CSS：解决样式与结构分离，但缺变量/复用。阶段2 预处理器(Sass/Less)：解决变量/嵌套/Mixin，编译时增强。阶段3 命名规范(BEM)：解决命名冲突，靠人工遵守。阶段4 CSS Modules：编译时自动哈希，彻底解决命名冲突。阶段5 CSS-in-JS：样式与组件耦合，支持动态主题，但运行时开销。阶段6 原子化(Tailwind)：实用优先，约束设计系统，按需生成。阶段7 现代 CSS(@container/@layer/CSS 变量)：原生能力增强，减少对工具依赖。每阶段解决前一阶段的痛点。',
+                content:
+                  'CSS 样式方案的演进，本质是不断解决上一阶段的痛点。\n\n' +
+                  '1. 原生 CSS：实现了样式与结构分离，但缺少变量与复用机制。\n' +
+                  '2. 预处理器（Sass/Less）：引入变量、嵌套、Mixin，在编译时增强表达能力。\n' +
+                  '3. 命名规范（BEM）：用约定解决命名冲突，但依赖人工遵守。\n' +
+                  '4. CSS Modules：编译时自动哈希类名，彻底消除命名冲突。\n' +
+                  '5. CSS-in-JS：样式与组件耦合，支持动态主题，但带来运行时开销。\n' +
+                  '6. 原子化（Tailwind）：实用优先，约束设计系统，按需生成。\n' +
+                  '7. 现代 CSS（@container、@layer、CSS 变量）：原生能力增强，减少对工具的依赖。\n\n' +
+                  '结论：每一阶段都在弥补前一阶段的不足，理解这条线索比记忆结论更重要。',
               },
               {
                 title: 'Q2: Sass 变量与 CSS 变量的区别',
-                content: 'Sass 变量：编译时确定为静态值，无法运行时修改，编译后消失（变成字面值）；支持多种数据类型（颜色、数字、列表、map）；作用域分全局与局部（块级）。CSS 变量：运行时生效的自定义属性，可通过 JS 操作（getPropertyValue/setProperty）、媒体查询覆盖、父级覆盖；继承 DOM 树；支持 fallback（var(--x, fallback)）。选型：需运行时主题切换用 CSS 变量；需复杂计算（循环、函数）用 Sass 变量。现代项目优先 CSS 变量做主题，Sass 变量做编译期常量。',
+                content:
+                  '两者定位不同，并非替代关系。\n\n' +
+                  'Sass 变量：\n' +
+                  '- 编译时确定为静态值，编译后消失（变成字面值）；\n' +
+                  '- 无法运行时修改；\n' +
+                  '- 支持颜色、数字、列表、map 等多种数据类型；\n' +
+                  '- 作用域分全局与局部（块级）。\n\n' +
+                  'CSS 变量：\n' +
+                  '- 运行时生效的自定义属性；\n' +
+                  '- 可通过 JS 操作（getPropertyValue / setProperty）、媒体查询或父级覆盖；\n' +
+                  '- 继承 DOM 树；\n' +
+                  '- 支持 fallback：var(--x, fallback)。\n\n' +
+                  '选型建议：需要运行时主题切换用 CSS 变量；需要复杂计算（循环、函数）用 Sass 变量。现代项目通常用 CSS 变量做主题，Sass 变量做编译期常量。',
               },
               {
                 title: 'Q3: @mixin 与 @extend 的区别与选择',
-                content: '@mixin：复用样式块，支持参数，输出到每个使用位置（重复输出，体积略大）。@extend：继承选择器，生成分组选择器（.a, .b 共享样式），不重复输出但可能选择器爆炸。选择原则：需要参数用 Mixin（如 @include button-variant($color)）；纯共享样式且选择器可控用 extend；复杂场景或担心选择器爆炸用 Mixin。Dart Sass 已弱化 @extend，社区倾向 Mixin + placeholder 占位类。',
+                content:
+                  '两者都能复用样式，但机制与产物不同。\n\n' +
+                  '@mixin：复用样式块，支持参数，输出到每个使用位置（重复输出，体积略大）。\n' +
+                  '@extend：继承选择器，生成分组选择器（.a, .b 共享样式），不重复输出，但可能造成选择器爆炸。\n\n' +
+                  '选择原则：\n' +
+                  '- 需要参数时用 Mixin，如 @include button-variant($color)；\n' +
+                  '- 纯共享样式且选择器可控时用 extend；\n' +
+                  '- 复杂场景或担心选择器爆炸时优先 Mixin。\n\n' +
+                  '趋势：Dart Sass 已弱化 @extend，社区更倾向 Mixin + placeholder 占位类。',
               },
               {
                 title: 'Q4: Tailwind 的核心理念与适用场景',
-                content: '核心理念：实用优先（Utility-first），提供 bg-blue-500/p-4/flex 等原子工具类，直接在 HTML 组合，无需写自定义 CSS。优势：1) 约束设计系统（配色/间距/字号统一）；2) 按需生成（PurgeCSS 移除未用类，体积小）；3) 无命名冲突；4) 切换主题/暗色模式方便。劣势：类名冗长、学习曲线、HTML 可读性下降。适用：中后台、快速原型、设计系统约束的项目。不适用：高度定制视觉、强语义化类名需求、团队抗拒原子化的项目。',
+                content:
+                  '核心理念：实用优先（Utility-first）。Tailwind 提供 bg-blue-500、p-4、flex 等原子工具类，直接在 HTML 中组合，无需编写自定义 CSS。\n\n' +
+                  '优势：\n' +
+                  '1. 约束设计系统（配色、间距、字号统一）；\n' +
+                  '2. 按需生成（PurgeCSS 移除未用类，体积小）；\n' +
+                  '3. 无命名冲突；\n' +
+                  '4. 切换主题与暗色模式方便。\n\n' +
+                  '劣势：类名冗长、有学习曲线、HTML 可读性下降。\n\n' +
+                  '适用场景：中后台、快速原型、设计系统约束较强的项目。\n' +
+                  '不适用：高度定制视觉、强语义化类名需求、团队抗拒原子化的项目。',
               },
               {
                 title: 'Q5: Tailwind 的响应式断点机制',
-                content: 'Tailwind 移动优先：默认样式针对最小屏，断点前缀（sm/md/lg/xl/2xl）针对 min-width 升级。默认断点：sm=640px、md=768px、lg=1024px、xl=1280px、2xl=1536px。如 class="flex-col md:flex-row" 表示移动端垂直、md 及以上水平。自定义：tailwind.config.js 的 theme.screens 覆盖。注意：max-* 前缀（max-md:）针对 max-width 桌面优先，现代项目用得少。响应式组合：class="text-sm md:text-base lg:text-lg"。',
+                content:
+                  'Tailwind 采用移动优先策略：默认样式针对最小屏，断点前缀针对 min-width 升级。\n\n' +
+                  '默认断点：\n' +
+                  '- sm = 640px\n' +
+                  '- md = 768px\n' +
+                  '- lg = 1024px\n' +
+                  '- xl = 1280px\n' +
+                  '- 2xl = 1536px\n\n' +
+                  '示例：class="flex-col md:flex-row" 表示移动端垂直排列、md 及以上水平排列。\n\n' +
+                  '自定义：在 tailwind.config.js 的 theme.screens 中覆盖。\n' +
+                  '注意：max-* 前缀（如 max-md:）针对 max-width，属于桌面优先，现代项目用得较少。',
               },
               {
                 title: 'Q6: CSS Modules 的工作原理',
-                content: 'CSS Modules 在编译时为类名添加唯一哈希（如 .btn → .Button_btn__a1b2c），实现局部作用域，彻底解决命名冲突。文件命名约定：*.module.css。编译产物：类名被替换为哈希形式，CSS 与 JS 各自维护映射。composes: btn 复用其他样式（类似 @extend），:global(.reset) 定义全局类名。Vite/Next.js 原生支持，无需配置。TypeScript 需声明 *.module.css 模块类型。优势：编译时保证唯一、零运行时、与框架解耦。劣势：跨组件复用较弱（需 composes 或 CSS 变量）。',
+                content:
+                  'CSS Modules 在编译时为类名添加唯一哈希（如 .btn → .Button_btn__a1b2c），实现局部作用域，彻底解决命名冲突。\n\n' +
+                  '文件命名约定：*.module.css。\n' +
+                  '编译产物：类名被替换为哈希形式，CSS 与 JS 各自维护映射。\n\n' +
+                  '核心能力：\n' +
+                  '- composes: btn 可复用其他样式（类似 @extend）；\n' +
+                  '- :global(.reset) 可定义全局类名。\n\n' +
+                  '工具链：Vite/Next.js 原生支持；TypeScript 需声明 *.module.css 模块类型。\n\n' +
+                  '优势：编译时保证唯一、零运行时、与框架解耦。\n' +
+                  '劣势：跨组件复用较弱（需 composes 或 CSS 变量）。',
               },
               {
                 title: 'Q7: CSS-in-JS 的运行时与零运行时方案对比',
-                content: '运行时方案（styled-components/emotion）：在浏览器中动态生成类名与样式表，支持完全动态主题（props 驱动），但有运行时开销（~10-30KB）、SSR 复杂（需提取样式表）。零运行时方案（Vanilla Extract/Linaria/Panda CSS）：编译时生成静态 CSS，无运行时开销，但动态主题受限（需用 CSS 变量传值）。React 18 + 并发渲染下，运行时 CSS-in-JS 因 hook 调用顺序问题受诟病（styled-components 曾警告），社区转向零运行时或 Tailwind。选型：SSR/性能敏感用零运行时；需完全动态样式用运行时但谨慎评估。',
+                content:
+                  '两者都能把样式写进 JS，但执行时机与代价不同。\n\n' +
+                  '运行时方案（styled-components、emotion）：\n' +
+                  '- 在浏览器中动态生成类名与样式表；\n' +
+                  '- 支持完全动态主题（props 驱动）；\n' +
+                  '- 代价：运行时开销约 10–30KB，SSR 较复杂（需提取样式表）。\n\n' +
+                  '零运行时方案（Vanilla Extract、Linaria、Panda CSS）：\n' +
+                  '- 编译时生成静态 CSS，无运行时开销；\n' +
+                  '- 动态主题受限（需用 CSS 变量传值）。\n\n' +
+                  '趋势：React 18 并发渲染下，运行时方案因 hook 调用顺序问题受诟病，社区转向零运行时或 Tailwind。\n\n' +
+                  '选型：SSR 或性能敏感场景用零运行时；需要完全动态样式时可用运行时，但要谨慎评估。',
               },
               {
                 title: 'Q8: PostCSS 的作用与典型插件',
-                content: 'PostCSS 是 CSS 后处理器（不是预处理器），用 JS 插件转换 CSS AST。典型插件：autoprefixer（自动加浏览器前缀）、cssnano（压缩）、postcss-preset-env（用未来 CSS 语法，自动降级）、tailwindcss（Tailwind 本身是 PostCSS 插件）、postcss-modules（实现 CSS Modules）。与 Sass 区别：Sass 增强语法（变量/嵌套/Mixin），PostCSS 转换现有 CSS（前缀/降级/优化）。现代项目 PostCSS 是事实标准，Tailwind/autoprefixer 都基于它。配置：postcss.config.js。',
+                content:
+                  'PostCSS 是 CSS 后处理器（不是预处理器），用 JS 插件转换 CSS 的 AST。\n\n' +
+                  '典型插件：\n' +
+                  '- autoprefixer：自动添加浏览器前缀；\n' +
+                  '- cssnano：压缩 CSS；\n' +
+                  '- postcss-preset-env：使用未来 CSS 语法并自动降级；\n' +
+                  '- tailwindcss：Tailwind 本身就是一个 PostCSS 插件；\n' +
+                  '- postcss-modules：实现 CSS Modules。\n\n' +
+                  '与 Sass 的区别：Sass 增强语法（变量、嵌套、Mixin），PostCSS 转换现有 CSS（前缀、降级、优化）。\n\n' +
+                  '地位：现代项目中 PostCSS 已是事实标准，Tailwind、autoprefixer 都基于它构建。配置在 postcss.config.js。',
               },
               {
                 title: 'Q9: BEM 命名规范的语法与优劣',
-                content: '语法：Block__Element--Modifier。Block 是独立可复用单元（.card）；Element 是块内子部分（.card__title）；Modifier 是块或元素的状态变体（.card--featured / .card__title--large）。HTML 中修饰符需与块名同时出现：class="card card--featured"。优势：类名自文档化、零命名冲突、表达层级与状态、易复用。劣势：类名冗长、深层嵌套是反模式（.block__e1__e2 错误）、靠人工遵守。现代替代：CSS Modules 自动哈希、Tailwind 原子类无命名。但 BEM 仍是团队规范与设计系统命名的基础。',
+                content:
+                  '语法：Block__Element--Modifier。\n\n' +
+                  '- Block：独立可复用单元，如 .card；\n' +
+                  '- Element：块内子部分，如 .card__title；\n' +
+                  '- Modifier：块或元素的状态变体，如 .card--featured、.card__title--large。\n\n' +
+                  '注意：HTML 中修饰符需与块名同时出现，如 class="card card--featured"。\n\n' +
+                  '优势：类名自文档化、零命名冲突、表达层级与状态、易复用。\n' +
+                  '劣势：类名冗长；深层嵌套是反模式（.block__e1__e2 错误）；依赖人工遵守。\n\n' +
+                  '现代替代：CSS Modules 自动哈希、Tailwind 原子类无命名。但 BEM 仍是团队规范与设计系统命名的基础。',
               },
               {
                 title: 'Q10: ITCSS 与 SMACSS 的分层思想',
-                content: 'ITCSS（Inverted Triangle CSS）：从通用到具体分 7 层 - Settings/Tokens（变量）、Tools（Mixin/Function）、Generic（reset/normalize）、Elements（标签样式）、Objects（无视觉的布局类）、Components（组件样式）、Utilities（工具类）。下层可使用上层，不可反向。SMACSS（Scalable Modular CSS）：分 5 类 - Base（标签样式）、Layout（布局）、Module（组件）、State（状态类 .is-active）、Theme（主题）。两者都是"分层 + 限定依赖方向"思想，解决大项目的样式组织。现代项目用 CSS Modules/Tailwind 后，分层思想体现在 tokens 层（CSS 变量）与组件层。',
+                content:
+                  '两者都用「分层 + 限定依赖方向」的思想组织大型项目的样式。\n\n' +
+                  'ITCSS（Inverted Triangle CSS），从通用到具体分 7 层：\n' +
+                  '1. Settings/Tokens：变量；\n' +
+                  '2. Tools：Mixin/Function；\n' +
+                  '3. Generic：reset/normalize；\n' +
+                  '4. Elements：标签样式；\n' +
+                  '5. Objects：无视觉的布局类；\n' +
+                  '6. Components：组件样式；\n' +
+                  '7. Utilities：工具类。\n' +
+                  '规则：下层可使用上层，不可反向。\n\n' +
+                  'SMACSS（Scalable Modular CSS），分 5 类：\n' +
+                  'Base（标签样式）、Layout（布局）、Module（组件）、State（状态类 .is-active）、Theme（主题）。\n\n' +
+                  '现代演进：使用 CSS Modules/Tailwind 后，分层思想主要体现在 tokens 层（CSS 变量）与组件层。',
               },
               {
                 title: 'Q11: 容器查询 @container 与媒体查询 @media 的区别',
-                content: '@media 基于视口宽度，组件在不同位置表现一致（无法感知容器），适合页面级响应式。@container 基于父容器宽度（需先 container-type: inline-size），组件根据可用空间自适应，适合可复用组件。使用：1) 父级声明 container-type: inline-size；2) 子级用 @container (min-width: 400px) { ... }。优势：组件级响应式，真正解耦组件与页面布局。劣势：兼容性较新（2023 年主流浏览器支持），旧项目需 polyfill。选型：可复用组件（卡片、侧边栏、表格）用容器查询；页面整体布局用媒体查询。',
+                content:
+                  '@media 基于视口宽度，组件在不同位置表现一致（无法感知容器），适合页面级响应式。\n' +
+                  '@container 基于父容器宽度，组件根据可用空间自适应，适合可复用组件。\n\n' +
+                  '使用方式：\n' +
+                  '1. 父级声明 container-type: inline-size；\n' +
+                  '2. 子级用 @container (min-width: 400px) { ... }。\n\n' +
+                  '优势：组件级响应式，真正解耦组件与页面布局。\n' +
+                  '劣势：兼容性较新（2023 年起主流浏览器支持），旧项目需 polyfill。\n\n' +
+                  '选型：可复用组件（卡片、侧边栏、表格）用容器查询；页面整体布局用媒体查询。',
               },
               {
                 title: 'Q12: @layer 层叠层的作用与使用',
-                content: '@layer 声明层叠层，显式控制样式优先级。声明顺序决定优先级：后声明的层优先级高。如 @layer reset, base, components, utilities; 中 utilities 层优先级最高，即使特异性低也会覆盖其他层。用途：1) 覆盖第三方库样式无需 !important；2) 组织样式架构（reset/base/components/utilities）；3) 解决样式覆盖难题。注意：未声明在层中的样式优先级高于所有层（"未分层样式"最强）。浏览器兼容性 2022 年后主流支持。选型：大型项目组织样式层；覆盖第三方库优先用 @layer 而非 !important。',
+                content:
+                  '@layer 用于声明层叠层，显式控制样式优先级。声明顺序决定优先级：后声明的层优先级更高。\n\n' +
+                  '示例：@layer reset, base, components, utilities; 中 utilities 层优先级最高，即使特异性较低也会覆盖其他层。\n\n' +
+                  '主要用途：\n' +
+                  '1. 覆盖第三方库样式，无需 !important；\n' +
+                  '2. 组织样式架构（reset/base/components/utilities）；\n' +
+                  '3. 解决样式覆盖难题。\n\n' +
+                  '注意：未声明在层中的样式优先级高于所有层（「未分层样式」最强）。\n\n' +
+                  '兼容性：2022 年后主流浏览器支持。覆盖第三方库样式时优先用 @layer 而非 !important。',
               },
               {
                 title: 'Q13: CSS 变量如何实现主题切换',
-                content: '原理：CSS 变量（自定义属性）运行时生效，可被 JS 操作与选择器覆盖。实现：1) :root 定义默认变量（--color-bg、--color-text 等）；2) [data-theme="dark"] 或 .dark 选择器覆盖变量值；3) 样式用 var() 引用变量。切换：JS 操作 document.documentElement.dataset.theme = "dark" 或 classList.toggle("dark")。优势：零运行时开销（纯 CSS）、切换瞬时、SSR 友好、可与 Tailwind dark: 变体配合。注意：变量继承 DOM 树，组件级变量可被父级覆盖（.hero { --card-padding: 32px }）；fallback 语法 var(--x, #fff) 防未定义。',
+                content:
+                  '原理：CSS 变量（自定义属性）运行时生效，可被 JS 操作与选择器覆盖。\n\n' +
+                  '实现步骤：\n' +
+                  '1. 在 :root 定义默认变量（--color-bg、--color-text 等）；\n' +
+                  '2. 用 [data-theme="dark"] 或 .dark 选择器覆盖变量值；\n' +
+                  '3. 样式中用 var() 引用变量。\n\n' +
+                  '切换方式：JS 操作 document.documentElement.dataset.theme = "dark"，或 classList.toggle("dark")。\n\n' +
+                  '优势：零运行时开销（纯 CSS）、切换瞬时、SSR 友好、可与 Tailwind dark: 变体配合。\n\n' +
+                  '注意：变量继承 DOM 树，组件级变量可被父级覆盖（如 .hero { --card-padding: 32px }）；fallback 语法 var(--x, #fff) 可防止变量未定义。',
               },
               {
                 title: 'Q14: CSS 作用域与样式隔离的方案',
-                content: '方案一 Shadow DOM：Web Components 原生隔离，样式与子树完全封闭，外部无法渗透（除非用 ::part）。方案二 CSS Modules：编译时哈希类名，逻辑隔离（仍全局样式表，但类名唯一）。方案三 CSS-in-JS：运行时生成唯一类名（styled-components）或作用域容器（emotion css={...}）。方案四 @scope（新）：CSS 原生作用域，@scope (.card) { ... } 限定样式作用范围。方案五 iframe：物理隔离，但通信与样式注入复杂。选型：Web Components 用 Shadow DOM；React 组件用 CSS Modules 或 CSS-in-JS；样式隔离实验用 @scope（兼容性较新）。',
+                content:
+                  '常见方案有五种，隔离强度与适用场景各异。\n\n' +
+                  '1. Shadow DOM：Web Components 原生隔离，样式与子树完全封闭（除 ::part 外无法渗透）。\n' +
+                  '2. CSS Modules：编译时哈希类名，逻辑隔离（仍是全局样式表，但类名唯一）。\n' +
+                  '3. CSS-in-JS：运行时生成唯一类名（styled-components）或作用域容器（emotion css={...}）。\n' +
+                  '4. @scope（新）：CSS 原生作用域，@scope (.card) { ... } 限定作用范围。\n' +
+                  '5. iframe：物理隔离，但通信与样式注入复杂。\n\n' +
+                  '选型：Web Components 用 Shadow DOM；React 组件用 CSS Modules 或 CSS-in-JS；样式隔离实验可用 @scope（兼容性较新）。',
               },
               {
                 title: 'Q15: CSS 性能优化方案',
-                content: '1) 减少选择器复杂度：避免深层嵌套（.a .b .c .d）、避免通用选择器（*）、避免属性选择器过度使用。2) 减少回流重绘：transform/opacity 代替 top/left/width（触发合成层而非回流）；批量改样式用 class 切换；脱离文档流（display:none）操作。3) 减少样式表体积：PurgeCSS/Tailwind 按需生成移除未用类；cssnano 压缩；@import 改为 <link>（避免串行加载）。4) 关键 CSS 内联：首屏样式 inline 到 <head>，非关键 CSS 异步加载。5) CSS containment：contain: layout paint 隔离重排范围。6) will-careful 用 will-change 提示浏览器优化（但勿滥用）。',
+                content:
+                  '可从选择器、回流重绘、体积、加载四个维度入手。\n\n' +
+                  '1. 减少选择器复杂度：避免深层嵌套（.a .b .c .d）、通用选择器（*）、属性选择器过度使用。\n' +
+                  '2. 减少回流重绘：用 transform/opacity 代替 top/left/width（触发合成层而非回流）；批量改样式用 class 切换；脱离文档流（display:none）后再操作。\n' +
+                  '3. 减少样式表体积：PurgeCSS/Tailwind 按需生成移除未用类；cssnano 压缩；@import 改为 <link>（避免串行加载）。\n' +
+                  '4. 关键 CSS 内联：首屏样式 inline 到 <head>，非关键 CSS 异步加载。\n' +
+                  '5. CSS containment：contain: layout paint 隔离重排范围。\n' +
+                  '6. 谨慎用 will-change 提示浏览器优化（勿滥用）。',
               },
               {
                 title: 'Q16: will-change 的作用与陷阱',
-                content: 'will-change: transform 提示浏览器该元素即将变化，提前优化（创建合成层、预分配资源），用于动画/拖拽元素提升流畅度。陷阱：1) 滥用导致内存爆炸（每个 will-change 元素都创建合成层）；2) 长期保留 will-change 浪费资源（应在变化结束后移除）；3) 已用 transform 做动画时无需 will-change（浏览器已优化）。正确用法：在动画开始前设置（如 hover 时），动画结束后移除；或仅对频繁动画的元素长期设置。替代：CSS containment（contain）隔离重排范围，更轻量。',
+                content:
+                  'will-change: transform 用于提示浏览器该元素即将变化，提前优化（创建合成层、预分配资源），常用于动画或拖拽元素以提升流畅度。\n\n' +
+                  '常见陷阱：\n' +
+                  '1. 滥用导致内存爆炸（每个 will-change 元素都会创建合成层）；\n' +
+                  '2. 长期保留 will-change 浪费资源（应在变化结束后移除）；\n' +
+                  '3. 已用 transform 做动画时无需 will-change（浏览器已优化）。\n\n' +
+                  '正确用法：在动画开始前设置（如 hover 时），动画结束后移除；或仅对频繁动画的元素长期设置。\n\n' +
+                  '替代方案：CSS containment（contain）隔离重排范围，更轻量。',
               },
               {
                 title: 'Q17: CSS Houdini 的能力与限制',
-                content: 'CSS Houdini 让 JS 直接操作 CSS 引擎，扩展 CSS 能力。API：1) Paint API（自定义绘制，如实现气泡箭头、复杂背景）；2) Layout API（自定义布局，如实现 masonry 瀑布流）；3) Properties & Values API（注册自定义属性类型，如 @property --angle { syntax: "<angle>"; ... } 让变量参与动画）；4) Worklet（在独立线程跑自定义渲染逻辑）。优势：突破 CSS 原生限制，性能优（独立线程）。限制：兼容性差（Chrome 较好，Safari/Firefox 部分支持），生产用得少。@property 是最实用的子集，已用于高级动画（如渐变角度动画）。',
+                content:
+                  'CSS Houdini 让 JS 直接操作 CSS 引擎，扩展 CSS 能力。\n\n' +
+                  '主要 API：\n' +
+                  '1. Paint API：自定义绘制，如实现气泡箭头、复杂背景；\n' +
+                  '2. Layout API：自定义布局，如实现 masonry 瀑布流；\n' +
+                  '3. Properties & Values API：注册自定义属性类型，如 @property --angle { syntax: "<angle>"; ... } 让变量参与动画；\n' +
+                  '4. Worklet：在独立线程运行自定义渲染逻辑。\n\n' +
+                  '优势：突破 CSS 原生限制，性能优（独立线程）。\n' +
+                  '限制：兼容性差（Chrome 较好，Safari/Firefox 部分支持），生产用得少。\n\n' +
+                  '实用子集：@property 是最实用的部分，已用于高级动画（如渐变角度动画）。',
               },
               {
                 title: 'Q18: :has() 选择器的作用与场景',
-                content: ':has() 是父选择器（实际是"关系选择器"），让 CSS 能根据子元素状态选父级。如 .card:has(img) 选中含 img 的 .card；.form:has(input:invalid) 高亮含非法输入的表单。场景：1) 根据子元素状态样式化父级（以前需 JS）；2) 实现复杂条件样式（如"前一个兄弟是 h1 的 p 加 margin"）。兼容性 2023 年主流浏览器支持。注意：性能敏感场景慎用（需回溯检查），但浏览器已优化。:has() 是 CSS 选择器近年最大增强，替代大量 JS 交互逻辑。',
+                content:
+                  ':has() 是「关系选择器」（常被称为父选择器），让 CSS 能根据子元素状态选父级。\n\n' +
+                  '示例：\n' +
+                  '- .card:has(img) 选中包含 img 的 .card；\n' +
+                  '- .form:has(input:invalid) 高亮含非法输入的表单。\n\n' +
+                  '典型场景：\n' +
+                  '1. 根据子元素状态样式化父级（以前需 JS）；\n' +
+                  '2. 实现复杂条件样式（如「前一个兄弟是 h1 的 p 加 margin」）。\n\n' +
+                  '兼容性：2023 年起主流浏览器支持。\n' +
+                  '注意：性能敏感场景慎用（需回溯检查），但浏览器已做优化。:has() 是 CSS 选择器近年最大的增强，可替代大量 JS 交互逻辑。',
               },
               {
                 title: 'Q19: CSS 调试技巧',
-                content: '1) Chrome DevTools Elements 面板：实时编辑样式、查看计算值（Computed）、盒模型可视化。2) :hover/:focus 调试：在 Styles 面板点 :hov 触发伪类，无需实际交互。3) 选择器特异性：Styles 面板显示被覆盖规则（划线），可判断为何样式未生效。4) 层叠层调试：@layer 顺序影响优先级，用 Layers 面板查看。5) 未生效排查：检查选择器拼写、特异性、层叠层顺序、!important 滥用、CSS Modules 哈希、Tailwind 类名拼写。6) 性能：Performance 面板看 Layout/Recalculate Style 耗时，定位回流重绘热点。7) CSS overview 面板：统计配色/字号/对比度，发现设计系统不一致。',
+                content:
+                  '善用 DevTools 各面板可大幅提升排查效率。\n\n' +
+                  '1. Elements 面板：实时编辑样式、查看计算值（Computed）、盒模型可视化。\n' +
+                  '2. 伪类调试：在 Styles 面板点 :hov 触发 :hover/:focus，无需实际交互。\n' +
+                  '3. 选择器特异性：Styles 面板显示被覆盖规则（划线），可判断样式未生效原因。\n' +
+                  '4. 层叠层调试：@layer 顺序影响优先级，用 Layers 面板查看。\n' +
+                  '5. 未生效排查：检查选择器拼写、特异性、层叠层顺序、!important 滥用、CSS Modules 哈希、Tailwind 类名拼写。\n' +
+                  '6. 性能：Performance 面板看 Layout/Recalculate Style 耗时，定位回流重绘热点。\n' +
+                  '7. CSS Overview 面板：统计配色、字号、对比度，发现设计系统不一致。',
               },
               {
                 title: 'Q20: CSS 样式覆盖的优先级规则',
-                content: '优先级（从低到高）：1) 浏览器默认样式（user-agent）；2) 用户样式（浏览器设置）；3) 作者样式（开发者写的 CSS）。作者样式内：1) !important > 普通；2) 层叠层（@layer）：未分层 > 后声明层 > 先声明层；3) 特异性：内联 style > ID > 类/属性/伪类 > 元素/伪元素（计算 a,b,c,d）；4) 来源顺序：后写的覆盖先写的。注意：!important 会破坏正常层叠，应优先用 @layer 或调整特异性；CSS Modules 哈希不影响特异性（仍是类选择器）；内联 style 可被 !important 覆盖但不可被普通规则覆盖。',
+                content:
+                  '优先级从低到高：浏览器默认样式 → 用户样式（浏览器设置）→ 作者样式（开发者写的 CSS）。\n\n' +
+                  '作者样式内部规则：\n' +
+                  '1. !important 优先于普通规则；\n' +
+                  '2. 层叠层（@layer）：未分层 > 后声明层 > 先声明层；\n' +
+                  '3. 特异性：内联 style > ID > 类/属性/伪类 > 元素/伪元素（计算 a,b,c,d）；\n' +
+                  '4. 来源顺序：后写的覆盖先写的。\n\n' +
+                  '注意：\n' +
+                  '- !important 会破坏正常层叠，应优先用 @layer 或调整特异性；\n' +
+                  '- CSS Modules 哈希不影响特异性（仍是类选择器）；\n' +
+                  '- 内联 style 可被 !important 覆盖，但不能被普通规则覆盖。',
               },
               {
                 title: 'Q21: CSS 加载与渲染阻塞',
-                content: 'CSS 是渲染阻塞资源：浏览器需等 CSSOM 构建完才会渲染，避免 FOUC（无样式闪烁）。优化：1) 关键 CSS 内联到 <head>（首屏样式）；2) 非关键 CSS 异步加载（media="print" onload="this.media=\'all\'" 或 preload）；3) 减少 CSS 体积（PurgeCSS/压缩）；4) 避免 @import（串行加载，改用 <link> 并行）；5) preload 关键 CSS（<link rel="preload" as="style">）。注意：JS 执行会等 CSSOM（因 JS 可能读样式），CSS 阻塞渲染也间接阻塞 JS 执行。SSR 项目尤其要控制首屏 CSS 体积。',
+                content:
+                  'CSS 是渲染阻塞资源：浏览器需等 CSSOM 构建完成才会渲染，以避免 FOUC（无样式闪烁）。\n\n' +
+                  '优化手段：\n' +
+                  '1. 关键 CSS 内联到 <head>（首屏样式）；\n' +
+                  '2. 非关键 CSS 异步加载（media="print" onload="this.media=\'all\'" 或 preload）；\n' +
+                  '3. 减少 CSS 体积（PurgeCSS、压缩）；\n' +
+                  '4. 避免 @import（串行加载，改用 <link> 并行）；\n' +
+                  '5. preload 关键 CSS（<link rel="preload" as="style">）。\n\n' +
+                  '注意：JS 执行会等 CSSOM（因 JS 可能读样式），所以 CSS 阻塞渲染也间接阻塞 JS 执行。SSR 项目尤其要控制首屏 CSS 体积。',
               },
               {
                 title: 'Q22: CSS 与 SEO/无障碍的关系',
-                content: 'SEO：1) 语义化标签（<nav>/<main>/<article>）优于 div + class，搜索引擎理解结构；2) 隐藏内容用 .visually-hidden（clip/position）而非 display:none（后者不索引）；3) 关键内容在 DOM 前部（CSS 定位调整视觉顺序不影响 DOM 顺序）。无障碍：1) 颜色对比度（WCAG AA 4.5:1 文本、3:1 大文本）；2) :focus-visible 显示焦点轮廓（勿 outline:none 无替代）；3) 动画尊重 prefers-reduced-motion；4) 暗色模式对比度。CSS 工程化应将这些标准内置到设计 tokens（--color-text-contrast 等）。',
+                content:
+                  'CSS 工程化应将 SEO 与无障碍标准前置到设计 tokens。\n\n' +
+                  'SEO：\n' +
+                  '1. 语义化标签（<nav>、<main>、<article>）优于 div + class，便于搜索引擎理解结构；\n' +
+                  '2. 隐藏内容用 .visually-hidden（clip/position）而非 display:none（后者不被索引）；\n' +
+                  '3. 关键内容置于 DOM 前部（CSS 定位调整视觉顺序不影响 DOM 顺序）。\n\n' +
+                  '无障碍：\n' +
+                  '1. 颜色对比度（WCAG AA：文本 4.5:1、大文本 3:1）；\n' +
+                  '2. :focus-visible 显示焦点轮廓（勿 outline:none 无替代）；\n' +
+                  '3. 动画尊重 prefers-reduced-motion；\n' +
+                  '4. 暗色模式注意对比度。',
               },
               {
                 title: 'Q23: 设计系统的 CSS 实现方案',
-                content: '设计系统（Design System）包含 tokens、组件、规范，CSS 实现核心是 tokens 层。方案：1) CSS 变量做 tokens（--color-primary、--space-md、--radius），运行时可切换；2) Sass/Less 变量做编译期 tokens（配色/字号），编译后静态；3) Tailwind config 做 tokens（theme.extend.colors/spacing），约束设计系统；4) Style Dictionary 跨平台 tokens（Web/iOS/Android 共享）。组件层：CSS Modules 或 CSS-in-JS 或 Tailwind 组件类。现代主流：CSS 变量做主题 tokens + Tailwind 做工具类 + shadcn/ui 做组件层（基于 Radix Headless + Tailwind）。',
+                content:
+                  '设计系统（Design System）包含 tokens、组件、规范，CSS 实现的核心是 tokens 层。\n\n' +
+                  'tokens 实现方案：\n' +
+                  '1. CSS 变量做 tokens（--color-primary、--space-md、--radius），运行时可切换；\n' +
+                  '2. Sass/Less 变量做编译期 tokens（配色、字号），编译后静态；\n' +
+                  '3. Tailwind config 做 tokens（theme.extend.colors/spacing），约束设计系统；\n' +
+                  '4. Style Dictionary 跨平台 tokens（Web/iOS/Android 共享）。\n\n' +
+                  '组件层：可用 CSS Modules、CSS-in-JS 或 Tailwind 组件类。\n\n' +
+                  '现代主流组合：CSS 变量做主题 tokens + Tailwind 做工具类 + shadcn/ui 做组件层（基于 Radix Headless + Tailwind）。',
               },
               {
                 title: 'Q24: Tailwind 的 @apply 指令',
-                content: '@apply 在 CSS 中复用 Tailwind 工具类，如 .btn { @apply bg-blue-500 text-white p-4 rounded; }。用途：1) 抽取重复工具类组合为语义化类名（组件类）；2) 在第三方库样式中应用 Tailwind；3) 与 CSS 变量结合做主题化组件。争议：过度使用 @apply 会失去 Tailwind 的"无命名"优势，回到传统语义化类名。社区建议：简单组合用 @apply，复杂逻辑直接写工具类；@apply 适合组件封装层（如 .btn-primary），不适合业务页面。注意：@apply 不能应用 @screen、@variant 等特殊指令；Tailwind v4 调整了 @apply 语义。',
+                content:
+                  '@apply 用于在 CSS 中复用 Tailwind 工具类，例如：\n' +
+                  '.btn { @apply bg-blue-500 text-white p-4 rounded; }\n\n' +
+                  '主要用途：\n' +
+                  '1. 抽取重复的工具类组合为语义化类名（组件类）；\n' +
+                  '2. 在第三方库样式中应用 Tailwind；\n' +
+                  '3. 与 CSS 变量结合做主题化组件。\n\n' +
+                  '争议：过度使用 @apply 会失去 Tailwind「无命名」的优势，回到传统语义化类名。\n\n' +
+                  '社区建议：简单组合可用 @apply，复杂逻辑直接写工具类；@apply 适合组件封装层（如 .btn-primary），不适合业务页面。\n\n' +
+                  '注意：@apply 不能应用 @screen、@variant 等特殊指令；Tailwind v4 调整了 @apply 语义。',
               },
               {
                 title: 'Q25: CSS Modules 的 composes 用法',
-                content: 'composes 复用其他类样式，类似 Sass @extend 但作用域在模块内。用法：1) 同文件 composes: btn;（.primary { composes: btn; background: blue; }）；2) 跨文件 composes: btn from "./button.module.css";。编译后类名组合：class="Button_btn__a1b2 Button_primary__d3e4"，样式叠加。优势：编译时保证唯一、无运行时、与框架解耦。与 @extend 区别：composes 是模块级（不跨文件除非显式 import），@extend 是全局（易选择器爆炸）。与 Tailwind 区别：composes 仍是语义化类名，Tailwind 是原子类无命名。',
+                content:
+                  'composes 用于复用其他类样式，类似 Sass @extend，但作用域在模块内。\n\n' +
+                  '用法：\n' +
+                  '1. 同文件：.primary { composes: btn; background: blue; }\n' +
+                  '2. 跨文件：composes: btn from "./button.module.css";\n\n' +
+                  '编译后类名组合：class="Button_btn__a1b2 Button_primary__d3e4"，样式叠加。\n\n' +
+                  '优势：编译时保证唯一、无运行时、与框架解耦。\n\n' +
+                  '对比：\n' +
+                  '- 与 @extend：composes 是模块级（不跨文件除非显式 import），@extend 是全局（易选择器爆炸）；\n' +
+                  '- 与 Tailwind：composes 仍是语义化类名，Tailwind 是原子类无命名。',
               },
               {
                 title: 'Q26 【场景题】: 老项目从 Sass 迁移到 Tailwind，如何评估与执行',
-                content: '评估：1) 项目规模与团队熟悉度（团队抗拒则失败）；2) 现有设计系统是否约束（Sass 自由配色难迁移）；3) 组件复用程度（高复用适合 Tailwind 约束）。执行步骤：1) 渐进迁移，非大爆炸重写（先新页面用 Tailwind，旧页面保留 Sass）；2) 配置 tailwind.config.js 映射现有设计 tokens（colors 映射 Sass 变量值）；3) 提取重复工具类组合为组件类（@apply）；4) 旧 Sass 文件用 PurgeCSS 移除未用样式；5) 团队培训与代码评审。风险：类名冗长可读性下降、设计系统漂移、与 CSS Modules 兼容（混用）。回退方案：保留 Sass，仅新项目用 Tailwind。',
+                content:
+                  '先评估可行性，再渐进迁移。\n\n' +
+                  '评估：\n' +
+                  '1. 项目规模与团队熟悉度（团队抗拒则易失败）；\n' +
+                  '2. 现有设计系统是否约束（Sass 自由配色难迁移）；\n' +
+                  '3. 组件复用程度（高复用适合 Tailwind 约束）。\n\n' +
+                  '执行步骤：\n' +
+                  '1. 渐进迁移，避免大爆炸重写（新页面用 Tailwind，旧页面保留 Sass）；\n' +
+                  '2. 配置 tailwind.config.js 映射现有设计 tokens（colors 映射 Sass 变量值）；\n' +
+                  '3. 提取重复工具类组合为组件类（@apply）；\n' +
+                  '4. 旧 Sass 文件用 PurgeCSS 移除未用样式；\n' +
+                  '5. 团队培训与代码评审。\n\n' +
+                  '风险：类名冗长可读性下降、设计系统漂移、与 CSS Modules 兼容（混用）。\n' +
+                  '回退方案：保留 Sass，仅新项目用 Tailwind。',
               },
               {
                 title: 'Q27 【场景题】: 首屏 LCP 慢，定位到 CSS 阻塞，如何优化',
-                content: '排查：1) DevTools Network 看 CSS 加载顺序与体积；2) Performance 看渲染阻塞时间（CSSOM 构建耗时）；3) Lighthouse 看 LCP 元素与阻塞资源。优化方案：1) 关键 CSS（首屏用到的样式）内联到 <head>（<style> 标签），消除阻塞；2) 非关键 CSS 异步加载（media="print" onload、preload）；3) 压缩 CSS（cssnano）、移除未用样式（PurgeCSS）；4) 避免 @import（串行加载，改 <link> 并行）；5) 拆分 CSS 按路由加载（如 Vue/React 路由级 CSS）；6) preload 关键 CSS（<link rel="preload" as="style">）；7) 减少选择器复杂度加速 CSSOM 解析。验证：Lighthouse LCP < 2.5s，Coverage 工具看未用 CSS 占比。',
+                content:
+                  '先排查定位，再针对性优化。\n\n' +
+                  '排查：\n' +
+                  '1. DevTools Network 看 CSS 加载顺序与体积；\n' +
+                  '2. Performance 看渲染阻塞时间（CSSOM 构建耗时）；\n' +
+                  '3. Lighthouse 看 LCP 元素与阻塞资源。\n\n' +
+                  '优化方案：\n' +
+                  '1. 关键 CSS（首屏样式）内联到 <head> 的 <style>，消除阻塞；\n' +
+                  '2. 非关键 CSS 异步加载（media="print" onload、preload）；\n' +
+                  '3. 压缩 CSS（cssnano）、移除未用样式（PurgeCSS）；\n' +
+                  '4. 避免 @import（串行加载，改 <link> 并行）；\n' +
+                  '5. 按路由拆分 CSS 加载；\n' +
+                  '6. preload 关键 CSS（<link rel="preload" as="style">）；\n' +
+                  '7. 减少选择器复杂度，加速 CSSOM 解析。\n\n' +
+                  '验证：Lighthouse LCP < 2.5s，Coverage 工具看未用 CSS 占比。',
               },
               {
                 title: 'Q28 【对比题】: CSS Modules vs CSS-in-JS',
-                content: 'CSS Modules：编译时哈希类名，零运行时，与框架解耦（Vue/React/原生都支持），SSR 友好。劣势：动态主题需借 CSS 变量，跨组件复用较弱（composes）。CSS-in-JS：运行时（styled-components）或零运行时（Vanilla Extract），样式与组件耦合，支持完全动态主题（props 驱动），TypeScript 类型安全。劣势：运行时方案有性能开销与 SSR 复杂，React 18 并发渲染下受诟病。选型：SSR/性能敏感用 CSS Modules；需完全动态样式（如根据 props 变色）用零运行时 CSS-in-JS；纯静态项目两者皆可，CSS Modules 更轻。',
+                content:
+                  '两者都能实现样式隔离，但机制与代价不同。\n\n' +
+                  'CSS Modules：\n' +
+                  '- 编译时哈希类名，零运行时；\n' +
+                  '- 与框架解耦（Vue/React/原生都支持），SSR 友好；\n' +
+                  '- 劣势：动态主题需借 CSS 变量，跨组件复用较弱（composes）。\n\n' +
+                  'CSS-in-JS：\n' +
+                  '- 分运行时（styled-components）与零运行时（Vanilla Extract）两种；\n' +
+                  '- 样式与组件耦合，支持完全动态主题（props 驱动），TypeScript 类型安全；\n' +
+                  '- 劣势：运行时方案有性能开销与 SSR 复杂，React 18 并发渲染下受诟病。\n\n' +
+                  '选型：SSR/性能敏感用 CSS Modules；需完全动态样式（如根据 props 变色）用零运行时 CSS-in-JS；纯静态项目两者皆可，CSS Modules 更轻。',
               },
               {
                 title: 'Q29 【对比题】: Tailwind vs 传统 BEM + Sass',
-                content: 'Tailwind：原子类无命名，约束设计系统，按需生成体积小，移动优先响应式便捷。劣势：类名冗长、HTML 可读性差、学习曲线、强约束可能限制创意。BEM + Sass：语义化类名可读，Sass 提供变量/嵌套/Mixin 增强表达力，团队熟悉。劣势：命名靠人工遵守易冲突，样式体积大（写多少用多少），设计系统约束弱。选型：快速开发/中后台/设计系统约束用 Tailwind；复杂视觉/团队抗拒原子化/需强语义化用 BEM + Sass。现代实践：两者可混用，Tailwind 做布局与原子，BEM 做复杂组件，Sass 变量做编译期常量。',
+                content:
+                  '两者代表两种不同的样式组织哲学。\n\n' +
+                  'Tailwind：\n' +
+                  '- 原子类无命名，约束设计系统，按需生成体积小，移动优先响应式便捷；\n' +
+                  '- 劣势：类名冗长、HTML 可读性差、学习曲线、强约束可能限制创意。\n\n' +
+                  'BEM + Sass：\n' +
+                  '- 语义化类名可读，Sass 提供变量/嵌套/Mixin 增强表达力，团队熟悉；\n' +
+                  '- 劣势：命名靠人工遵守易冲突，样式体积大（写多少用多少），设计系统约束弱。\n\n' +
+                  '选型：快速开发/中后台/设计系统约束用 Tailwind；复杂视觉/团队抗拒原子化/需强语义化用 BEM + Sass。\n\n' +
+                  '现代实践：两者可混用——Tailwind 做布局与原子，BEM 做复杂组件，Sass 变量做编译期常量。',
               },
               {
                 title: 'Q30 【对比题】: 媒体查询 @media vs 容器查询 @container',
-                content: '@media：基于视口宽度（min-width: 768px），全局唯一参照系，组件在不同位置表现一致。优势：兼容性好（IE9+）、简单。劣势：无法感知容器，组件在窄侧边栏与宽主区域表现一致。@container：基于父容器宽度（需先 container-type: inline-size），组件根据可用空间自适应。优势：组件级响应式、真正解耦组件与页面、可复用。劣势：兼容性较新（2023 年主流支持）、需显式声明 container-type。选型：可复用组件（卡片、表格、侧边栏）用容器查询；页面整体布局用媒体查询；两者可配合（页面用媒体查询，组件内用容器查询）。',
+                content:
+                  '两者的参照系不同，决定其适用层级不同。\n\n' +
+                  '@media：\n' +
+                  '- 基于视口宽度（min-width: 768px），全局唯一参照系；\n' +
+                  '- 组件在不同位置表现一致；\n' +
+                  '- 优势：兼容性好（IE9+）、简单；\n' +
+                  '- 劣势：无法感知容器，组件在窄侧边栏与宽主区域表现一致。\n\n' +
+                  '@container：\n' +
+                  '- 基于父容器宽度（需先 container-type: inline-size）；\n' +
+                  '- 组件根据可用空间自适应；\n' +
+                  '- 优势：组件级响应式、真正解耦组件与页面、可复用；\n' +
+                  '- 劣势：兼容性较新（2023 年主流支持）、需显式声明 container-type。\n\n' +
+                  '选型：可复用组件（卡片、表格、侧边栏）用容器查询；页面整体布局用媒体查询；两者可配合使用。',
               },
             ],
           },

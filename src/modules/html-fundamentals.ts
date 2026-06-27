@@ -2143,67 +2143,67 @@ if (errors.length === 0) {
             items: [
               {
                 title: 'Q1: HTML 语义化是什么？为什么重要？',
-                content: '语义化是指使用有含义的标签（如 header/nav/main/article）来描述内容结构，而非用无语义的 div。重要性：① 提升 SEO（搜索引擎能理解内容权重）；② 改善无障碍（读屏器可导航）；③ 增强可读性和可维护性；④ 便于团队协作。',
+                content: '语义化是指使用有含义的标签（如 header/nav/main/article）来描述内容结构，而非用无语义的 div。\n\n重要性：\n1. 提升 SEO——搜索引擎能理解内容权重。\n2. 改善无障碍——读屏器可导航。\n3. 增强可读性和可维护性。\n4. 便于团队协作。',
               },
               {
                 title: 'Q2: src 和 href 的区别？',
-                content: 'src（Source）用于替换当前元素，如 img/script/iframe，浏览器会暂停解析去加载资源；href（Hypertext Reference）用于建立链接关系，如 a/link，浏览器并行加载不阻塞。src 会阻塞，href 不会。',
+                content: '两者都用于引用外部资源，但加载行为不同。\n\nsrc（Source）：\n- 用于替换当前元素，如 img/script/iframe。\n- 浏览器会暂停解析去加载资源，阻塞文档。\n\nhref（Hypertext Reference）：\n- 用于建立链接关系，如 a/link。\n- 浏览器并行加载，不阻塞。\n\n结论：src 会阻塞，href 不会。',
               },
               {
                 title: 'Q3: script 标签的 defer 和 async 区别？',
-                content: '两者都异步下载脚本。defer：下载不阻塞 HTML 解析，执行等 HTML 解析完成后按顺序执行；async：下载不阻塞，下载完立即执行（暂停 HTML 解析），执行顺序不确定。defer 适合有依赖的脚本，async 适合独立脚本如统计代码。',
+                content: '两者都异步下载脚本，但执行时机不同。\n\ndefer：\n- 下载不阻塞 HTML 解析。\n- 执行等 HTML 解析完成后按顺序执行。\n- 适合有依赖的脚本。\n\nasync：\n- 下载不阻塞。\n- 下载完立即执行（暂停 HTML 解析）。\n- 执行顺序不确定。\n- 适合独立脚本如统计代码。',
               },
               {
                 title: 'Q4: HTML5 的离线存储方案有哪些？',
-                content: 'localStorage（5-10MB，永久存储）；sessionStorage（5-10MB，标签页关闭即清除）；IndexedDB（大容量结构化数据，异步 API）；Cookie（4KB，随请求发送）；Cache API（配合 Service Worker，用于 PWA 离线缓存）。',
+                content: '常见方案各有适用场景：\n1. localStorage——5-10MB，永久存储。\n2. sessionStorage——5-10MB，标签页关闭即清除。\n3. IndexedDB——大容量结构化数据，异步 API。\n4. Cookie——4KB，随请求发送。\n5. Cache API——配合 Service Worker，用于 PWA 离线缓存。',
               },
               {
                 title: 'Q5: 什么是 DOCTYPE？不写会怎样？',
-                content: '<!DOCTYPE html> 声明文档类型为 HTML5，触发标准模式（Standards Mode）。不写会触发怪异模式（Quirks Mode），浏览器按旧规则渲染，导致盒模型、布局等行为异常。始终在文档首行写 DOCTYPE。',
+                content: '<!DOCTYPE html> 声明文档类型为 HTML5，触发标准模式（Standards Mode）。\n\n不写会触发怪异模式（Quirks Mode）：\n- 浏览器按旧规则渲染。\n- 导致盒模型、布局等行为异常。\n\n结论：始终在文档首行写 DOCTYPE。',
               },
               {
                 title: 'Q6: meta viewport 的作用？',
-                content: '<meta name="viewport" content="width=device-width, initial-scale=1"> 告诉移动端浏览器以设备宽度作为视口宽度，初始缩放为 1。缺失会导致移动端页面被缩小显示（默认 980px 视口）。这是响应式设计的必备配置。',
+                content: '<meta name="viewport" content="width=device-width, initial-scale=1"> 告诉移动端浏览器：\n- 以设备宽度作为视口宽度。\n- 初始缩放为 1。\n\n缺失会导致移动端页面被缩小显示（默认 980px 视口）。这是响应式设计的必备配置。',
               },
               {
                 title: 'Q7: 什么是文档流（normal flow）？块级和行内元素在文档流中的区别？',
-                content: '文档流是浏览器默认的元素排列规则：元素按 HTML 顺序、按显示特性自动排版。块级元素（div/p/h1）在文档流中独占一行，从上到下堆叠，可设宽高；行内元素（span/a/strong）在一行内从左到右排列，宽高由内容决定，上下 margin/padding 不影响行高。理解文档流是理解所有 CSS 布局的基础——Flex/Grid 本质都是「脱离或重组」文档流。',
+                content: '文档流是浏览器默认的元素排列规则：元素按 HTML 顺序、按显示特性自动排版。\n\n块级元素（div/p/h1）：\n- 独占一行，从上到下堆叠。\n- 可设宽高。\n\n行内元素（span/a/strong）：\n- 在一行内从左到右排列。\n- 宽高由内容决定，上下 margin/padding 不影响行高。\n\n理解文档流是理解所有 CSS 布局的基础——Flex/Grid 本质都是「脱离或重组」文档流。',
               },
               {
                 title: 'Q8: 简述盒模型，标准模式与怪异模式（IE 盒模型）有何不同？',
-                content: '盒模型由内到外四层：content → padding → border → margin。标准模式（W3C）下，CSS 的 width 只含 content，盒子实际占宽 = width + 左右padding + 左右border + 左右margin。怪异模式（IE 盒模型）下，width 包含 content + padding + border，实际占宽 = width + 左右margin。现代开发可用 box-sizing: border-box 切换为 IE 盒模型，让 width 即「可见宽」，更直观。',
+                content: '盒模型由内到外四层：content → padding → border → margin。\n\n标准模式（W3C）：\n- CSS 的 width 只含 content。\n- 盒子实际占宽 = width + 左右padding + 左右border + 左右margin。\n\n怪异模式（IE 盒模型）：\n- width 包含 content + padding + border。\n- 实际占宽 = width + 左右margin。\n\n现代开发可用 box-sizing: border-box 切换为 IE 盒模型，让 width 即「可见宽」，更直观。',
               },
               {
                 title: 'Q9: HTML5 表单原生验证有哪些？为什么不能替代后端验证？',
-                content: '原生验证包括：required（必填）、type 校验（email/number/url 自动校验格式）、min/max/step（数值范围）、minlength/maxlength（长度）、pattern（正则）。可用 novalidate 关闭。不能替代后端的原因：① 前端验证可被 novalidate 或 JS 绕过；② 请求可绕过浏览器直接构造（如 curl/Postman）；③ 存在恶意用户篡改数据。前端验证只为改善体验，真正的数据校验必须在服务器端进行。',
+                content: '原生验证包括：\n1. required——必填。\n2. type 校验——email/number/url 自动校验格式。\n3. min/max/step——数值范围。\n4. minlength/maxlength——长度。\n5. pattern——正则。\n\n可用 novalidate 关闭。\n\n不能替代后端的原因：\n1. 前端验证可被 novalidate 或 JS 绕过。\n2. 请求可绕过浏览器直接构造（如 curl/Postman）。\n3. 存在恶意用户篡改数据。\n\n前端验证只为改善体验，真正的数据校验必须在服务器端进行。',
               },
               {
                 title: 'Q10: 无障碍（a11y）的 WCAG 四原则 POUR 是什么？举例说明。',
-                content: 'POUR：① Perceivable 可感知——内容能被感知（图片加 alt、视频加字幕）；② Operable 可操作——可用键盘完成所有操作（不能只靠鼠标，按钮用 <button> 而非 <div onclick>）；③ Understandable 可理解——语言清晰、错误有明确提示、行为可预测；④ Robust 健壮——能被各种辅助技术解析（标准 HTML + 正确 ARIA）。核心思想：无障碍不是「给盲人做特殊功能」，而是让所有人（含残障、老年、临时受伤）都能用。',
+                content: 'POUR 四原则：\n1. Perceivable 可感知——内容能被感知（图片加 alt、视频加字幕）。\n2. Operable 可操作——可用键盘完成所有操作（不能只靠鼠标，按钮用 <button> 而非 <div onclick>）。\n3. Understandable 可理解——语言清晰、错误有明确提示、行为可预测。\n4. Robust 健壮——能被各种辅助技术解析（标准 HTML + 正确 ARIA）。\n\n核心思想：无障碍不是「给盲人做特殊功能」，而是让所有人（含残障、老年、临时受伤）都能用。',
               },
               {
                 title: 'Q11: ARIA 的使用原则？什么时候该用、什么时候不该用？',
-                content: 'ARIA 第一法则：能用原生 HTML 实现就不要用 ARIA。例如用 <button> 而非 <div role="button">——原生 button 自带键盘操作、焦点、读屏器语义，而 role="button" 需要手动补全 tabindex、键盘事件、aria-pressed。ARIA 应用于「原生 HTML 无对应标签」的富交互组件，如 Tab 切换（role="tab"）、模态框（role="dialog"）、实时提示（role="alert"）。错误用法：用 ARIA 重复原生语义（如 <button role="button">）、只加 role 不补键盘行为。',
+                content: 'ARIA 第一法则：能用原生 HTML 实现就不要用 ARIA。\n\n该用：原生 HTML 无对应标签的富交互组件：\n- Tab 切换（role="tab"）。\n- 模态框（role="dialog"）。\n- 实时提示（role="alert"）。\n\n不该用：\n- 用 <button> 而非 <div role="button">——原生 button 自带键盘操作、焦点、读屏器语义。\n- 用 ARIA 重复原生语义（如 <button role="button">）。\n- 只加 role 不补键盘行为。\n\n错误用法会带来更大维护成本与可访问性倒退。',
               },
               {
                 title: 'Q12: 响应式图片怎么做？srcset 的 1x/2x 和 w 描述符有何区别？',
-                content: '三种方案：① srcset + 密度描述符（1x/2x/3x）：按屏幕 devicePixelRatio 选图，Retina 屏下高清；② srcset + 宽度描述符（400w/800w）+ sizes：按视口宽 + 显示尺寸选最合适的图宽，省流量；③ <picture> + <source>：用 media 做艺术指导（手机/桌面不同构图）、用 type 做格式回退（webp→jpg）。区别：1x/2x 只关心屏幕密度，w + sizes 关心实际显示尺寸，<picture> 还能按条件换完全不同的图。三者可组合使用。',
+                content: '三种方案：\n1. srcset + 密度描述符（1x/2x/3x）：按屏幕 devicePixelRatio 选图，Retina 屏下高清。\n2. srcset + 宽度描述符（400w/800w）+ sizes：按视口宽 + 显示尺寸选最合适的图宽，省流量。\n3. <picture> + <source>：用 media 做艺术指导（手机/桌面不同构图）、用 type 做格式回退（webp→jpg）。\n\n区别：\n- 1x/2x 只关心屏幕密度。\n- w + sizes 关心实际显示尺寸。\n- <picture> 还能按条件换完全不同的图。\n\n三者可组合使用。',
               },
               {
                 title: 'Q13: 行内元素、块级元素、行内块元素的区别？举例说明哪些是空元素。',
-                content: '块级（div/p/h1/ul/table）：独占一行、可设宽高、默认宽 100%。行内（span/a/strong/em）：不换行、宽高由内容定、上下 margin/padding 不占布局。行内块（button/input/img）：不换行、可设宽高。空元素（void element）无内容无结束标签：<br>、<hr>、<img>、<input>、<meta>、<link>、<source>、<track>。注意 <img> 是行内块（替换元素），行为接近行内块。',
+                content: '三类元素显示特性不同：\n\n块级（div/p/h1/ul/table）：独占一行、可设宽高、默认宽 100%。\n行内（span/a/strong/em）：不换行、宽高由内容定、上下 margin/padding 不占布局。\n行内块（button/input/img）：不换行、可设宽高。\n\n空元素（void element）无内容无结束标签：<br>、<hr>、<img>、<input>、<meta>、<link>、<source>、<track>。\n\n注意 <img> 是行内块（替换元素），行为接近行内块。',
               },
               {
                 title: 'Q14: 场景题——页面加载缓慢且交互卡顿，你会从 HTML 层面排查哪些问题？',
-                content: '① script 位置：head 里的普通 <script> 阻塞渲染，应改 defer（业务脚本）或 async（独立脚本），或移到 body 末尾；② 资源体积：大图未压缩、未用响应式图片（srcset/<picture>），手机加载了桌面大图；③ 未懒加载：<img> 加 loading="lazy"、<iframe> 同理；④ CSS 阻塞：<link rel="stylesheet"> 阻塞渲染，关键 CSS 内联、非关键 CSS 异步加载；⑤ 资源未压缩、未开 CDN；⑥ preload/prefetch 预加载关键资源。先看 Network 面板定位最慢的资源。',
+                content: '从 HTML 层面排查：\n1. script 位置：head 里的普通 <script> 阻塞渲染，应改 defer（业务脚本）或 async（独立脚本），或移到 body 末尾。\n2. 资源体积：大图未压缩、未用响应式图片（srcset/<picture>），手机加载了桌面大图。\n3. 未懒加载：<img> 加 loading="lazy"、<iframe> 同理。\n4. CSS 阻塞：<link rel="stylesheet"> 阻塞渲染，关键 CSS 内联、非关键 CSS 异步加载。\n5. 资源未压缩、未开 CDN。\n6. preload/prefetch 预加载关键资源。\n\n先看 Network 面板定位最慢的资源。',
               },
               {
                 title: 'Q15: 场景题——重构一个全用 <div> 写的导航栏，你会怎么改？为什么？',
-                content: '把 <div class="nav"> 改为 <nav>，里面的链接用 <ul><li><a> 结构。理由：① <nav> 让读屏器识别「导航区域」，用户可一键跳过导航直达正文；② <ul> 表达「列表」语义，读屏器会播报「列表，N 项」；③ <a> 是原生链接，Tab 可聚焦、回车可跳转，而 <div onclick> 键盘不可达。改完后还需：加 aria-label="主导航"（多个 nav 时区分）、确保当前页链接加 aria-current="page"。',
+                content: '把 <div class="nav"> 改为 <nav>，里面的链接用 <ul><li><a> 结构。\n\n理由：\n1. <nav> 让读屏器识别「导航区域」，用户可一键跳过导航直达正文。\n2. <ul> 表达「列表」语义，读屏器会播报「列表，N 项」。\n3. <a> 是原生链接，Tab 可聚焦、回车可跳转，而 <div onclick> 键盘不可达。\n\n改完后还需：\n- 加 aria-label="主导航"（多个 nav 时区分）。\n- 确保当前页链接加 aria-current="page"。',
               },
               {
                 title: 'Q16: 对比题——<b>/<strong>、<i>/<em>、<br>/<p> 各有什么区别？',
-                content: '<b> vs <strong>：<b> 只是视觉加粗（无语义），<strong> 表示「重要」（语义化，读屏器会强调朗读），SEO 权重更高。同理 <i> 只是斜体，<em> 表示「强调」。<br> vs <p>：<br> 是文本内换行（用于诗歌、地址等），<p> 是段落（块级，语义上是独立段落）。初学者误区：用 <br><br> 制造段落间距——应改用 <p> + CSS margin。原则：能表达语义就别只用样式标签。',
+                content: '<b> vs <strong>：\n- <b> 只是视觉加粗（无语义）。\n- <strong> 表示「重要」（语义化，读屏器会强调朗读），SEO 权重更高。\n\n同理 <i> 只是斜体，<em> 表示「强调」。\n\n<br> vs <p>：\n- <br> 是文本内换行（用于诗歌、地址等）。\n- <p> 是段落（块级，语义上是独立段落）。\n\n初学者误区：用 <br><br> 制造段落间距——应改用 <p> + CSS margin。\n\n原则：能表达语义就别只用样式标签。',
               },
             ],
           },

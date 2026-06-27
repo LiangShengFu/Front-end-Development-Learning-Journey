@@ -1116,7 +1116,7 @@ const [count, setCount] = useState(0)
     {
       order: 11,
       title: '映射类型与模板字面量类型',
-      difficulty: 4,
+      difficulty: 3,
       blocks: [
         {
           id: 'ts-p11-1',
@@ -1696,67 +1696,203 @@ interface User {
             items: [
               {
                 title: 'Q1: interface 和 type 的区别是什么？什么场景用哪个？',
-                content: '主要区别：1) interface 支持声明合并（同名自动合并），type 不支持；2) type 可以定义联合类型和元组，interface 不能；3) interface 用 extends 扩展，type 用 & 交叉。实践：定义对象形状优先 interface（支持扩展），联合类型/元组/工具类型用 type。团队内部统一一种风格即可。',
+                content: '主要区别：\n1. interface 支持声明合并（同名自动合并），type 不支持。\n2. type 可以定义联合类型和元组，interface 不能。\n3. interface 用 extends 扩展，type 用 & 交叉。\n\n实践：\n- 定义对象形状优先 interface（支持扩展）。\n- 联合类型/元组/工具类型用 type。\n- 团队内部统一一种风格即可。',
               },
               {
                 title: 'Q2: any 和 unknown 的区别？',
-                content: 'any 会关闭所有类型检查，可以赋值给任何类型，也可以访问任意属性而不报错。unknown 是类型安全的 any 替代——可以赋值给 unknown，但 unknown 不能赋值给其他类型（除 unknown 和 any），也不能访问任何属性。使用 unknown 需要用类型守卫收窄后才能操作。',
+                content: '两者都接受任意值，但类型安全度不同。\n\nany：\n- 关闭所有类型检查。\n- 可赋值给任何类型，也可访问任意属性而不报错。\n\nunknown：\n- 类型安全的 any 替代。\n- 可以赋值给 unknown，但 unknown 不能赋值给其他类型（除 unknown 和 any）。\n- 不能访问任何属性。\n\n使用 unknown 需用类型守卫（typeof/instanceof/in/自定义 is 函数）收窄后才能操作。',
               },
               {
                 title: 'Q3: extends 关键字在不同上下文中的含义？',
-                content: 'extends 有三个用途：1) 接口继承——interface A extends B；2) 泛型约束——T extends HasLength，限制 T 必须满足某个形状；3) 条件类型——T extends U ? X : Y，根据类型关系做分支判断。三者在语法上相同但编译行为完全不同。',
+                content: 'extends 有三个用途，语法相同但编译行为不同：\n\n1. 接口继承：interface A extends B。\n2. 泛型约束：T extends HasLength，限制 T 必须满足某个形状。\n3. 条件类型：T extends U ? X : Y，根据类型关系做分支判断。',
               },
               {
                 title: 'Q4: keyof 和 typeof 在类型系统中的用法？',
-                content: 'keyof T 获取类型 T 的所有键名组成的联合类型。typeof 在类型上下文中获取 JS 值的类型（不是运行时的 typeof）。结合使用：type Keys = keyof typeof obj 获取对象的键名联合类型。keyof 是映射类型和泛型约束的核心工具。',
+                content: '两者用于不同的类型查询场景：\n\nkeyof T：\n- 获取类型 T 的所有键名组成的联合类型。\n- 是映射类型和泛型约束的核心工具。\n\ntypeof（类型上下文）：\n- 获取 JS 值的类型（不是运行时的 typeof）。\n\n结合使用：\ntype Keys = keyof typeof obj 获取对象的键名联合类型。',
               },
               {
                 title: 'Q5: 什么是分布式条件类型？如何避免？',
-                content: '裸类型参数 T 在条件类型 T extends U ? X : Y 中会分发：如果是联合类型 A | B，则求值为 (A extends U ? X : Y) | (B extends U ? X : Y)。避免分发的方法：用 [T] extends [U] 或 { t: T } extends { t: U } 包裹。',
+                content: '裸类型参数 T 在条件类型 T extends U ? X : Y 中会分发：\n\n- 如果是联合类型 A | B，则求值为 (A extends U ? X : Y) | (B extends U ? X : Y)。\n\n避免分发的方法：\n- 用 [T] extends [U] 包裹。\n- 或用 { t: T } extends { t: U } 包裹。',
               },
               {
                 title: 'Q6: TypeScript 的 strict 模式包含哪些子选项？',
-                content: 'strict: true 开启以下子项：strictNullChecks（严格空值检查）、noImplicitAny（禁止隐式 any）、strictFunctionTypes（严格函数类型检查）、strictBindCallApply、strictPropertyInitialization、noImplicitThis、alwaysStrict、useUnknownInCatchVariables。',
+                content: 'strict: true 开启以下子项：\n\n- strictNullChecks：严格空值检查\n- noImplicitAny：禁止隐式 any\n- strictFunctionTypes：严格函数类型检查\n- strictBindCallApply\n- strictPropertyInitialization\n- noImplicitThis\n- alwaysStrict\n- useUnknownInCatchVariables',
               },
               {
                 title: 'Q7: never 类型有什么用？什么时候会得到 never？',
-                content: 'never 表示"永不出现的值"。两种得到 never 的场景：1) 函数永不返回（抛错、无限循环）；2) 联合类型收窄到穷尽后剩余分支。用途：① 穷尽检查（exhaustive check）——在 switch 的 default 分支赋值给 never 类型变量，若漏处理一个 union 成员则编译报错；② 过滤联合类型，如 Exclude<T, never>；③ 表示不可能的状态。never 是所有类型的子类型，可赋值给任何类型。',
+                content: 'never 表示"永不出现的值"。\n\n两种得到 never 的场景：\n1. 函数永不返回（抛错、无限循环）。\n2. 联合类型收窄到穷尽后剩余分支。\n\n用途：\n1. 穷尽检查（exhaustive check）——在 switch 的 default 分支赋值给 never 类型变量，若漏处理一个 union 成员则编译报错。\n2. 过滤联合类型，如 Exclude<T, never>。\n3. 表示不可能的状态。\n\n特性：never 是所有类型的子类型，可赋值给任何类型。',
               },
               {
                 title: 'Q8: 协变与逆变是什么？TS 函数参数是协变还是逆变？',
-                content: '协变（Covariance）：子类型关系与参数化方向一致，Dog[] 是 Animal[] 的子类型。逆变（Contravariance）：方向相反，(x: Animal) => void 是 (x: Dog) => void 的子类型（参数更宽的函数可替代参数更窄的）。TS 中：方法参数（method shorthand）默认双变（bivariant，宽松），普通函数参数在 strictFunctionTypes 下逆变。这就是 strictFunctionTypes 能捕获回调参数类型错误的原理。',
+                content: '协变（Covariance）：\n- 子类型关系与参数化方向一致。\n- 例：Dog[] 是 Animal[] 的子类型。\n\n逆变（Contravariance）：\n- 方向相反。\n- 例：(x: Animal) => void 是 (x: Dog) => void 的子类型（参数更宽的函数可替代参数更窄的）。\n\nTS 中的处理：\n- 方法参数（method shorthand）默认双变（bivariant，宽松）。\n- 普通函数参数在 strictFunctionTypes 下逆变。\n\n这就是 strictFunctionTypes 能捕获回调参数类型错误的原理。',
               },
               {
                 title: 'Q9: 函数重载怎么写？实现签名为什么不能被外部调用？',
-                content: '重载写法：先写多个 overload signature（只有类型无函数体），最后写一个 implementation signature（含 body，参数用宽松类型如 any）。外部调用时只能匹配 overload signature，implementation signature 对外不可见。原因：实现签名是为编译器提供运行时实现，其参数类型通常比任意一个重载都宽（联合），直接暴露会失去重载的精确性。注意重载顺序：更具体的类型放前面，否则会被宽类型先匹配。',
+                content: '重载写法：\n1. 先写多个 overload signature（只有类型无函数体）。\n2. 最后写一个 implementation signature（含 body，参数用宽松类型如 any）。\n\n外部调用时只能匹配 overload signature，implementation signature 对外不可见。\n\n原因：\n- 实现签名是为编译器提供运行时实现。\n- 其参数类型通常比任意一个重载都宽（联合），直接暴露会失去重载的精确性。\n\n注意：重载顺序——更具体的类型放前面，否则会被宽类型先匹配。',
               },
               {
                 title: 'Q10: as const 有什么用？和普通 const 有何区别？',
-                content: 'const 是运行时变量不可重新赋值，但类型仍被拓宽（const x = "hi" 推断为 string）。as const 是类型断言，把值断言为最窄的字面量类型并全部 readonly：const x = "hi" as const 推断为 "hi"；const arr = [1, 2] as const 推断为 readonly [1, 2]。用途：定义常量联合、精确对象类型、配合 satisfies 保留字面量。注意 as const 是编译期行为，不产生运行时冻结。',
+                content: '两者性质完全不同：\n\nconst：\n- 运行时变量不可重新赋值。\n- 但类型仍被拓宽（const x = "hi" 推断为 string）。\n\nas const：\n- 类型断言，把值断言为最窄的字面量类型并全部 readonly。\n- const x = "hi" as const 推断为 "hi"。\n- const arr = [1, 2] as const 推断为 readonly [1, 2]。\n\n用途：\n- 定义常量联合\n- 精确对象类型\n- 配合 satisfies 保留字面量\n\n注意：as const 是编译期行为，不产生运行时冻结。',
               },
               {
                 title: 'Q11: 枚举（enum）有什么陷阱？为什么不推荐用？',
-                content: 'enum 陷阱：1) 数字枚举会生成反向映射代码（enum["A"]=0 和 enum[0]="A"），增大体积；2) 数字枚举不安全——任何 number 都可赋值给数字枚举；3) const enum 在 isolatedModules 下不可用，且不同编译器（如 esbuild/swc）对 const enum 的处理不一致，可能运行时报错；4) 字符串枚举虽安全但写法冗长。推荐替代：联合字面量类型 + as const，如 type Status = "active" | "inactive"。',
+                content: 'enum 陷阱：\n1. 数字枚举会生成反向映射代码（enum["A"]=0 和 enum[0]="A"），增大体积。\n2. 数字枚举不安全——任何 number 都可赋值给数字枚举。\n3. const enum 在 isolatedModules 下不可用，且不同编译器（如 esbuild/swc）对 const enum 的处理不一致，可能运行时报错。\n4. 字符串枚举虽安全但写法冗长。\n\n推荐替代：\n- 联合字面量类型 + as const，如 type Status = "active" | "inactive"。',
               },
               {
                 title: 'Q12: 类型断言 as 和类型守卫（narrowing）有什么本质区别？',
-                content: '类型断言 as 是"你说什么编译器就信什么"，不做运行时检查，编译器不验证断言是否成立，错用会把错误推迟到运行时。类型守卫（typeof/instanceof/in/自定义 is 函数）是基于运行时值的真实检查，编译器根据检查结果收窄类型，类型安全。原则：优先用类型守卫，仅在确认安全且无法用守卫表达时（如解析 JSON 后已知结构）才用 as，且最好紧跟运行时校验。unknown + 守卫是替代 any + as 的安全模式。',
+                content: '类型断言 as：\n- "你说什么编译器就信什么"。\n- 不做运行时检查，编译器不验证断言是否成立。\n- 错用会把错误推迟到运行时。\n\n类型守卫（typeof/instanceof/in/自定义 is 函数）：\n- 基于运行时值的真实检查。\n- 编译器根据检查结果收窄类型，类型安全。\n\n原则：\n- 优先用类型守卫。\n- 仅在确认安全且无法用守卫表达时（如解析 JSON 后已知结构）才用 as，且最好紧跟运行时校验。\n- unknown + 守卫是替代 any + as 的安全模式。',
               },
               {
                 title: 'Q13 【对比题】: Partial<T> 和 Readonly<T> 在实现上有何异同？',
-                content: '两者都是映射类型，遍历 keyof T：Partial 把每个属性变可选（加 ?），Readonly 把每个属性变只读（加 readonly）。实现：type Partial<T> = { [K in keyof T]?: T[K] }；type Readonly<T> = { readonly [K in keyof T]: T[K] }。相同点：都基于映射类型 [K in keyof T]，不改变属性类型本身。不同点：修饰符不同（? vs readonly），可叠加成 Readonly<Partial<T>>。TS 4.1+ 还支持修饰符增删：-readonly 移除只读、-? 移除可选（Required 的实现）。',
+                content: '两者都是映射类型，遍历 keyof T：\n- Partial：把每个属性变可选（加 ?）。\n- Readonly：把每个属性变只读（加 readonly）。\n\n实现：\n- type Partial<T> = { [K in keyof T]?: T[K] }\n- type Readonly<T> = { readonly [K in keyof T]: T[K] }\n\n相同点：都基于映射类型 [K in keyof T]，不改变属性类型本身。\n\n不同点：\n- 修饰符不同（? vs readonly）。\n- 可叠加成 Readonly<Partial<T>>。\n\nTS 4.1+ 还支持修饰符增删：\n- -readonly 移除只读\n- -? 移除可选（Required 的实现）',
               },
               {
                 title: 'Q14 【对比题】: Omit<T,K> 和 Pick<T,K> 的关系？Omit 是 TS 内置还是可手写？',
-                content: 'Pick<T,K extends keyof T> 选取指定键：{ [P in K]: T[P] }。Omit<T,K> 排除指定键，TS 内置定义为 Omit = Pick<T, Exclude<keyof T, K>>，即"取反再 Pick"。关系：Omit 是 Pick + Exclude 的组合，二者互补。手写 Omit 注意点：直接 { [P in keyof T as P extends K ? never : P]: T[P] } 用键重映射更精确，因为内置 Omit 的 K 不约束为 keyof T，可能接受不存在的键而不报错（这是已知的设计取舍）。实践中 Omit 适合"排除少数字段"，Pick 适合"只取少数字段"。',
+                content: '两者互补：\n- Pick<T, K extends keyof T>：选取指定键 { [P in K]: T[P] }。\n- Omit<T, K>：排除指定键。\n\nOmit 是 TS 内置：\n- 定义为 Omit = Pick<T, Exclude<keyof T, K>>，即"取反再 Pick"。\n- 是 Pick + Exclude 的组合。\n\n手写 Omit 注意点：\n- 直接 { [P in keyof T as P extends K ? never : P]: T[P] } 用键重映射更精确。\n- 内置 Omit 的 K 不约束为 keyof T，可能接受不存在的键而不报错（这是已知的设计取舍）。\n\n实践：\n- Omit 适合"排除少数字段"。\n- Pick 适合"只取少数字段"。',
               },
               {
                 title: 'Q15 【场景题】: 一个 JS 项目要迁移到 TS，如何制定迁移策略避免影响线上？',
-                content: '渐进式迁移策略：1) allowJs + checkJs 开启，先让 TS 编译器能识别 JS 文件；2) strict: false 起步，逐个开启子选项（先 noImplicitAny，再 strictNullChecks），避免一次性开 strict 导致几千个报错阻塞；3) 按依赖顺序迁移：叶子模块（工具函数、类型定义）先迁，入口/业务后迁；4) 为第三方无类型库写 .d.ts 声明或装 @types；5) 用 // @ts-ignore / unknown 临时压制高风险报错，加 TODO 跟进；6) CI 卡新增报错（tsc --noEmit）但允许存量；7) 关键路径补类型测试。原则：类型安全是过程不是开关，优先保护核心数据流。',
+                content: '渐进式迁移策略：\n1. allowJs + checkJs 开启，先让 TS 编译器能识别 JS 文件。\n2. strict: false 起步，逐个开启子选项（先 noImplicitAny，再 strictNullChecks），避免一次性开 strict 导致几千个报错阻塞。\n3. 按依赖顺序迁移：叶子模块（工具函数、类型定义）先迁，入口/业务后迁。\n4. 为第三方无类型库写 .d.ts 声明或装 @types。\n5. 用 // @ts-ignore / unknown 临时压制高风险报错，加 TODO 跟进。\n6. CI 卡新增报错（tsc --noEmit）但允许存量。\n7. 关键路径补类型测试。\n\n原则：类型安全是过程不是开关，优先保护核心数据流。',
               },
               {
                 title: 'Q16 【场景题】: 团队 TS 项目编译慢，如何排查与优化？',
-                content: '排查：1) tsc --extendedDiagnostics 看检查时间/文件数/类型数，定位是类型展开慢还是文件多；2) 检查是否有大量 any/断言导致类型推断退化；3) 检查复杂条件类型/映射类型是否在巨型联合上分发；4) 第三方 .d.ts 是否过大（如完整 DOM lib）。优化：1) project references 拆分，按子项目增量编译；2) isolatedModules + 用 esbuild/swc 转译（只做类型剥离不做类型检查），tsc 仅做 --noEmit 类型检查；3) 开启 incremental + tsBuildInfoFile 缓存；4) 收窄联合规模，用品牌类型/枚举替代超大字面量联合；5) 避免 any 回流污染推断。权衡：类型越精确检查越慢，按核心/非核心分级严格度。',
+                content: '排查与优化分两步走。\n\n排查：\n1. tsc --extendedDiagnostics 看检查时间/文件数/类型数，定位是类型展开慢还是文件多。\n2. 检查是否有大量 any/断言导致类型推断退化。\n3. 检查复杂条件类型/映射类型是否在巨型联合上分发。\n4. 第三方 .d.ts 是否过大（如完整 DOM lib）。\n\n优化：\n1. project references 拆分，按子项目增量编译。\n2. isolatedModules + 用 esbuild/swc 转译（只做类型剥离不做类型检查），tsc 仅做 --noEmit 类型检查。\n3. 开启 incremental + tsBuildInfoFile 缓存。\n4. 收窄联合规模，用品牌类型/枚举替代超大字面量联合。\n5. 避免 any 回流污染推断。\n\n权衡：类型越精确检查越慢，按核心/非核心分级严格度。',
+              },
+              {
+                title: 'Q17: 声明文件 .d.ts 的作用是什么？如何为第三方库编写？',
+                content: '.d.ts 是只含类型、不含实现的声明文件，运行时被完全擦除。\n\n核心作用：\n1. 为纯 JS 库提供类型——安装 @types/lodash 即获得类型补全。\n2. 全局类型扩展——declare global 给 window 加自定义属性。\n3. 模块声明——declare module "*.css" 让 import 能识别非 JS 资源。\n\n编写要点：\n- 三斜杠指令：/// <reference types="node" /> 引入依赖类型。\n- export 导出对外 API 的类型，内部实现不暴露。\n- 配合 package.json 的 "types" 字段指向入口 .d.ts。\n\n易错点：声明文件只能写类型不能写值，const x = 1 这种会报错，需用 declare const x: number。',
+              },
+              {
+                title: 'Q18: import type 与普通 import 有何区别？何时使用？',
+                content: 'import type 只引入类型，不产生运行时代码。\n\n区别：\n1. import type { User } from "./types"——编译后被完全擦除，不出现在产物里。\n2. 普通 import { User }——如果 User 只是类型也会被擦除，但若是值（class/enum/const）则保留。\n3. import type 在 isolatedModules 下必需——某些转译器（esbuild/swc）逐文件编译无法判断符号是类型还是值。\n\n何时使用：\n- 仅用于类型标注时优先 import type，语义更清晰。\n- 配合 verbatimModuleSyntax: true 强制区分类型导入与值导入。\n\n注意：默认导出的类型只能用 import type 整体导入，不能 import { type X } 拆分（除非 TS 4.5+ 的内联 type 修饰符）。',
+              },
+              {
+                title: 'Q19: ES modules 与 namespace 有何区别？为什么推荐 ES modules？',
+                content: '两者都是组织代码的方式，但机制完全不同。\n\nES modules：\n1. 文件即模块，import/export 显式声明依赖。\n2. 编译为 CommonJS/ESM 等标准格式，与运行时模块系统一致。\n3. 支持静态分析——tree-shaking、按需导入。\n\nnamespace：\n1. 用 namespace Foo {} 在全局/文件作用域定义命名空间，用 Foo.x 访问。\n2. 本质是编译期的对象合并，运行时是真实对象。\n3. 容易污染全局，依赖关系隐式。\n\n推荐 ES modules 的原因：\n- 现代 TS 项目默认 module: ESNext，namespace 是历史遗留方案。\n- namespace 在 isolatedModules 下行为不一致，跨编译器兼容性差。\n- 仅 .d.ts 全局类型扩展场景才适合用 declare global / namespace。',
+              },
+              {
+                title: 'Q20: 索引签名 [key: string]: T 与 Record<string, T> 有何区别？',
+                content: '两者都表达"键为 string、值为 T 的对象"，但用法和约束不同。\n\n索引签名：\n- 写法：interface Foo { [key: string]: T; name: string }。\n- 允许任意字符串键，且已具名属性的类型必须兼容索引值类型。\n- 适合对象形状不固定的场景（如缓存表）。\n\nRecord<K, V>：\n- 写法：type Foo = Record<string, T>，本质是映射类型 { [P in K]: V }。\n- 更严格——Record<"a"|"b", T> 只允许指定键。\n- 不允许混入具名属性，纯字典场景更清晰。\n\n选择：固定键用 Record<联合, T>，开放键用索引签名。两者结合 keyof 可获取键联合。',
+              },
+              {
+                title: 'Q21: 元组类型与具名元组是什么？什么场景用？',
+                content: '元组是"固定长度 + 每位固定类型"的数组。\n\n基础元组：\n- const pair: [string, number] = ["age", 30]，按位置约束类型。\n- 访问 pair[0] 推断为 string，pair[1] 为 number。\n\n具名元组（TS 4.0+）：\n- const user: [name: string, age: number] = ["Alice", 30]。\n- 仅为可读性，类型行为与基础元组一致。\n\n可变元组（TS 4.0+）：\n- type Tail<T extends any[]> = T extends [head: any, ...tail: infer R] ? R : never。\n- 用 ...spread 在元组中展开，支持 concat 类型推导。\n\n场景：函数返回多值（如 useState 返回 [value, setter]）、CSV 行解析、坐标点。避免在 API 边界用元组——结构含义靠位置记忆，对象更可读。',
+              },
+              {
+                title: 'Q22: readonly 修饰符与 ReadonlyArray<T> 有何区别？',
+                content: '两者都表达"不可变"，但作用层级不同。\n\nreadonly 修饰符（属性级）：\n- interface Foo { readonly id: number; name: string }。\n- 仅锁定单个属性，name 仍可改。\n- 只防赋值不防深层——obj.nested.x = 1 仍可改。\n\nReadonlyArray<T> / readonly T[]（数组级）：\n- const arr: readonly number[] = [1, 2, 3]。\n- 禁止 push/pop/splice 等变更方法，但元素仍可改（若元素是对象）。\n- 等价于 ReadonlyArray<number>。\n\n深只读：需用 Readonly<T> 递归或自定义 DeepReadonly<T>。const 断言（as const）是最简的深只读方式，把整个结构变 readonly + 字面量类型。',
+              },
+              {
+                title: 'Q23: 可选链 ?. 与非空断言 ! 有何本质区别？',
+                content: '可选链 ?. 是运行时安全访问，非空断言 ! 是编译期假设。\n\n可选链 ?.：\n- obj?.foo 在运行时检查 obj 是否 null/undefined，是则短路返回 undefined。\n- 类型上 obj?.foo 推断为 T | undefined。\n- 类型安全——运行时不会崩溃。\n\n非空断言 !：\n- obj!.foo 告诉编译器"我知道 obj 不是 null"，编译器不再报错。\n- 运行时无任何检查，若 obj 真为 null 则崩溃。\n- 危险——把错误从编译期推迟到运行时。\n\n选择原则：默认用 ?.，仅在确认值必存在（如刚做 typeof 检查后）且 ?. 语义不恰当时用 !。?. 链可级联：user?.address?.city?.length，任一层为空都安全短路。',
+              },
+              {
+                title: 'Q24: 类型拓宽（widening）是什么？如何控制？',
+                content: '拓宽指字面量类型被自动放宽为更宽的基础类型。\n\n典型场景：\n- const x = "hi" → 类型 "hi"（不拓宽，因 const 不可变）。\n- let x = "hi" → 类型 string（拓宽，因 let 可变）。\n- const arr = [1, 2] → 类型 number[]（元素类型拓宽，非元组 [1, 2]）。\n- const obj = { x: 1 } → { x: number }（属性值拓宽）。\n\n控制方式：\n1. as const 把字面量全部锁定为最窄类型，并加 readonly。\n2. 显式标注：const arr: [1, 2] = [1, 2]。\n3. satisfies 保留字面量推断：const palette = { red: [255,0,0] } satisfies Record<string, Color>，palette.red 仍是 [255,0,0]。\n\n拓宽是 TS 为可变性服务的折中，理解它才能解释"为何推断成 string 而非字面量"。',
+              },
+              {
+                title: 'Q25: 控制流分析（CFA）在类型收窄中起什么作用？',
+                content: 'CFA 是 TS 根据代码控制流自动收窄类型的核心机制。\n\n工作原理：\n编译器在分析函数体时，跟踪每个变量在每个位置的当前类型。遇到条件分支、赋值、return 时更新类型状态。\n\n常见收窄：\n1. if (typeof x === "string") 分支内 x: string。\n2. if (x === null) return 后，后续 x 去掉 null。\n3. 赋值后收窄：x = getString(); x 变 string。\n4. const 赋值收窄到字面量，let 拓宽。\n\n局限：\n- 函数调用后类型可能失效——TS 假设函数有副作用，会重置部分收窄。\n- 嵌套闭包不收窄：if (x !== null) { setTimeout(() => x.foo()) } 报错，需用 const 局部变量冻结。\n\n理解 CFA 才能解释"为何在回调里类型又变宽了"。',
+              },
+              {
+                title: 'Q26: 品牌类型（Branded Types）解决什么问题？如何实现？',
+                content: '品牌类型用"幽灵字段"给同结构类型加区分标识，防止误用。\n\n问题：\nUserId 和 OrderId 都是 number，TS 结构类型系统认为两者可互换——传错 ID 不报错。\n\n实现：\n- type UserId = number & { readonly __brand: "UserId" }。\n- type OrderId = number & { readonly __brand: "OrderId" }。\n- 创建：function userId(n: number): UserId { return n as UserId }。\n- 使用：getUser(id: UserId) 只接受 UserId，传 OrderId 报错。\n\n运行时无开销——__brand 字段不存在，只在编译期起作用。适合 ID、Token、经纬度等"同结构但语义不同"的类型。结合 type-fest 等库的 Brand 工具可简化定义。',
+              },
+              {
+                title: 'Q27: 递归类型有什么用？有什么限制？',
+                content: '递归类型让类型自引用，用于表达树形/嵌套结构。\n\n典型用例：\n1. JSON 值：type Json = string | number | boolean | null | Json[] | { [k: string]: Json }。\n2. 深只读：type DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> }。\n3. 深可选：type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> }。\n4. Promise 链：type Unwrap<T> = T extends Promise<infer U> ? Unwrap<U> : T。\n\n限制：\n- 尾递归优化（TS 4.5+）：用尾递归写法可处理更深的嵌套，否则 50 层左右触发栈溢出报错。\n- 类型实例化深度上限约 1000，超出报"Type instantiation is excessively deep"。\n- 复杂递归类型编译慢，需权衡精确度与编译性能。\n\n实践：树形数据用递归类型表达，但避免无限深——给递归加终止分支。',
+              },
+              {
+                title: 'Q28: 模板字面量类型有哪些实战应用？',
+                content: '模板字面量类型用反引号在类型层拼接字符串，实现强类型字符串。\n\n语法：\n- type EventName<T extends string> = `on${Capitalize<T>}`。\n- type Click = EventName<"click"> → "onClick"。\n\n实战应用：\n1. 事件名映射：type Listener<K extends keyof Events> = (e: Events[K]) => void，键约束为 `on${Capitalize<K>}`。\n2. CSS 类名联合：type Align = "left" | "center" | "right"；type Class = `text-${Align}` → "text-left" | "text-center" | "text-right"。\n3. 路由路径：type Route = `/users/${number}/posts/${number}`。\n4. 配合 Uppercase/Lowercase/Uncapitalize 做大小写变换。\n5. 键重映射中重命名：`[K in keyof T as \`get${Capitalize<K>}\`]`。\n\n局限：拼接结果过多时会膨胀成超大联合，影响编译性能。',
+              },
+              {
+                title: 'Q29: 映射类型的键重映射 as 与修饰符增删 -?/-readonly 怎么用？',
+                content: '两者是映射类型的高级能力，TS 4.1+ 引入。\n\n键重映射 as：\n- 语法：{ [K in keyof T as NewKey]: T[K] }。\n- 重命名键：`[K in keyof T as \`get${Capitalize<string & K>}\`]`。\n- 过滤键：[K in keyof T as K extends "id" ? never : K] 把 id 排除（映射类型自动跳过 never）。\n\n修饰符增删：\n- 加 ?：{ [K in keyof T]?: T[K] }（Partial 实现）。\n- 删 ?：{ [K in keyof T]-?: T[K] }（Required 实现）。\n- 加 readonly：{ readonly [K in keyof T]: T[K] }（Readonly 实现）。\n- 删 readonly：{ -readonly [K in keyof T]: T[K] }（Mutable 实现）。\n- 可叠加：-readonly + -? 同时移除。\n\n组合能力：键重映射 + 修饰符增删让自定义工具类型表达力接近运行时 map/filter。',
+              },
+              {
+                title: 'Q30: 函数类型、可调用签名与构造签名怎么写？',
+                content: '三种表达"可调用"的方式，适用场景不同。\n\n函数类型字面量：\n- type Fn = (x: number) => string，最简洁。\n- 适合独立函数类型别名。\n\n可调用签名（Call Signature）：\n- interface Fn { (x: number): string; description: string }。\n- 函数本身带属性时用——JS 中函数是对象，可挂属性。\n- 调用 const f: Fn = ... 后能访问 f.description。\n\n构造签名（Construct Signature）：\n- interface Ctor { new (x: number): Instance }。\n- 描述可被 new 的类/构造函数。\n- 用法：function make(C: Ctor) { return new C(1) }。\n\n区分：可调用签名用于普通函数调用 fn()，构造签名用于 new fn()。抽象类与接口配合时可约束 new 能力，是依赖注入的常见模式。',
+              },
+              {
+                title: 'Q31: this 类型与 ThisType 有什么用？',
+                content: 'this 类型让方法内 this 的类型显式化，避免动态 this 导致类型丢失。\n\nthis 类型参数：\n- class Builder { method(this: Builder) {...} } 显式声明 this 类型。\n- 链式调用：class Builder { add(): this { return this } }，子类继承后返回子类类型而非 Builder。\n- 防误用：function strict(this: User) {} 绑定调用方类型。\n\nThisType<T>：\n- 工具类型，让对象字面量内 this 推断为 T。\n- 典型场景：Vue2 的 methods/computed 内 this 指向组件实例。\n- 用法：const options = { methods: {...} } satisfies ThisType<MyComponent>。\n\n注意：this 类型在普通函数（非方法简写）中默认为 any，开启 noImplicitThis 后会报错，需显式标注。箭头函数没有自己的 this，继承外层。',
+              },
+              {
+                title: 'Q32: 抽象类 abstract 与接口在描述对象形状时如何选择？',
+                content: '两者都能定义抽象契约，但能力边界不同。\n\n抽象类 abstract：\n- 可含实现：abstract class Base { abstract name(): string; hello() { return "hi" } }。\n- 子类用 extends 继承，单继承。\n- 提供默认实现 + 强制子类实现抽象方法。\n- 运行时存在（编译为真实 class）。\n\n接口 interface：\n- 只描述形状，不含实现。\n- 类用 implements 实现多个接口。\n- 支持声明合并。\n- 运行时擦除。\n\n选择：\n- 需要默认实现 + 强制实现某些方法 → 抽象类。\n- 仅定义契约/形状、希望多实现、跨库扩展 → 接口。\n- TS 推荐：能用接口就用接口，抽象类是 JS class 的能力扩展，运行时开销真实存在。\n- 鸭子类型场景纯接口更轻量，OOP 继承链场景抽象类更合适。',
+              },
+              {
+                title: 'Q33: 访问修饰符 public/private/protected 有何区别？运行时有效吗？',
+                content: '三者控制类成员的可访问性，但都是编译期特性。\n\npublic（默认）：任意位置可访问。\nprivate：仅类内部可访问，子类与外部都不行。\nprotected：类内部与子类可访问，外部不行。\n\n运行时无效：\n- TS 的 private/protected 编译后被擦除，运行时仍可访问 obj.privateField。\n- 真要运行时私有用 ES2022 的 #field 私有字段：class Foo { #x = 1 }，编译为真实私有，Reflect 也访问不到。\n\n其他修饰符：\n- readonly：只读，构造函数内可赋值。\n- static：静态成员，挂在类上。\n- #field vs private：# 是运行时私有且不可被同名继承覆盖，private 是编译期约定。\n\n实践：库的内部实现用 #field 防止误用，团队协作用 private 表达意图即可。',
+              },
+              {
+                title: 'Q34: 装饰器（Decorators）的现状与限制是什么？',
+                content: '装饰器是给类/方法/属性/参数加注解的语法，TS 5.0 起原生支持 stage 3 装饰器。\n\n类型：\n1. 类装饰器：@Component class Foo {} 接收构造函数。\n2. 方法装饰器：@Log method() {} 接收 (target, key, descriptor)。\n3. 属性/参数装饰器：类似机制。\n\n现状：\n- TS 5.0+ 默认 stage 3（标准提案），与旧 experimentalDecorators 不兼容。\n- 旧装饰器（emitDecoratorMetadata + experimentalDecorators）仍是 NestJS/TypeORM 等主流框架的默认，迁移需时。\n- reflect-metadata 提供类型元数据，依赖旧装饰器。\n\n限制：\n- 装饰器不能改变被装饰者的类型签名（需配合 mixin 或类型推断）。\n- 运行时顺序固定（自下而上、方法→类），调试需理解执行顺序。\n\n实践：新项目优先 stage 3，旧框架沿用旧装饰器配置，避免混用。',
+              },
+              {
+                title: 'Q35: const 类型参数 <const T> 有什么用？和 as const 有何区别？',
+                content: 'const 类型参数（TS 5.0+）让函数泛型参数推断为字面量类型而不拓宽。\n\n语法：\n- function tuple<const T>(arr: readonly T[]): T { return arr[0] }。\n- 调用 tuple([1, 2, 3]) 推断 T 为 [1, 2, 3]（元组字面量），而非 number[]。\n\n与 as const 区别：\n- as const 是调用方手动断言：tuple([1,2,3] as const)。\n- <const T> 是函数作者声明"自动推断为字面量"，调用方无需每次加 as const。\n- const 类型参数等价于在调用点自动加 as const，更符合 API 设计者控制推断的诉求。\n\n场景：\n- 定义精确联合：function flags<const T extends string>(...vals: T[]): T[]。\n- 路由表/配置表：期望键为字面量联合而非 string。\n\n注意：const 类型参数会让推断更窄，可能因过度精确导致赋值报错，需权衡。',
+              },
+              {
+                title: 'Q36: 结构类型系统与名义类型系统有何区别？TS 是哪种？',
+                content: '两者是类型等价判定的两种哲学。\n\n结构类型（Structural）：\n- 只要结构匹配即视为同类型，不看名字。\n- type A = { x: number }; type B = { x: number }; A 和 B 可互换。\n- TS 默认是结构类型，源自 JS 的鸭子类型传统。\n\n名义类型（Nominal）：\n- 类型由名字决定，同结构不同名仍视为不同类型。\n- Java/C#/Rust 是名义类型，更严格但表达力受限。\n\nTS 中模拟名义类型：\n- 品牌类型：type UserId = number & { __brand: "UserId" }。\n- unique symbol：用唯一符号做品牌，更严谨。\n- 类实例：class UserId { private _brand: unique symbol }，类天然有名义色彩。\n\n影响：结构类型让组合更灵活，但同结构 ID 易混用；名义类型更安全但啰嗦。理解这点才能解释"为何传错 ID 不报错"。',
+              },
+              {
+                title: 'Q37: 类型推导与显式标注如何取舍？',
+                content: '核心原则：公共 API 显式标注，内部实现让推导。\n\n显式标注的场景：\n1. 函数返回值——库的对外 API 必须标注，避免内部实现变更导致返回类型漂移影响调用方。\n2. 函数参数——参数类型是契约，必须显式。\n3. 复杂泛型——推导结果可能不直观，显式标注更清晰。\n4. 对象字面量赋值给变量——避免拓宽，const + 显式类型或 satisfies。\n\n依赖推导的场景：\n1. 局部变量 const x = fn()——推导出的类型最精确。\n2. async 函数返回值——Promise<T> 由 return 推导。\n3. 解构——let { name } = obj 推导即可。\n\n反模式：\n- 给局部变量重复写类型（let x: number = 1）——冗余。\n- 用 any 替代推导——丢失精度。\n- 推导结果不直观时仍固执依赖推导——可读性差。\n\n平衡：以"调用方能否一眼看懂类型"为准，公共边界显式，内部推导。',
+              },
+              {
+                title: 'Q38: satisfies 运算符与类型断言 as 有何区别？',
+                content: 'satisfies 验证类型约束但不改变推断，as 强制断言改变推断。\n\nsatisfies（TS 4.9+）：\n- const palette = { red: [255, 0, 0] } satisfies Record<string, Color>。\n- 验证对象符合 Record<string, Color>，但 palette.red 仍推断为 [255, 0, 0]（精确字面量）。\n- 不通过约束时报错，安全。\n\nas：\n- const palette = { red: [255, 0, 0] } as Record<string, Color>。\n- palette.red 推断为 Color（拓宽），丢失字面量精度。\n- 不验证对象真实形状，可能误断言。\n\n选择：\n- 想验证约束 + 保留精确推断 → satisfies。\n- 想强制类型转换（如 JSON.parse 后） → as，但应紧跟运行时校验。\n- 联合类型收窄到具体分支 → 类型守卫优于 as。\n\nsatisfies 是 TS 4.9 后替代"显式标注 + 拓宽"折中方案的最佳实践。',
+              },
+              {
+                title: 'Q39: 如何根据值类型过滤对象的属性（PickByType）？',
+                content: '用映射类型 + 键重映射 + 条件类型实现按值类型筛选属性。\n\n实现：\ntype PickByType<T, V> = {\n  [K in keyof T as T[K] extends V ? K : never]: T[K]\n}\n\n原理：\n1. [K in keyof T] 遍历所有键。\n2. as T[K] extends V ? K : never——若值类型兼容 V 则保留键名，否则重映射为 never。\n3. 映射类型自动跳过 never 键，最终只保留符合的属性。\n\n用法：\n- interface Config { port: number; host: string; debug: boolean }。\n- type StringProps = PickByType<Config, string> → { host: string }。\n- type NumberProps = PickByType<Config, number> → { port: number }。\n\n扩展：配合 NonNullable 可过滤可选属性——type Required<T> = { [K in keyof T]-?: T[K] }。这是类型体操的典型模式：键重映射 + 条件类型 = 类型层的 filter/map。',
+              },
+              {
+                title: 'Q40: DeepPartial 与 DeepReadonly 如何实现？有何陷阱？',
+                content: '两者是递归映射类型，让类型深层变可选/只读。\n\nDeepPartial：\ntype DeepPartial<T> = {\n  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K]\n}\n\nDeepReadonly：\ntype DeepReadonly<T> = {\n  readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K]\n}\n\n原理：递归遍历，遇到对象类型继续递归，基础类型停止。\n\n陷阱：\n1. 函数类型——T[K] extends object 会把函数也当对象递归，导致 () => void 被错误处理。需加排除：T[K] extends Function ? T[K] : ...。\n2. 数组——DeepReadonly<number[]> 会变成 { readonly [n: number]: number }，丢失数组方法。需特殊处理数组：T extends readonly any[] ? ReadonlyArray<T[number]> : ...。\n3. 循环引用——对象自引用会无限递归，TS 有深度上限保护。\n\n实践：复杂场景用 type-fest 库的 DeepPartial/DeepReadonly，已处理边界情况。',
+              },
+              {
+                title: 'Q41: Promise<T> 与 async/await 的类型如何工作？',
+                content: 'async 函数返回 Promise<T>，await 解包 Promise。\n\n类型规则：\n1. async function fn(): Promise<string> { return "hi" }——return 的值自动包装为 Promise。\n2. async function fn(): Promise<string> { return Promise.resolve("hi") }——直接返回 Promise 会被展平。\n3. const x: string = await fn()——await 解包 Promise<string> 为 string。\n4. async 函数中 await 非 Promise 值——值原样返回，类型不变。\n\n陷阱：\n1. 顶层 await——仅在 module 上下文可用，CommonJS 报错。\n2. await 必在 async 内——普通函数用 await 会报错，需用 .then() 或改成 async。\n3. Promise 链类型——Promise<T>.then<U>(cb) 返回 Promise<U>，cb 返回 Promise 会被展平。\n4. reject 类型——Promise 的 reject 是 any，无法类型化错误，需用 Result<T, E> 模式封装。\n\n实践：async/await 是 Promise 的语法糖，类型推断更友好，错误用 try/catch 处理。',
+              },
+              {
+                title: 'Q42: 泛型默认值 <T = string> 有什么用？',
+                content: '泛型默认值让调用方可省略类型参数，提升 API 易用性。\n\n语法：\n- interface Box<T = string> { value: T }。\n- 调用 const b: Box = { value: "hi" }，T 默认为 string。\n- 显式覆盖：const b: Box<number> = { value: 1 }。\n\n规则：\n1. 有默认值的类型参数可省略，无默认值的必须传入。\n2. 默认值不能引用排在后面的类型参数（需在前声明）。\n3. 默认值需满足该参数的 extends 约束。\n\n场景：\n1. 配置对象——interface Config<T = string> { items: T[] }，多数用 string。\n2. 工具类型——type State<T = any> = { value: T }，宽松默认。\n3. React 组件 Props——interface Props<T = unknown>，泛型组件默认 unknown。\n\n注意：默认值让 API 更易用，但也可能隐藏类型不精确——调用方应明确传入类型而非依赖默认。',
+              },
+              {
+                title: 'Q43: 可变元组类型 ...args: [...T] 是什么？解决什么问题？',
+                content: '可变元组（TS 4.0+）让元组支持泛型展开，是函数 concat 类型推导的关键。\n\n语法：\n- function concat<T extends readonly unknown[]>(...args: [...T]): T { return args }。\n- 调用 concat(1, "a", true) 推断 T 为 [number, string, boolean]。\n\n解决的问题：\n- 旧 TS 中 ...args: T[] 只能推出数组，丢失位置信息。\n- 可变元组让 ...args: [...T] 保留每个位置的精确类型。\n\n典型应用：\n1. curry 函数：function curry<T extends any[]>(...fn: T): (...args: T) => void。\n2. concat 类型：function concat<A extends readonly unknown[], B extends readonly unknown[]>(a: A, b: B): [...A, ...B]。\n3. useState：const [v, set] = useState<T>(init) 返回 [T, (v: T) => void]。\n\n注意：可变元组在条件类型 + infer 中也能展开——T extends [infer Head, ...infer Rest] ? Rest : []，实现元组类型递归。',
+              },
+              {
+                title: 'Q44: 字面量收窄与 as const 在配置场景如何配合？',
+                content: 'as const 把对象/数组断言为最窄字面量类型，是配置类型化的关键工具。\n\n场景：路由表/配置表期望键为字面量联合而非 string。\n\n示例：\nconst ROUTES = ["home", "about", "contact"] as const\n// 类型：readonly ["home", "about", "contact"]\ntype Route = typeof ROUTES[number]\n// "home" | "about" | "contact"\n\n要点：\n1. as const 让数组变元组而非 string[]，元素类型保留字面量。\n2. typeof ROUTES[number] 取数组元素的联合类型。\n3. 对象字面量同样适用：const CONFIG = { port: 3000 } as const，port 类型为 3000 而非 number。\n4. 配合 satisfies 验证约束：const CONFIG = { port: 3000 } satisfies Record<string, number>，CONFIG.port 仍是 3000。\n\n陷阱：as const 让一切变 readonly，运行时不可变，修改需先 [...arr] 解冻。',
+              },
+              {
+                title: 'Q45 【场景题】: 项目依赖的第三方库没有类型声明，如何处理？',
+                content: '分场景处理，优先用社区已有类型，其次手写最小声明。\n\n步骤：\n1. 查 @types——npm i -D @types/libname，多数主流库有社区维护的 .d.ts。\n2. 查库自带类型——package.json 的 "types" 或 "exports" 字段，新版库多自带 .d.ts。\n3. 都没有则手写最小声明：\n   - 在 src/types/global.d.ts 写 declare module "libname" { export function foo(x: number): string }。\n   - 只声明用到的 API，未知 API 用 any 兜底（后续逐步收窄）。\n4. 渐进收窄——用一段时间后，把 any 替换为精确类型，配合 unknown + 类型守卫。\n\n易错点：\n- declare module 整体用 any 会污染调用方推断，应尽量精确。\n- 全局声明文件需在 tsconfig 的 include 内。\n- 库升级后类型可能变化，定期核对 .d.ts 与实际 API。\n\n原则：类型是渐进的，先跑起来再精确化，避免阻塞业务。',
+              },
+              {
+                title: 'Q46 【场景题】: 大型 monorepo 中如何组织共享类型？',
+                content: '集中定义、按域分包、避免循环依赖。\n\n结构：\n1. types 包——单独的 @repo/types 包，集中存放跨包共享的领域类型（User/Order/DTO）。\n2. 按域分文件——types/user.ts、types/order.ts，barrel 导出 index.ts。\n3. 包内私有类型不放共享包，避免污染。\n\n实践：\n1. project references——tsconfig 用 references 拆分，类型变更增量编译。\n2. path mapping——tsconfig paths 配置 @repo/types/* 别名，开发期无需发布。\n3. 版本策略——共享类型包用 changeset/semantic-release 管理，避免破坏性变更。\n4. 不依赖运行时——types 包只含类型不含实现，避免循环依赖。\n\n陷阱：\n- 类型与运行时 schema 漂移——用 zod/io-ts 生成类型，单源真理。\n- 循环依赖——A 引 B 的类型，B 又引 A，需提取公共子类型到第三方文件。\n- 编译性能——巨型 types 包拖慢全仓编译，按域拆子包。\n\n原则：类型即契约，共享类型应像 API 一样有版本与变更流程。',
+              },
+              {
+                title: 'Q47 【对比题】: enum、联合字面量类型、as const 对象三者的取舍？',
+                content: '三者都表达"有限常量集合"，但机制与陷阱不同。\n\nenum：\n- enum Color { Red, Blue } 生成运行时对象，数字枚举有反向映射。\n- 陷阱：体积增大、数字枚举不安全、const enum 跨编译器不一致。\n- 适合需要运行时对象（迭代枚举值）的场景。\n\n联合字面量类型：\n- type Color = "red" | "blue"，编译期擦除，无运行时开销。\n- 安全——只能赋值指定字面量。\n- 缺点：不能像对象一样迭代，需配合 const COLORS = [...] as const。\n\nas const 对象：\n- const COLORS = { Red: "red", Blue: "blue" } as const。\n- 兼顾运行时值（可迭代）+ 类型联合（typeof COLORS[keyof typeof COLORS]）。\n- 最接近 enum 但无 enum 陷阱。\n\n推荐：新项目优先 as const 对象 + 联合字面量，兼顾运行时与类型安全；遗留 enum 保留，避免引入 const enum。',
+              },
+              {
+                title: 'Q48 【对比题】: type alias 与 interface 在扩展与性能上有何差异？',
+                content: '两者定义对象形状能力相近，但扩展机制和编译表现不同。\n\n扩展机制：\n- interface 用 extends 继承：interface B extends A {}，可多继承。\n- interface 支持声明合并——同名自动合并，库可被使用者扩展。\n- type 用交叉 &：type B = A & { x: number }，无声明合并。\n- type 可表达联合/元组/映射类型，interface 不能。\n\n性能：\n- 大型联合用 type 表达，interface 因不能定义联合需绕路。\n- interface 声明合并可能在大型项目产生意外合并结果（同名冲突）。\n- 编译速度两者差异通常可忽略，但巨型交叉 & 可能比 extends 慢。\n\n选择：\n- 公开 API 形状、希望被扩展 → interface。\n- 联合、元组、工具类型、复杂类型演算 → type。\n- 团队统一一种风格即可，混用增加认知负担。\n\nTS 官方建议：能用 interface 就用 interface，需要 type 独有能力时才用 type。',
+              },
+              {
+                title: 'Q49 【对比题】: 泛型与函数重载在表达"多类型签名"时如何取舍？',
+                content: '两者都能让函数适配多种类型，但表达力与适用场景不同。\n\n泛型：\n- function id<T>(x: T): T { return x }，一个签名覆盖所有类型。\n- 优点：类型精确、代码少、调用方推断。\n- 局限：不同类型参数组合的"实现逻辑"相同时才适合，逻辑不同需重载。\n- 适合：identity、map、容器、工具函数。\n\n函数重载：\n- function fn(x: string): number; function fn(x: number): string; 多签名 + 一实现。\n- 优点：每种参数组合可返回不同类型，实现可分支处理。\n- 局限：实现签名对外不可见，重载顺序敏感，维护成本高。\n- 适合：参数与返回类型有复杂映射、各分支逻辑不同的 API。\n\n取舍：\n- 逻辑统一、仅类型变化 → 泛型。\n- 逻辑分叉、各分支返回类型不同 → 重载。\n- 可先用泛型，发现需要分支实现时再升级为重载。\n- 重载签名应从具体到宽泛排序，避免被宽类型先匹配。',
+              },
+              {
+                title: 'Q50 【综合】: TypeScript 类型体操的核心理念是什么？边界在哪？',
+                content: '类型体操是把类型系统当编程语言用，实现类型层的计算。\n\n核心理念：\n1. 类型即值——类型参数像函数参数，条件类型像 if，映射类型像 map，infer 像 let。\n2. 递归与模式匹配——T extends [infer H, ...infer R] ? f<H> + rec<R> : []，递归遍历。\n3. 约束即契约——T extends Constraint 限定输入形状，保证类型安全。\n4. 组合优于继承——小工具类型组合成大工具类型，Partial<Omit<...>>。\n\n典型成果：\n- DeepPartial/DeepReadonly、GetOptional/GetRequired、Path<T>（路径联合）、Join（字符串拼接）。\n- type-fest、ts-toolbelt 等库提供大量现成体操工具。\n\n边界（何时不该体操）：\n1. 编译性能——递归类型在大型联合上分发会拖慢编译，tsc --extendedDiagnostics 排查。\n2. 可读性——过度体操的代码难维护，团队需有共识。\n3. 运行时无效——类型只在编译期，运行时校验仍需 zod/io-ts。\n4. 推断极限——某些类型（如反向推导对象键值类型）TS 无法表达，需运行时方案。\n\n实践：用体操消除重复类型代码，但保留"够用即可"的克制，类型精确度与维护成本要平衡。',
               },
             ],
           },

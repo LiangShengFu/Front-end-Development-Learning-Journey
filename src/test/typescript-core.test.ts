@@ -96,6 +96,9 @@ describe('TypeScript 核心与进阶 模块', () => {
     expect(Math.min(...difficulties)).toBeGreaterThanOrEqual(1)
     expect(Math.max(...difficulties)).toBeLessThanOrEqual(5)
     expect(new Set(difficulties).size).toBeGreaterThanOrEqual(3)
+    // 进阶(4-5)占比 ≤ 30%（对齐 A3）
+    const advanced = difficulties.filter((d) => d >= 4).length
+    expect(advanced / difficulties.length).toBeLessThanOrEqual(0.3)
   })
 
   it('每个知识点应至少包含一个段落或标题块', () => {
@@ -128,7 +131,7 @@ describe('TypeScript 核心与进阶 模块', () => {
     })
   })
 
-  it('应包含面试题知识点且题数 ≥ 12（含场景题 / 对比题）', () => {
+  it('应包含面试题知识点且题数 ≥ 50（含场景题 / 对比题）', () => {
     const accordionPoint = typescriptCoreModule.points.find(
       (p) => p.visualizationType === 'accordion' && p.title.includes('面试题'),
     )
@@ -136,10 +139,19 @@ describe('TypeScript 核心与进阶 模块', () => {
     const demo = accordionPoint!.blocks.find((b) => b.type === 'demo')
     expect(demo).toBeDefined()
     const data = demo!.data as AccordionData
-    expect(data.items.length).toBeGreaterThanOrEqual(12)
+    expect(data.items.length).toBeGreaterThanOrEqual(50)
     const titles = data.items.map((i) => i.title).join('\n')
-    expect(titles).toMatch(/场景题/)
-    expect(titles).toMatch(/对比题/)
+    // 场景题与对比题计数校验（对齐 B4：≥ 2 场景 + ≥ 2 对比）
+    const sceneCount = (titles.match(/场景题/g) || []).length
+    const compareCount = (titles.match(/对比题/g) || []).length
+    expect(sceneCount).toBeGreaterThanOrEqual(2)
+    expect(compareCount).toBeGreaterThanOrEqual(2)
+    // 每题 content 应解释"为什么"，非空且含结构化说明
+    data.items.forEach((i) => {
+      expect(i.title).toBeTruthy()
+      expect(i.content).toBeTruthy()
+      expect(i.content.length).toBeGreaterThan(20)
+    })
   })
 
   it('应包含知识点速查表（表格形式，≥ 10 行）', () => {

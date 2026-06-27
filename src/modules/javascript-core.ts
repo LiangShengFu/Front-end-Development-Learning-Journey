@@ -1766,139 +1766,139 @@ bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
             items: [
               {
                 title: 'Q1: 解释闭包及其应用场景',
-                content: '闭包是函数与其词法环境的组合。内部函数可以访问外部函数的变量，即使外部函数已返回。应用：模块模式（私有变量）、柯里化、防抖节流、事件监听器。注意：闭包持有变量引用，若闭包长期存活（如未移除的监听器）可能导致内存泄漏，应及时解绑或用 WeakMap。',
+                content: '闭包是函数与其词法环境的组合。内部函数可以访问外部函数的变量，即使外部函数已返回。\n\n应用场景：\n1. 模块模式（私有变量）\n2. 柯里化\n3. 防抖节流\n4. 事件监听器\n\n注意：闭包持有变量引用，若闭包长期存活（如未移除的监听器）可能导致内存泄漏，应及时解绑或用 WeakMap。',
               },
               {
                 title: 'Q2: typeof null 为什么是 "object"',
-                content: 'JavaScript 诞生时，值在内存中以类型标签存储。对象的类型标签低位是 000，而 null 在多数平台被表示为空指针（全 0），因此 typeof 误判为 "object"。这是历史遗留 bug，已无法修复（破坏兼容性）。精确判 null 应使用 value === null。',
+                content: 'JavaScript 诞生时，值在内存中以类型标签存储。对象的类型标签低位是 000，而 null 在多数平台被表示为空指针（全 0），因此 typeof 误判为 "object"。\n\n这是历史遗留 bug，已无法修复（破坏兼容性）。精确判 null 应使用 value === null。',
               },
               {
                 title: 'Q3: == 和 === 的区别',
-                content: '== 宽松相等会触发隐式类型转换（如 0 == "" 为 true），规则复杂易错。=== 严格相等不转换类型，类型不同直接返回 false。始终使用 ===，需要转换时显式 Number()/String()。特殊场景用 Object.is()（处理 NaN 和 ±0）。',
+                content: '两者差异：\n\n== 宽松相等：\n- 会触发隐式类型转换。\n- 如 0 == "" 为 true。\n- 规则复杂易错。\n\n=== 严格相等：\n- 不转换类型。\n- 类型不同直接返回 false。\n\n建议：始终使用 ===，需要转换时显式 Number()/String()。特殊场景用 Object.is()（处理 NaN 和 ±0）。',
               },
               {
                 title: 'Q4: 解释事件循环（Event Loop）',
-                content: 'JS 单线程，通过事件循环处理异步。主线程执行同步代码 → 清空微任务队列（Promise.then、queueMicrotask、MutationObserver）→ UI 渲染 → 取一个宏任务（setTimeout、IO、UI 事件）→ 循环。微任务优先于宏任务，每次宏任务后清空所有微任务，因此 Promise.then 总先于 setTimeout 执行。',
+                content: 'JS 单线程，通过事件循环处理异步。\n\n执行流程：\n1. 主线程执行同步代码。\n2. 清空微任务队列（Promise.then、queueMicrotask、MutationObserver）。\n3. UI 渲染。\n4. 取一个宏任务（setTimeout、IO、UI 事件）。\n5. 循环。\n\n关键规则：微任务优先于宏任务，每次宏任务后清空所有微任务，因此 Promise.then 总先于 setTimeout 执行。',
               },
               {
                 title: 'Q5: var / let / const 区别',
-                content: 'var：函数作用域，变量提升（初始化为 undefined），可重复声明。let：块作用域，暂存性死区（TDZ），不可重复声明。const：块作用域，必须初始化，不可重新赋值（但对象属性可变）。默认用 const，可变用 let，避免 var。TDZ 使 let/const 在声明前访问抛 ReferenceError。',
+                content: '三者特性：\n\nvar：\n- 函数作用域。\n- 变量提升（初始化为 undefined）。\n- 可重复声明。\n\nlet：\n- 块作用域。\n- 暂存性死区（TDZ）。\n- 不可重复声明。\n\nconst：\n- 块作用域。\n- 必须初始化。\n- 不可重新赋值（但对象属性可变）。\n\n建议：默认用 const，可变用 let，避免 var。TDZ 使 let/const 在声明前访问抛 ReferenceError。',
               },
               {
                 title: 'Q6: 箭头函数与普通函数的区别',
-                content: '箭头函数：没有自己的 this（继承外层词法作用域）、没有 arguments、不能作为构造函数（不能 new）、没有 prototype。适合回调和需要词法 this 的场景。不适合对象方法（this 不指向对象）和需要 arguments 的场景。普通函数 this 由调用方式决定（默认/隐式/显式/new 绑定）。',
+                content: '箭头函数特性：\n- 没有自己的 this（继承外层词法作用域）。\n- 没有 arguments。\n- 不能作为构造函数（不能 new）。\n- 没有 prototype。\n\n适合场景：回调和需要词法 this 的场景。\n\n不适合场景：\n- 对象方法（this 不指向对象）。\n- 需要 arguments 的场景。\n\n普通函数 this 由调用方式决定（默认/隐式/显式/new 绑定）。',
               },
               {
                 title: 'Q7: 解释原型链及 instanceof 的原理',
-                content: '每个对象有 __proto__ 指向其构造函数的 prototype。访问属性时沿 __proto__ → 构造函数.prototype → ... → Object.prototype → null 逐层查找，形成原型链。instanceof 沿原型链检查右侧构造函数的 prototype 是否出现在左侧对象的原型链上。class extends 是原型链继承的语法糖，super() 调用父构造函数并自动设置原型链。',
+                content: '每个对象有 __proto__ 指向其构造函数的 prototype。访问属性时沿原型链逐层查找：\n\n__proto__ → 构造函数.prototype → ... → Object.prototype → null\n\ninstanceof 原理：沿原型链检查右侧构造函数的 prototype 是否出现在左侧对象的原型链上。\n\nclass extends 是原型链继承的语法糖，super() 调用父构造函数并自动设置原型链。',
               },
               {
                 title: 'Q8: this 的绑定规则有哪些',
-                content: '四种规则（优先级由低到高）：默认绑定（独立调用，非严格模式指向 window，严格模式 undefined）；隐式绑定（obj.fn() 指向 obj）；显式绑定（call/apply/bind 指定 this，bind 永久绑定）；new 绑定（指向新创建对象，优先级最高）。箭头函数不适用以上规则，this 由外层词法作用域决定。注意隐式丢失：把对象方法赋值给变量再调用会退化为默认绑定。',
+                content: '四种规则（优先级由低到高）：\n1. 默认绑定——独立调用，非严格模式指向 window，严格模式 undefined。\n2. 隐式绑定——obj.fn() 指向 obj。\n3. 显式绑定——call/apply/bind 指定 this，bind 永久绑定。\n4. new 绑定——指向新创建对象，优先级最高。\n\n箭头函数不适用以上规则，this 由外层词法作用域决定。\n\n注意隐式丢失：把对象方法赋值给变量再调用会退化为默认绑定。',
               },
               {
                 title: 'Q9: Promise 的三种状态与链式调用原理',
-                content: 'Promise 有 pending（进行中）、fulfilled（已完成）、rejected（已拒绝）三态，状态一经改变不可逆。then 返回新 Promise，使链式调用成为可能：then 的回调返回值会被 Promise.resolve 包装，返回 thenable 会跟随其状态，抛错则进入 rejected。.catch 是 .then(null, onRejected) 的语法糖。链中任一 rejected 未捕获会冒泡到最近的 catch。',
+                content: 'Promise 三态：\n- pending（进行中）\n- fulfilled（已完成）\n- rejected（已拒绝）\n\n状态一经改变不可逆。\n\n链式调用原理：\n- then 返回新 Promise。\n- then 的回调返回值会被 Promise.resolve 包装。\n- 返回 thenable 会跟随其状态。\n- 抛错则进入 rejected。\n\n.catch 是 .then(null, onRejected) 的语法糖。链中任一 rejected 未捕获会冒泡到最近的 catch。',
               },
               {
                 title: 'Q10: async/await 的原理与错误处理',
-                content: 'async 函数自动返回 Promise，返回值被 Promise.resolve 包装；await 暂停函数执行等待 Promise 完成，本质是 Generator + 自动执行器的语法糖。错误处理用 try/catch 包裹 await（Promise 的 .catch 等价）。并发场景用 Promise.all 配合 await 提升效率。注意：多个独立 await 串行会浪费时间，应改 Promise.all 并发。',
+                content: '原理：\n- async 函数自动返回 Promise，返回值被 Promise.resolve 包装。\n- await 暂停函数执行等待 Promise 完成。\n- 本质是 Generator + 自动执行器的语法糖。\n\n错误处理：用 try/catch 包裹 await（等价于 Promise 的 .catch）。\n\n并发场景：用 Promise.all 配合 await 提升效率。\n\n注意：多个独立 await 串行会浪费时间，应改 Promise.all 并发。',
               },
               {
                 title: 'Q11: ES Module 与 CommonJS 的区别',
-                content: 'ESM 是编译时静态分析，支持 tree-shaking，import 必须在顶层且异步加载；CommonJS 是运行时同步加载，require 可在条件块中。ESM 导出是引用绑定（导出方修改可见），CommonJS 导出是值拷贝。ESM 默认严格模式、顶层 this 为 undefined。Node 中 ESM 可 import CommonJS（默认导出 = module.exports），反之受限。',
+                content: '两者差异：\n\nESM：\n- 编译时静态分析，支持 tree-shaking。\n- import 必须在顶层且异步加载。\n- 导出是引用绑定（导出方修改可见）。\n- 默认严格模式、顶层 this 为 undefined。\n\nCommonJS：\n- 运行时同步加载。\n- require 可在条件块中。\n- 导出是值拷贝。\n\nNode 中 ESM 可 import CommonJS（默认导出 = module.exports），反之受限。',
               },
               {
                 title: 'Q12: 防抖与节流的区别及实现要点',
-                content: '防抖（debounce）：事件停止触发 n 秒后执行一次，期间再次触发则重新计时。用于搜索框输入、窗口 resize。节流（throttle）：n 秒内只执行一次，稀释执行频率。用于滚动、拖拽。两者都借助闭包保存定时器/时间戳。实现要点：debounce 用 setTimeout + clearTimeout 重置计时器；throttle 用 Date.now() 判断时间间隔，leading/trailing 控制首尾是否触发。',
+                content: '防抖（debounce）：\n- 事件停止触发 n 秒后执行一次。\n- 期间再次触发则重新计时。\n- 用于搜索框输入、窗口 resize。\n\n节流（throttle）：\n- n 秒内只执行一次，稀释执行频率。\n- 用于滚动、拖拽。\n\n实现要点：\n- debounce 用 setTimeout + clearTimeout 重置计时器。\n- throttle 用 Date.now() 判断时间间隔。\n- leading/trailing 控制首尾是否触发。\n\n两者都借助闭包保存定时器/时间戳。',
               },
               {
                 title: 'Q13 【场景题】: 页面长时间运行后越来越卡，如何从 JS 角度排查内存泄漏',
-                content: '排查路径：1) Chrome DevTools Memory 面板做堆快照对比（Take heap snapshot 两次 Diff），定位未释放对象；2) Performance Monitor 观察 JS heap size 是否持续上涨不回落；3) 常见泄漏源：未移除的事件监听器、闭包持有大对象、脱离 DOM 的引用、定时器未清除、全局变量意外挂载、WeakMap 该用却用了 Map。4) 修复：及时 removeEventListener、clearInterval/timeout、用 WeakMap 存元数据、避免在闭包中持有无用引用。5) 验证：复现操作后强制 GC 看堆是否回落。',
+                content: '排查路径：\n1. Chrome DevTools Memory 面板做堆快照对比（Take heap snapshot 两次 Diff），定位未释放对象。\n2. Performance Monitor 观察 JS heap size 是否持续上涨不回落。\n3. 常见泄漏源：未移除的事件监听器、闭包持有大对象、脱离 DOM 的引用、定时器未清除、全局变量意外挂载、WeakMap 该用却用了 Map。\n4. 修复：及时 removeEventListener、clearInterval/timeout、用 WeakMap 存元数据、避免在闭包中持有无用引用。\n5. 验证：复现操作后强制 GC 看堆是否回落。',
               },
               {
                 title: 'Q14 【场景题】: 现有代码用回调嵌套发 3 个串行请求，慢且难维护，如何重构',
-                content: '重构步骤：1) 将回调式 API 包裹成 Promise（new Promise + resolve/reject）；2) 串行改用 async/await 顺序书写，逻辑清晰、错误用 try/catch 集中处理；3) 若三请求无依赖关系，改 Promise.all 并发执行，耗时从 sum 降为 max；4) 需容错用 Promise.allSettled 保留部分成功结果；5) 加请求超时（Promise.race 包裹 setTimeout reject）和取消（AbortController）；6) 加重试与限流。最终代码可读性、健壮性、性能都显著提升。',
+                content: '重构步骤：\n1. 将回调式 API 包裹成 Promise（new Promise + resolve/reject）。\n2. 串行改用 async/await 顺序书写，逻辑清晰、错误用 try/catch 集中处理。\n3. 若三请求无依赖关系，改 Promise.all 并发执行，耗时从 sum 降为 max。\n4. 需容错用 Promise.allSettled 保留部分成功结果。\n5. 加请求超时（Promise.race 包裹 setTimeout reject）和取消（AbortController）。\n6. 加重试与限流。\n\n最终代码可读性、健壮性、性能都显著提升。',
               },
               {
                 title: 'Q15 【对比题】: Promise.all / allSettled / any / race 的区别',
-                content: '四者都接收可迭代 Promise，返回 Promise：all——全部 fulfilled 才 fulfilled，任一 reject 立即 reject（快速失败），结果数组有序；allSettled——等待全部完成，结果为 {status, value/reason}，永不 reject；any——任一 fulfilled 立即 fulfilled，全部 reject 才 reject（AggregateError），返回首个成功值；race——首个 settle（无论成功失败）即 adopt 其结果。选型：全部成功才继续用 all；容忍部分失败用 allSettled；任一成功即可用 any；超时控制用 race。',
+                content: '四者都接收可迭代 Promise，返回 Promise：\n\nall：\n- 全部 fulfilled 才 fulfilled。\n- 任一 reject 立即 reject（快速失败）。\n- 结果数组有序。\n\nallSettled：\n- 等待全部完成。\n- 结果为 {status, value/reason}。\n- 永不 reject。\n\nany：\n- 任一 fulfilled 立即 fulfilled。\n- 全部 reject 才 reject（AggregateError）。\n- 返回首个成功值。\n\nrace：\n- 首个 settle（无论成功失败）即 adopt 其结果。\n\n选型：全部成功才继续用 all；容忍部分失败用 allSettled；任一成功即可用 any；超时控制用 race。',
               },
               {
                 title: 'Q16 【对比题】: 深拷贝与浅拷贝的区别及实现方式',
-                content: '浅拷贝只复制一层，嵌套对象仍共享引用（Object.assign、展开运算符 ...、Array.slice）。深拷贝递归复制所有层级，完全独立。实现方式：JSON.parse(JSON.stringify())（简单但不处理函数/undefined/循环引用/Date）；structuredClone()（现代原生 API，支持循环引用、Date、Map/Set，不支持函数）；手写递归（需处理循环引用用 WeakMap 缓存、特殊对象 Date/RegExp）。React 状态更新只需浅拷贝到改动层级即可保证新引用。',
+                content: '浅拷贝：只复制一层，嵌套对象仍共享引用。\n- Object.assign\n- 展开运算符 ...\n- Array.slice\n\n深拷贝：递归复制所有层级，完全独立。\n\n实现方式：\n1. JSON.parse(JSON.stringify())——简单但不处理函数/undefined/循环引用/Date。\n2. structuredClone()——现代原生 API，支持循环引用、Date、Map/Set，不支持函数。\n3. 手写递归——需处理循环引用用 WeakMap 缓存、特殊对象 Date/RegExp。\n\nReact 状态更新只需浅拷贝到改动层级即可保证新引用。',
               },
               {
                 title: 'Q17: 解释 JS 的弱类型与动态类型特征',
-                content: '动态类型：变量类型在运行时确定，同一变量可重新赋值为不同类型（let x = 1; x = "a"）。弱类型：隐式类型转换频繁（1 + "2" → "12"，[] == false → true），不同类型参与运算时由引擎按规则转换。弱类型易写出"能跑但语义错"的代码，TS 在编译期加静态类型检查缓解此问题，但运行时仍是 JS 弱类型。',
+                content: '动态类型：\n- 变量类型在运行时确定。\n- 同一变量可重新赋值为不同类型（let x = 1; x = "a"）。\n\n弱类型：\n- 隐式类型转换频繁。\n- 如 1 + "2" → "12"，[] == false → true。\n- 不同类型参与运算时由引擎按规则转换。\n\n弱类型易写出"能跑但语义错"的代码。TS 在编译期加静态类型检查缓解此问题，但运行时仍是 JS 弱类型。',
               },
               {
                 title: 'Q18: 为什么 0.1 + 0.2 !== 0.3？如何解决',
-                content: 'JS 采用 IEEE 754 双精度浮点数，0.1 / 0.2 在二进制下是无限循环小数，截断后产生舍入误差，相加结果为 0.30000000000000004。解决方案：1) 比较时用 Math.abs(a - b) < Number.EPSILON；2) 金额场景先乘以 100 转整数运算再除回；3) 用 toFixed(小数位) 显示（注意返回字符串）；4) 高精度需求用 decimal.js / big.js / BigInt（仅整数）。整数在 ±2^53 内可精确表示。',
+                content: 'JS 采用 IEEE 754 双精度浮点数，0.1 / 0.2 在二进制下是无限循环小数，截断后产生舍入误差，相加结果为 0.30000000000000004。\n\n解决方案：\n1. 比较时用 Math.abs(a - b) < Number.EPSILON。\n2. 金额场景先乘以 100 转整数运算再除回。\n3. 用 toFixed(小数位) 显示（注意返回字符串）。\n4. 高精度需求用 decimal.js / big.js / BigInt（仅整数）。\n\n整数在 ±2^53 内可精确表示。',
               },
               {
                 title: 'Q19: 解释 JS 的垃圾回收机制',
-                content: 'V8 采用分代回收：新生代（Scavenge 算法，From/To 半区复制存活对象）+ 老生代（Mark-Sweep 标记清除 + Mark-Compact 标记整理解决碎片）。回收触发：分配失败时。可达性分析：从 GC Roots（全局变量、活动栈、DOM 引用等）出发不可达的对象被回收。常见泄漏：意外全局变量、未清除的定时器/监听器、闭包持有无用引用、脱离 DOM 仍被引用。WeakMap/WeakSet 的键是弱引用，不影响 GC。',
+                content: 'V8 采用分代回收：\n\n新生代：Scavenge 算法，From/To 半区复制存活对象。\n\n老生代：Mark-Sweep 标记清除 + Mark-Compact 标记整理解决碎片。\n\n回收触发：分配失败时。\n\n可达性分析：从 GC Roots（全局变量、活动栈、DOM 引用等）出发不可达的对象被回收。\n\n常见泄漏：意外全局变量、未清除的定时器/监听器、闭包持有无用引用、脱离 DOM 仍被引用。WeakMap/WeakSet 的键是弱引用，不影响 GC。',
               },
               {
                 title: 'Q20: 解释 V8 引擎的执行流程与 JIT',
-                content: '流程：源码 → Parser 解析为 AST → Ignition 解释器生成字节码并执行（启动快）→ 热点代码经 TurboFan 优化编译为机器码（运行快）。若类型推测失败触发反优化（deopt）回退字节码。这就是为何同一段代码首次执行慢、反复执行后变快。理解 JIT 有助于写出"类型稳定"的代码（不在热路径上频繁改变对象形状）以避免反优化。',
+                content: '执行流程：\n1. 源码 → Parser 解析为 AST。\n2. Ignition 解释器生成字节码并执行（启动快）。\n3. 热点代码经 TurboFan 优化编译为机器码（运行快）。\n4. 若类型推测失败触发反优化（deopt）回退字节码。\n\n这就是为何同一段代码首次执行慢、反复执行后变快。\n\n理解 JIT 有助于写出"类型稳定"的代码（不在热路径上频繁改变对象形状）以避免反优化。',
               },
               {
                 title: 'Q21: 模块模式与 IIFE',
-                content: 'IIFE（立即调用函数表达式）创建独立作用域，避免污染全局：;(function(){ ... })()。模块模式利用闭包封装私有成员，仅暴露公共接口：const Counter = (function(){ let n=0; return { inc:()=>++n, get:()=>n } })()。ES6 前 IIFE + 闭包是实现私有与模块化的主流方案；ES6 后用 import/export + 私有字段 # 替代，但 IIFE 仍在 UMD 包装、避免变量提升冲突等场景有用。',
+                content: 'IIFE（立即调用函数表达式）创建独立作用域，避免污染全局：\n;(function(){ ... })()\n\n模块模式利用闭包封装私有成员，仅暴露公共接口：\nconst Counter = (function(){ let n=0; return { inc:()=>++n, get:()=>n } })()\n\nES6 前 IIFE + 闭包是实现私有与模块化的主流方案；ES6 后用 import/export + 私有字段 # 替代，但 IIFE 仍在 UMD 包装、避免变量提升冲突等场景有用。',
               },
               {
                 title: 'Q22: 柯里化（Currying）的原理与实现',
-                content: '柯里化把接收多参数的函数转换为一系列接收单参数的函数：f(a,b,c) → f(a)(b)(c)。原理：利用闭包逐层收集参数，参数凑齐后执行。实现：function curry(fn){ return function curried(...args){ return args.length >= fn.length ? fn(...args) : (...next)=>curried(...args, ...next) } }。应用：参数复用（如 log("INFO")("msg")）、延迟执行、函数组合。Lodash 的 _.curry 支持占位符。',
+                content: '柯里化把接收多参数的函数转换为一系列接收单参数的函数：f(a,b,c) → f(a)(b)(c)。\n\n原理：利用闭包逐层收集参数，参数凑齐后执行。\n\n实现：\nfunction curry(fn){ return function curried(...args){ return args.length >= fn.length ? fn(...args) : (...next)=>curried(...args, ...next) } }\n\n应用：\n1. 参数复用（如 log("INFO")("msg")）\n2. 延迟执行\n3. 函数组合\n\nLodash 的 _.curry 支持占位符。',
               },
               {
                 title: 'Q23 【对比题】: call / apply / bind 的区别',
-                content: '三者都用于显式绑定 this。call(thisArg, arg1, arg2...)——立即调用，参数逐个传递；apply(thisArg, [args])——立即调用，参数以数组传递（适合数组解构场景，如 Math.max.apply(null, arr)）；bind(thisArg, ...args)——不立即调用，返回一个永久绑定 this 的新函数，可预设部分参数（偏函数）。bind 返回的函数 this 已锁定，再 call 也无法改变。箭头函数无 this，三者对其无效。',
+                content: '三者都用于显式绑定 this：\n\ncall(thisArg, arg1, arg2...)\n- 立即调用。\n- 参数逐个传递。\n\napply(thisArg, [args])\n- 立即调用。\n- 参数以数组传递。\n- 适合数组解构场景，如 Math.max.apply(null, arr)。\n\nbind(thisArg, ...args)\n- 不立即调用。\n- 返回一个永久绑定 this 的新函数。\n- 可预设部分参数（偏函数）。\n\n注意：bind 返回的函数 this 已锁定，再 call 也无法改变。箭头函数无 this，三者对其无效。',
               },
               {
                 title: 'Q24: new 操作符的执行过程',
-                content: 'new Fn(args) 做四件事：1) 创建一个新的空对象 obj；2) 设置 obj.__proto__ = Fn.prototype（建立原型链）；3) 以 obj 为 this 执行 Fn 构造函数，初始化实例属性；4) 若 Fn 返回对象则用该返回值，否则返回 obj。手写：function myNew(Fn, ...args){ const obj = Object.create(Fn.prototype); const res = Fn.apply(obj, args); return res instanceof Object ? res : obj }。class 是 new + 原型链的语法糖。',
+                content: 'new Fn(args) 做四件事：\n1. 创建一个新的空对象 obj。\n2. 设置 obj.__proto__ = Fn.prototype（建立原型链）。\n3. 以 obj 为 this 执行 Fn 构造函数，初始化实例属性。\n4. 若 Fn 返回对象则用该返回值，否则返回 obj。\n\n手写：\nfunction myNew(Fn, ...args){ const obj = Object.create(Fn.prototype); const res = Fn.apply(obj, args); return res instanceof Object ? res : obj }\n\nclass 是 new + 原型链的语法糖。',
               },
               {
                 title: 'Q25: 手写一个简易 Promise',
-                content: '核心：状态机 + then 链。关键点：1) 三态 pending/fulfilled/rejected，状态不可逆；2) resolve/reject 用 setTimeout 包裹保证异步执行；3) then 返回新 Promise，根据回调返回值决定其状态（thenable 跟随、普通值 resolve、抛错 reject）；4) 用 then 链数组支持多次 then。完整实现还需处理 resolvePromise 循环引用、值穿透等。理解手写 Promise 才能真正掌握 async/await（其本质是 Promise + Generator）。',
+                content: '核心：状态机 + then 链。\n\n关键点：\n1. 三态 pending/fulfilled/rejected，状态不可逆。\n2. resolve/reject 用 setTimeout 包裹保证异步执行。\n3. then 返回新 Promise，根据回调返回值决定其状态（thenable 跟随、普通值 resolve、抛错 reject）。\n4. 用 then 链数组支持多次 then。\n\n完整实现还需处理 resolvePromise 循环引用、值穿透等。\n\n理解手写 Promise 才能真正掌握 async/await（其本质是 Promise + Generator）。',
               },
               {
                 title: 'Q26: 宏任务与微任务的区别及常见类型',
-                content: '微任务：Promise.then/catch/finally、queueMicrotask、MutationObserver、process.nextTick（Node）。宏任务：setTimeout/setInterval、setImmediate（Node）、I/O、UI 事件、MessageChannel、requestAnimationFrame（部分实现中视为独立队列）。区别：每次宏任务执行后、UI 渲染前，清空所有微任务；微任务队列空才取下一个宏任务。因此 Promise.then 总先于 setTimeout 回调执行。死循环的微任务会阻塞页面（队列无法清空）。',
+                content: '微任务：\n- Promise.then/catch/finally\n- queueMicrotask\n- MutationObserver\n- process.nextTick（Node）\n\n宏任务：\n- setTimeout/setInterval\n- setImmediate（Node）\n- I/O\n- UI 事件\n- MessageChannel\n- requestAnimationFrame（部分实现中视为独立队列）\n\n区别：\n- 每次宏任务执行后、UI 渲染前，清空所有微任务。\n- 微任务队列空才取下一个宏任务。\n- 因此 Promise.then 总先于 setTimeout 回调执行。\n\n死循环的微任务会阻塞页面（队列无法清空）。',
               },
               {
                 title: 'Q27: requestAnimationFrame 的作用及与 setTimeout 的区别',
-                content: 'rAF 把回调安排在下一次浏览器重绘前执行，频率对齐显示器刷新率（通常 60fps/16.67ms）。优势：1) 与渲染同步，避免丢帧；2) 后台标签页时自动暂停，节省资源；3) 比手动 setTimeout(fn, 16) 更精准。适合动画循环：function loop(){ update(); draw(); requestAnimationFrame(loop) }。退出动画需保存 id 并用 cancelAnimationFrame(id) 取消。不适合短延时逻辑（rAF 不保证精确毫秒数）。',
+                content: 'rAF 把回调安排在下一次浏览器重绘前执行，频率对齐显示器刷新率（通常 60fps/16.67ms）。\n\n优势：\n1. 与渲染同步，避免丢帧。\n2. 后台标签页时自动暂停，节省资源。\n3. 比手动 setTimeout(fn, 16) 更精准。\n\n适合动画循环：\nfunction loop(){ update(); draw(); requestAnimationFrame(loop) }\n\n退出动画需保存 id 并用 cancelAnimationFrame(id) 取消。不适合短延时逻辑（rAF 不保证精确毫秒数）。',
               },
               {
                 title: 'Q28: Set / Map / WeakMap / WeakSet 的区别与适用场景',
-                content: 'Set：唯一值集合，自动去重，有 has/add/delete，可遍历。Map：键值对，键可为任意类型（含对象），保持插入顺序，有 size，频繁增删优于 Object。WeakMap：键只能是对象且为弱引用（不阻止 GC），不可遍历、无 size，适合给对象挂元数据（如 DOM 节点关联数据）而不阻碍回收。WeakSet：弱引用对象集合，适合标记对象（如"已处理"）而不影响生命周期。强引用（Map/Set）会阻止 GC，弱引用不会。',
+                content: 'Set：唯一值集合，自动去重，有 has/add/delete，可遍历。\n\nMap：键值对，键可为任意类型（含对象），保持插入顺序，有 size，频繁增删优于 Object。\n\nWeakMap：键只能是对象且为弱引用（不阻止 GC），不可遍历、无 size，适合给对象挂元数据（如 DOM 节点关联数据）而不阻碍回收。\n\nWeakSet：弱引用对象集合，适合标记对象（如"已处理"）而不影响生命周期。\n\n核心：强引用（Map/Set）会阻止 GC，弱引用不会。',
               },
               {
                 title: 'Q29 【对比题】: Proxy 与 Object.defineProperty 的区别',
-                content: 'defineProperty：只能劫持已存在属性，新增/删除属性无法感知（Vue 2 需 $set/$delete）；无法监听数组索引与 length 变化（Vue 2 需重写 7 个数组方法）；深度监听需递归遍历一次性完成。Proxy：代理整个对象，能监听新增/删除（deleteProperty）、数组操作、in 等共 13 种陷阱；懒代理（访问时才递归）性能更好；Vue 3 据此实现响应式。但 Proxy 不能直接代理原始值，Vue 3 用 ref 包裹。Reflect 提供与 Proxy 陷阱一一对应的默认行为，推荐配合使用。',
+                content: 'defineProperty：\n- 只能劫持已存在属性，新增/删除属性无法感知（Vue 2 需 $set/$delete）。\n- 无法监听数组索引与 length 变化（Vue 2 需重写 7 个数组方法）。\n- 深度监听需递归遍历一次性完成。\n\nProxy：\n- 代理整个对象，能监听新增/删除（deleteProperty）、数组操作、in 等共 13 种陷阱。\n- 懒代理（访问时才递归）性能更好。\n- Vue 3 据此实现响应式。\n\n注意：Proxy 不能直接代理原始值，Vue 3 用 ref 包裹。Reflect 提供与 Proxy 陷阱一一对应的默认行为，推荐配合使用。',
               },
               {
                 title: 'Q30: Iterator 与 Generator 的原理',
-                content: 'Iterator：实现 [Symbol.iterator]() 方法返回一个含 next() 的对象，next() 返回 {value, done}。for...of、展开运算符、解构都依赖迭代协议。Generator：function* 声明，yield 暂停执行并返回值，next() 恢复，可传参作为上一个 yield 的返回值。生成器既是迭代器又是可迭代对象。应用：自定义数据结构遍历、惰性计算（无限序列）、状态机。async/await 借鉴了 Generator 的暂停/恢复语义，但前者基于 Promise。',
+                content: 'Iterator：\n- 实现 [Symbol.iterator]() 方法返回一个含 next() 的对象。\n- next() 返回 {value, done}。\n- for...of、展开运算符、解构都依赖迭代协议。\n\nGenerator：\n- function* 声明。\n- yield 暂停执行并返回值，next() 恢复，可传参作为上一个 yield 的返回值。\n- 生成器既是迭代器又是可迭代对象。\n\n应用：自定义数据结构遍历、惰性计算（无限序列）、状态机。\n\nasync/await 借鉴了 Generator 的暂停/恢复语义，但前者基于 Promise。',
               },
               {
-                title: 'Q31 【场景题】: 后端返回深层嵌套数据（user.company.address.city），如何安全访问避免报错',
-                content: '方案对比：1) 链式 && 短路：user && user.company && user.company.address && user.company.address.city——冗长；2) 可选链 ?.：user?.company?.address?.city——简洁，遇 null/undefined 返回 undefined 不报错；3) 配合空值合并给默认值：user?.company?.address?.city ?? "未知"；4) 工具函数 get(obj, path, default) 用 reduce 逐层取。注意 ?. 仅对 null/undefined 短路，对 0/""/false 不短路。函数调用也支持 fn?.()。',
+                title: 'Q31 【场景题】: 后端返回深层嵌套数据，如何安全访问避免报错',
+                content: '场景：访问 user.company.address.city，任一层为 null/undefined 会报错。\n\n方案对比：\n1. 链式 && 短路：user && user.company && user.company.address && user.company.address.city——冗长。\n2. 可选链 ?.：user?.company?.address?.city——简洁，遇 null/undefined 返回 undefined 不报错。\n3. 配合空值合并给默认值：user?.company?.address?.city ?? "未知"。\n4. 工具函数 get(obj, path, default) 用 reduce 逐层取。\n\n注意：?. 仅对 null/undefined 短路，对 0/""/false 不短路。函数调用也支持 fn?.()。',
               },
               {
                 title: 'Q32 【场景题】: 数组去重有哪些方案？各有何优劣',
-                content: '方案对比：1) [...new Set(arr)]——简洁，但无法区分对象（引用不同）；2) filter + indexOf——只保留首次出现位置，O(n²)；3) reduce + includes——同上 O(n²)；4) Map/Set 记录 key——O(n)；5) 对象去重需自定义 key（如 JSON.stringify 或 id 字段）配合 Map。稳定排序去重：用 Set 去重保持首次出现顺序。注意 NaN：Set 中 NaN === NaN（去重成立），但 indexOf 无法找到 NaN（NaN !== NaN）。',
+                content: '方案对比：\n1. [...new Set(arr)]——简洁，但无法区分对象（引用不同）。\n2. filter + indexOf——只保留首次出现位置，O(n²)。\n3. reduce + includes——同上 O(n²)。\n4. Map/Set 记录 key——O(n)。\n5. 对象去重需自定义 key（如 JSON.stringify 或 id 字段）配合 Map。\n\n稳定排序去重：用 Set 去重保持首次出现顺序。\n\n注意 NaN：Set 中 NaN === NaN（去重成立），但 indexOf 无法找到 NaN（NaN !== NaN）。',
               },
               {
                 title: 'Q33 【对比题】: forEach / map / filter / reduce 的区别',
-                content: 'forEach(fn)：遍历无返回值，不能 break/continue（return 仅跳过本次），适合副作用操作。map(fn)：返回新数组，每项为 fn 返回值，适合数据转换。filter(fn)：返回新数组，保留 fn 返回真值的项。reduce(fn, init)：累加，fn 接收 (acc, cur, idx, arr)，适合聚合（求和/分组/扁平化）。三者都不改原数组（除非 fn 内手动改）。链式组合：arr.filter(...).map(...).reduce(...) 是函数式风格典型写法。需提前退出用 for...of 或 some/every。',
+                content: 'forEach(fn)：\n- 遍历无返回值。\n- 不能 break/continue（return 仅跳过本次）。\n- 适合副作用操作。\n\nmap(fn)：\n- 返回新数组，每项为 fn 返回值。\n- 适合数据转换。\n\nfilter(fn)：\n- 返回新数组，保留 fn 返回真值的项。\n\nreduce(fn, init)：\n- 累加，fn 接收 (acc, cur, idx, arr)。\n- 适合聚合（求和/分组/扁平化）。\n\n三者都不改原数组（除非 fn 内手动改）。链式组合：arr.filter(...).map(...).reduce(...) 是函数式风格典型写法。需提前退出用 for...of 或 some/every。',
               },
               {
                 title: 'Q34 【对比题】: Object 与 Map 的区别及选型',
-                content: '键类型：Object 只能 string/symbol，Map 可任意类型（含对象、DOM 节点）。顺序：Object 键顺序依赖整数键优先规则（复杂），Map 严格按插入顺序。性能：Map 频繁增删更优，有 size 属性 O(1)。序列化：Object 可直接 JSON.stringify，Map 需转数组。迭代：Object 需 Object.keys/entries，Map 直接 for...of 或 forEach。选型：配置/数据传输用 Object（JSON 友好）；动态映射、键为对象、频繁增删用 Map。WeakMap 适合元数据挂载。',
+                content: '键类型：\n- Object 只能 string/symbol。\n- Map 可任意类型（含对象、DOM 节点）。\n\n顺序：\n- Object 键顺序依赖整数键优先规则（复杂）。\n- Map 严格按插入顺序。\n\n性能：\n- Map 频繁增删更优，有 size 属性 O(1)。\n\n序列化：\n- Object 可直接 JSON.stringify。\n- Map 需转数组。\n\n迭代：\n- Object 需 Object.keys/entries。\n- Map 直接 for...of 或 forEach。\n\n选型：配置/数据传输用 Object（JSON 友好）；动态映射、键为对象、频繁增删用 Map。WeakMap 适合元数据挂载。',
               },
             ],
           },

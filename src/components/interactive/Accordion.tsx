@@ -10,7 +10,7 @@
  *
  * 遵循设计规范：canvas-card 背景，hairline 边框，展开/翻转时 accent 条。
  */
-import { useState } from 'react'
+import { useState, useRef, useLayoutEffect } from 'react'
 import type { AccordionData } from '../../lib/types'
 import { cn } from '../../lib/utils'
 import { CodeBlock } from '../ui/CodeBlock'
@@ -163,6 +163,25 @@ function FlashcardView({ data }: AccordionProps) {
   const [pos, setPos] = useState(0)
   const [flipped, setFlipped] = useState(false)
 
+  // 动态测量正反两面内容高度，取较大值作为卡片高度，
+  // 避免长答案被固定 minHeight 截断（字体遮挡问题）。
+  const frontRef = useRef<HTMLDivElement>(null)
+  const backRef = useRef<HTMLDivElement>(null)
+  const [cardHeight, setCardHeight] = useState<number | null>(null)
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const frontH = frontRef.current?.scrollHeight ?? 0
+      const backH = backRef.current?.scrollHeight ?? 0
+      const next = Math.max(frontH, backH, 260)
+      setCardHeight((prev) => (prev === next ? prev : next))
+    }
+    measure()
+    // 翻转后内容布局可能变化，延迟复测一次
+    const t = window.setTimeout(measure, 60)
+    return () => window.clearTimeout(t)
+  }, [pos, flipped, data.items])
+
   if (total === 0) {
     return (
       <div className="rounded-sm border border-hairline bg-canvas-card p-xl text-center">
@@ -219,13 +238,15 @@ function FlashcardView({ data }: AccordionProps) {
           className="relative block w-full cursor-pointer"
           style={{
             transformStyle: 'preserve-3d',
-            transition: 'transform 0.5s ease',
+            transition: 'transform 0.5s ease, height 0.2s ease',
             transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+            height: cardHeight ? `${cardHeight}px` : undefined,
             minHeight: '260px',
           }}
         >
           {/* 正面：题目 */}
           <div
+            ref={frontRef}
             className="absolute inset-0 flex flex-col items-center justify-center rounded-sm border border-hairline bg-canvas-soft p-2xl"
             style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
           >
@@ -240,6 +261,7 @@ function FlashcardView({ data }: AccordionProps) {
 
           {/* 反面：答案 */}
           <div
+            ref={backRef}
             className="absolute inset-0 flex flex-col items-center justify-center overflow-auto rounded-sm border border-accent-sunset/30 bg-accent-sunset/5 p-2xl"
             style={{
               backfaceVisibility: 'hidden',

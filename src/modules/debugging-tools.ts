@@ -1151,67 +1151,67 @@ if (process.env.NODE_ENV !== 'production') {
             items: [
               {
                 title: 'Q1: Chrome DevTools 中 $0 和 $(selector) 分别是什么？',
-                content: '$0 引用上次在 Elements 面板选中的 DOM 元素（$1 是上上次，最多 $4）。$(selector) 是 document.querySelector 的简写，$$(selector) 是 querySelectorAll 的简写。这些是 DevTools 注入的命令行 API，仅在 Console 中可用，代码中不存在。常用场景：Console 里快速操作 Elements 选中的元素。',
+                content: '$0：引用上次在 Elements 面板选中的 DOM 元素（$1 是上上次，最多 $4）。\n\n$(selector)：document.querySelector 的简写。\n$$(selector)：querySelectorAll 的简写。\n\n注意：这些是 DevTools 注入的命令行 API，仅在 Console 中可用，代码中不存在。常用场景：Console 里快速操作 Elements 选中的元素。',
               },
               {
                 title: 'Q2: 条件断点、日志断点、DOM 断点分别用于什么场景？',
-                content: '条件断点（Conditional Breakpoint）：表达式为真时暂停，适合循环中排查特定条件（如 i === 100）。日志断点（Logpoint）：输出日志但不暂停，是 console.log 的非侵入替代，不改源码即可加日志。DOM 断点：节点子树变更/属性变更/节点删除时暂停，适合排查"不知谁改了 DOM"的问题，免去全局 MutationObserver。',
+                content: '三种断点各有适用：\n\n条件断点（Conditional Breakpoint）：\n- 表达式为真时暂停。\n- 适合循环中排查特定条件（如 i === 100）。\n\n日志断点（Logpoint）：\n- 输出日志但不暂停。\n- 是 console.log 的非侵入替代，不改源码即可加日志。\n\nDOM 断点：\n- 节点子树变更/属性变更/节点删除时暂停。\n- 适合排查"不知谁改了 DOM"的问题，免去全局 MutationObserver。',
               },
               {
                 title: 'Q3: Performance 面板中如何定位卡顿原因？',
-                content: '步骤：1) 录制操作过程；2) 看 FPS 图表找掉帧区域；3) 看主线程火焰图找长任务（>50ms 红色竖条）；4) 展开长任务看具体函数耗时；5) 关注紫色 Layout 和黄色 Recalculate Style（强制同步布局）。优化方向：拆分长任务（requestIdleCallback/scheduler.yield）、减少重排重绘、Web Worker 卸载计算、防抖节流。',
+                content: '步骤：\n1. 录制操作过程。\n2. 看 FPS 图表找掉帧区域。\n3. 看主线程火焰图找长任务（>50ms 红色竖条）。\n4. 展开长任务看具体函数耗时。\n5. 关注紫色 Layout 和黄色 Recalculate Style（强制同步布局）。\n\n优化方向：\n- 拆分长任务（requestIdleCallback/scheduler.yield）\n- 减少重排重绘\n- Web Worker 卸载计算\n- 防抖节流',
               },
               {
                 title: 'Q4: 如何排查内存泄漏？',
-                content: '步骤：1) Memory 面板 → Heap Snapshot；2) 操作页面（如进入/退出页面、增删列表）；3) 再拍一次快照；4) 选 "Objects allocated between Snapshot 1 and 2"；5) 按 Retained Size 排序找大对象；6) 看 Retainers 追溯引用链找泄漏源。常见泄漏：未清除的定时器、闭包持有大对象、detached DOM、全局变量、事件监听未解绑、WeakMap 未用导致强引用。',
+                content: '步骤：\n1. Memory 面板 → Heap Snapshot。\n2. 操作页面（如进入/退出页面、增删列表）。\n3. 再拍一次快照。\n4. 选 "Objects allocated between Snapshot 1 and 2"。\n5. 按 Retained Size 排序找大对象。\n6. 看 Retainers 追溯引用链找泄漏源。\n\n常见泄漏：\n- 未清除的定时器\n- 闭包持有大对象\n- detached DOM\n- 全局变量\n- 事件监听未解绑\n- WeakMap 未用导致强引用',
               },
               {
                 title: 'Q5: SourceMap 在生产环境如何安全使用？',
-                content: '问题：直接公开 .map 文件会泄露源码。方案：用 hidden-source-map 生成 .map 但不在 JS 中引用（浏览器不自动加载），将 .map 部署到错误监控服务（Sentry/Bugsnag）。线上报错时监控服务用 .map 还原源码位置和堆栈。开发环境用 source-map 或 eval-cheap-module-source-map 追求快。注意：inline-source-map 内联到 JS 会增大体积且泄露源码，仅用于开发。',
+                content: '问题：直接公开 .map 文件会泄露源码。\n\n方案：\n- 用 hidden-source-map 生成 .map 但不在 JS 中引用（浏览器不自动加载）。\n- 将 .map 部署到错误监控服务（Sentry/Bugsnag）。\n- 线上报错时监控服务用 .map 还原源码位置和堆栈。\n\n开发环境用 source-map 或 eval-cheap-module-source-map 追求快。\n\n注意：inline-source-map 内联到 JS 会增大体积且泄露源码，仅用于开发。',
               },
               {
                 title: 'Q6: Network 面板能排查哪些问题？',
-                content: '1) 请求失败（红色，看 Status/Response）；2) 慢请求（按 Time 排序，看 Waterfall 各阶段：Queueing/Stalled/TTFB/Content Download）；3) 重复请求；4) 缓存失效（看 from disk cache / from memory cache）；5) CORS 错误；6) 请求头/响应头/Cookie/_payload。技巧：右键 Copy as fetch/cURL；Disable cache 模拟首次访问；Throttling 模拟慢网；Block request URLs 测试容错。',
+                content: '排查维度：\n1. 请求失败（红色，看 Status/Response）。\n2. 慢请求（按 Time 排序，看 Waterfall 各阶段：Queueing/Stalled/TTFB/Content Download）。\n3. 重复请求。\n4. 缓存失效（看 from disk cache / from memory cache）。\n5. CORS 错误。\n6. 请求头/响应头/Cookie/payload。\n\n技巧：\n- 右键 Copy as fetch/cURL。\n- Disable cache 模拟首次访问。\n- Throttling 模拟慢网。\n- Block request URLs 测试容错。',
               },
               {
                 title: 'Q7: 移动端 H5 如何调试？',
-                content: '1) Android USB 调试：chrome://inspect 连接手机 Chrome，PC 远程调试（基于 CDP 协议，ADB 转发端口）；2) iOS：Safari 开发菜单连接 iPhone；3) 无 USB 场景：vConsole/eruda 注入式调试（生产必须移除）；4) 代理调试：Charles/Whistle 抓包改包；5) 远程真机：BrowserStack。注意 HTTPS 证书问题需安装代理证书。',
+                content: '常见方案：\n1. Android USB 调试：chrome://inspect 连接手机 Chrome，PC 远程调试（基于 CDP 协议，ADB 转发端口）。\n2. iOS：Safari 开发菜单连接 iPhone。\n3. 无 USB 场景：vConsole/eruda 注入式调试（生产必须移除）。\n4. 代理调试：Charles/Whistle 抓包改包。\n5. 远程真机：BrowserStack。\n\n注意：HTTPS 证书问题需安装代理证书。',
               },
               {
                 title: 'Q8: console 的哪些方法容易被忽略但很实用？',
-                content: 'console.table(data) 表格展示数组/对象；console.group/groupEnd 分组折叠；console.time/timeEnd 计时；console.trace() 打印调用栈；console.dir(element) 显示 DOM 对象属性（非 HTML）；console.assert(cond, msg) 条件为假才输出；%c 格式化样式如 console.log("%c红字", "color:red")。生产环境应按级别用 warn/error/info，便于日志聚合分级。',
+                content: '实用方法：\n- console.table(data) 表格展示数组/对象\n- console.group/groupEnd 分组折叠\n- console.time/timeEnd 计时\n- console.trace() 打印调用栈\n- console.dir(element) 显示 DOM 对象属性（非 HTML）\n- console.assert(cond, msg) 条件为假才输出\n- %c 格式化样式如 console.log("%c红字", "color:red")\n\n生产环境应按级别用 warn/error/info，便于日志聚合分级。',
               },
               {
                 title: 'Q9: Lighthouse 的核心指标有哪些？',
-                content: '四大维度：1) Performance（FCP/LCP/TBT/CLS/Speed Index）；2) Accessibility（可访问性）；3) Best Practices（HTTPS、错误处理、图片优化）；4) SEO。Core Web Vitals 三大核心：LCP < 2.5s（加载）、INP < 200ms（交互，2024 取代 FID）、CLS < 0.1（视觉稳定）。Lighthouse 基于真实浏览器运行，可在 CI 中集成自动监控。',
+                content: '四大维度：\n1. Performance（FCP/LCP/TBT/CLS/Speed Index）\n2. Accessibility（可访问性）\n3. Best Practices（HTTPS、错误处理、图片优化）\n4. SEO\n\nCore Web Vitals 三大核心：\n- LCP < 2.5s（加载）\n- INP < 200ms（交互，2024 取代 FID）\n- CLS < 0.1（视觉稳定）\n\nLighthouse 基于真实浏览器运行，可在 CI 中集成自动监控。',
               },
               {
                 title: 'Q10: 如何调试 Service Worker / PWA？',
-                content: 'Application 面板 → Service Workers：查看注册状态、手动 Update/Unregister、Offline 模拟离线。Sources 面板对 SW 文件可直接断点调试（SW 运行在独立线程）。Cache Storage 查看缓存条目。常见问题：SW 不更新（skipWaiting + clients.claim 强制激活）、缓存策略错误（Cache-first vs Network-first）、作用域范围不对。',
+                content: 'Application 面板 → Service Workers：\n- 查看注册状态、手动 Update/Unregister、Offline 模拟离线。\n\nSources 面板：\n- 对 SW 文件可直接断点调试（SW 运行在独立线程）。\n\nCache Storage：查看缓存条目。\n\n常见问题：\n- SW 不更新（skipWaiting + clients.claim 强制激活）\n- 缓存策略错误（Cache-first vs Network-first）\n- 作用域范围不对',
               },
               {
                 title: 'Q11: Elements 面板修改的样式如何持久化？',
-                content: 'Elements 面板的修改只在内存生效，刷新即丢失。持久化方案：1) 手动复制到源码 CSS；2) DevTools 的 "Local Overrides"（Sources → Overrides）可把网络响应保存到本地，刷新仍生效，适合改 HTML/CSS/JS 做本地实验；3) Workspaces 把 DevTools 映射到本地文件系统，直接保存。注意 Overrides 不改源码只改浏览器拉取的副本。',
+                content: '问题：Elements 面板的修改只在内存生效，刷新即丢失。\n\n持久化方案：\n1. 手动复制到源码 CSS。\n2. DevTools 的 "Local Overrides"（Sources → Overrides）：可把网络响应保存到本地，刷新仍生效，适合改 HTML/CSS/JS 做本地实验。\n3. Workspaces：把 DevTools 映射到本地文件系统，直接保存。\n\n注意：Overrides 不改源码只改浏览器拉取的副本。',
               },
               {
                 title: 'Q12: async/await 代码如何断点调试？',
-                content: '1) 直接在 await 行打断点，暂停后用 Step into 进入 Promise 链；2) 注意异步断点会跳到微任务队列，Call Stack 可能不完整，开启 "Async stack traces"（Settings）可看异步调用链；3) console.trace() 打印调用栈辅助；4) 无法断点时用日志断点输出变量。常见坑：try-catch 吞掉错误导致调试困难，确保 catch 中 console.error 重新抛出。',
+                content: '调试方式：\n1. 直接在 await 行打断点，暂停后用 Step into 进入 Promise 链。\n2. 异步断点会跳到微任务队列，Call Stack 可能不完整，开启 "Async stack traces"（Settings）可看异步调用链。\n3. console.trace() 打印调用栈辅助。\n4. 无法断点时用日志断点输出变量。\n\n常见坑：try-catch 吞掉错误导致调试困难，确保 catch 中 console.error 重新抛出。',
               },
               {
                 title: 'Q13 【对比题】: 条件断点和 console.log 各自的优缺点？',
-                content: '条件断点优点：不改源码、可随时增删、表达式为真才暂停、适合精确条件。缺点：每次执行都求值表达式有性能开销（循环中可能拖慢）。console.log 优点：简单直观、可输出多个变量、保留历史记录。缺点：需改源码重新部署、输出过多难筛选、无法暂停执行。最佳实践：本地用 console.log，线上/复杂条件用条件断点或日志断点（不暂停的 console.log 替代）。',
+                content: '条件断点：\n- 优点：不改源码、可随时增删、表达式为真才暂停、适合精确条件。\n- 缺点：每次执行都求值表达式有性能开销（循环中可能拖慢）。\n\nconsole.log：\n- 优点：简单直观、可输出多个变量、保留历史记录。\n- 缺点：需改源码重新部署、输出过多难筛选、无法暂停执行。\n\n最佳实践：本地用 console.log，线上/复杂条件用条件断点或日志断点（不暂停的 console.log 替代）。',
               },
               {
                 title: 'Q14 【对比题】: Heap Snapshot 和 Allocation Timeline 的区别与适用场景？',
-                content: 'Heap Snapshot：记录某时刻所有对象快照，适合对比两次快照找"增量泄漏"（操作前后新增未释放的对象）。Allocation Timeline：实时记录每次内存分配，适合定位"持续分配不释放"的泄漏点，按时间轴看分配峰值。适用：Snapshot 适合已知操作引发的泄漏（进入/退出页面）；Timeline 适合不确定何时泄漏、需观察分配模式。两者常配合使用：Timeline 定位时间点，Snapshot 定位对象。',
+                content: 'Heap Snapshot：\n- 记录某时刻所有对象快照。\n- 适合对比两次快照找"增量泄漏"（操作前后新增未释放的对象）。\n\nAllocation Timeline：\n- 实时记录每次内存分配。\n- 适合定位"持续分配不释放"的泄漏点，按时间轴看分配峰值。\n\n适用：\n- Snapshot 适合已知操作引发的泄漏（进入/退出页面）。\n- Timeline 适合不确定何时泄漏、需观察分配模式。\n\n两者常配合使用：Timeline 定位时间点，Snapshot 定位对象。',
               },
               {
                 title: 'Q15 【场景题】: 用户反馈页面偶发卡顿，但本地无法复现，如何排查？',
-                content: '步骤：1) 收集用户环境（浏览器版本/设备/网络/操作路径）；2) 查前端监控（RUM 如 Lighthouse CI / 自建性能埋点）确认卡顿时段的 Long Task / FPS 掉帧数据；3) 用 Performance 远程录制（Puppeteer 模拟用户环境跑 Performance trace）找长任务；4) 检查是否特定数据量导致（大数据列表渲染），本地用 mock 大数据复现；5) 检查是否内存泄漏导致（长时间使用后 GC 频繁），模拟长时间操作拍 Heap Snapshot；6) 修复后加性能测试防回归。',
+                content: '步骤：\n1. 收集用户环境（浏览器版本/设备/网络/操作路径）。\n2. 查前端监控（RUM 如 Lighthouse CI / 自建性能埋点）确认卡顿时段的 Long Task / FPS 掉帧数据。\n3. 用 Performance 远程录制（Puppeteer 模拟用户环境跑 Performance trace）找长任务。\n4. 检查是否特定数据量导致（大数据列表渲染），本地用 mock 大数据复现。\n5. 检查是否内存泄漏导致（长时间使用后 GC 频繁），模拟长时间操作拍 Heap Snapshot。\n6. 修复后加性能测试防回归。',
               },
               {
                 title: 'Q16 【场景题】: 线上 JS 报错但本地正常，如何定位？',
-                content: '步骤：1) 查错误监控（Sentry）拿错误堆栈 + 用户环境；2) 用 hidden-source-map 还原堆栈到源码位置；3) 分析可能原因：浏览器兼容性（新 API 旧浏览器不支持）、数据格式差异（后端返回结构与本地不同）、时序问题（竞态条件本地难触发）、缓存问题（旧 JS 缓存）；4) 用 Network 抓包确认接口数据；5) 本地 mock 相同数据/浏览器环境复现；6) 修复后加测试覆盖该场景，防回归。原则：先缩小变量（环境/数据/版本），再针对性复现。',
+                content: '步骤：\n1. 查错误监控（Sentry）拿错误堆栈 + 用户环境。\n2. 用 hidden-source-map 还原堆栈到源码位置。\n3. 分析可能原因：\n   - 浏览器兼容性（新 API 旧浏览器不支持）\n   - 数据格式差异（后端返回结构与本地不同）\n   - 时序问题（竞态条件本地难触发）\n   - 缓存问题（旧 JS 缓存）\n4. 用 Network 抓包确认接口数据。\n5. 本地 mock 相同数据/浏览器环境复现。\n6. 修复后加测试覆盖该场景，防回归。\n\n原则：先缩小变量（环境/数据/版本），再针对性复现。',
               },
             ],
           },

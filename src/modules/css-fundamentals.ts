@@ -1861,67 +1861,67 @@ background:
             items: [
               {
                 title: 'Q1: CSS 选择器优先级如何计算？',
-                content: '优先级用四位数表示 (a, b, c, d)：a=行内样式(1/0)，b=ID 数量，c=类/伪类/属性选择器数量，d=元素/伪元素数量。比较时从左到右逐位比较，如 (0,1,1,0) > (0,0,2,1)。!important 覆盖一切。优先级相同时后写的覆盖先写的（源码顺序）。',
+                content: '优先级用四位数表示 (a, b, c, d)：\n- a=行内样式(1/0)\n- b=ID 数量\n- c=类/伪类/属性选择器数量\n- d=元素/伪元素数量\n\n比较时从左到右逐位比较，如 (0,1,1,0) > (0,0,2,1)。!important 覆盖一切。优先级相同时后写的覆盖先写的（源码顺序）。',
               },
               {
                 title: 'Q2: 盒模型是什么？标准模式与怪异模式（IE 盒模型）有何不同？',
-                content: '盒模型四层：content → padding → border → margin。标准模式 width 只含 content，实际占宽 = width + padding + border + margin。怪异模式（IE 盒模型）width 含 content + padding + border，实际占宽 = width + margin。用 box-sizing: border-box 切换为 IE 盒模型，让 width 即「可见宽」，更直观，推荐全局设置 *{box-sizing:border-box}。',
+                content: '盒模型四层：content → padding → border → margin。\n\n标准模式（W3C）：\n- width 只含 content。\n- 实际占宽 = width + padding + border + margin。\n\n怪异模式（IE 盒模型）：\n- width 含 content + padding + border。\n- 实际占宽 = width + margin。\n\n用 box-sizing: border-box 切换为 IE 盒模型，让 width 即「可见宽」，更直观。推荐全局设置 *{box-sizing:border-box}。',
               },
               {
                 title: 'Q3: BFC 是什么？如何触发？有什么应用？',
-                content: 'BFC（块级格式化上下文）是一个独立的渲染区域，内部元素不影响外部。触发条件：float 非 none、position:absolute/fixed、overflow 非 visible、display:flow-root/flex/grid 等。应用：① 清除浮动（BFC 计算高度含浮动子元素）；② 避免 margin 折叠（不同 BFC 不折叠）；③ 阻止文字环绕浮动（BFC 不与浮动重叠）。现代推荐用 display:flow-root 触发，无副作用。',
+                content: 'BFC（块级格式化上下文）是一个独立的渲染区域，内部元素不影响外部。\n\n触发条件：\n- float 非 none\n- position:absolute/fixed\n- overflow 非 visible\n- display:flow-root/flex/grid 等\n\n应用：\n1. 清除浮动——BFC 计算高度含浮动子元素。\n2. 避免 margin 折叠——不同 BFC 不折叠。\n3. 阻止文字环绕浮动——BFC 不与浮动重叠。\n\n现代推荐用 display:flow-root 触发，无副作用。',
               },
               {
                 title: 'Q4: margin 折叠（合并）的条件是什么？如何避免？',
-                content: '折叠条件：① 相邻块级元素（兄弟或父子）的垂直 margin；② 在同一 BFC 内。折叠取较大值（非相加）。避免方法：① 触发新 BFC（overflow:hidden / display:flow-root）；② 用 padding/border 隔开；③ 用 Flex/Grid 布局（子项不折叠）；④ 元素间加行内元素或空隙。注意：水平 margin 不折叠，浮动/绝对定位元素不折叠。',
+                content: '折叠条件：\n1. 相邻块级元素（兄弟或父子）的垂直 margin。\n2. 在同一 BFC 内。\n\n折叠取较大值（非相加）。\n\n避免方法：\n1. 触发新 BFC（overflow:hidden / display:flow-root）。\n2. 用 padding/border 隔开。\n3. 用 Flex/Grid 布局（子项不折叠）。\n4. 元素间加行内元素或空隙。\n\n注意：水平 margin 不折叠，浮动/绝对定位元素不折叠。',
               },
               {
                 title: 'Q5: Flexbox 和 Grid 的区别？什么时候用哪个？',
-                content: 'Flexbox 是一维布局（一次处理一行或一列），适合组件内部线性排列：导航栏、工具栏、按钮组、表单项。Grid 是二维布局（同时控制行列），适合页面整体骨架：页头主体页脚、卡片网格、复杂表格布局。组合使用最佳：Grid 做页面骨架，Flex 做组件内部。经验：若「一行/一列」用 Flex，若「行列网格」用 Grid。',
+                content: '两者维度不同：\n\nFlexbox：\n- 一维布局（一次处理一行或一列）。\n- 适合组件内部线性排列：导航栏、工具栏、按钮组、表单项。\n\nGrid：\n- 二维布局（同时控制行列）。\n- 适合页面整体骨架：页头主体页脚、卡片网格、复杂表格布局。\n\n组合使用最佳：Grid 做页面骨架，Flex 做组件内部。\n\n经验：若「一行/一列」用 Flex，若「行列网格」用 Grid。',
               },
               {
                 title: 'Q6: position 的五个值区别？sticky 的触发条件？',
-                content: 'static（默认，文档流）；relative（相对自身原位置，不脱离流）；absolute（相对最近非 static 祖先，脱离流）；fixed（相对视口，脱离流）；sticky（滚动到阈值前是 static，到阈值后变 fixed，不脱离流）。sticky 触发条件：① 必须设 top/right/bottom/left 之一；② 父容器不能有 overflow:hidden/auto；③ 父容器高度需大于 sticky 元素。sticky 失效 90% 是父容器 overflow 问题。',
+                content: '五个值：\n1. static——默认，文档流。\n2. relative——相对自身原位置，不脱离流。\n3. absolute——相对最近非 static 祖先，脱离流。\n4. fixed——相对视口，脱离流。\n5. sticky——滚动到阈值前是 static，到阈值后变 fixed，不脱离流。\n\nsticky 触发条件：\n1. 必须设 top/right/bottom/left 之一。\n2. 父容器不能有 overflow:hidden/auto。\n3. 父容器高度需大于 sticky 元素。\n\nsticky 失效 90% 是父容器 overflow 问题。',
               },
               {
                 title: 'Q7: 什么是层叠上下文？z-index 失效是怎么回事？',
-                content: '层叠上下文是元素在 Z 轴上的渲染层级容器。创建条件：position+z-index 非 auto、opacity<1、transform/filter/perspective 非 none、position:fixed/sticky、will-change 等。z-index 只在同一层叠上下文内比较：若父元素创建了层叠上下文，子元素的 z-index 只在父级内有效，整体作为一个单元参与父级比较。z-index:999 子元素被 z-index:1 遮挡，多半是父级层叠上下文更低——排查父链。',
+                content: '层叠上下文是元素在 Z 轴上的渲染层级容器。\n\n创建条件：\n- position+z-index 非 auto\n- opacity<1\n- transform/filter/perspective 非 none\n- position:fixed/sticky\n- will-change 等\n\n关键规则：z-index 只在同一层叠上下文内比较。若父元素创建了层叠上下文，子元素的 z-index 只在父级内有效，整体作为一个单元参与父级比较。\n\n排查：z-index:999 子元素被 z-index:1 遮挡，多半是父级层叠上下文更低——排查父链。',
               },
               {
                 title: 'Q8: 实现垂直居中有哪些方法？',
-                content: '① Flex：display:flex; align-items:center; justify-content:center;（推荐，最简单）；② Grid：display:grid; place-items:center;（最短）；③ 绝对定位 + transform：position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);（适合已知尺寸）；④ 绝对定位 + margin:auto（需设宽高）；⑤ line-height（单行文本）；⑥ table-cell + vertical-align（老方案）。Flex/Grid 是现代首选。',
+                content: '常见方法：\n1. Flex：display:flex; align-items:center; justify-content:center;（推荐，最简单）\n2. Grid：display:grid; place-items:center;（最短）\n3. 绝对定位 + transform：position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);（适合已知尺寸）\n4. 绝对定位 + margin:auto（需设宽高）\n5. line-height（单行文本）\n6. table-cell + vertical-align（老方案）\n\nFlex/Grid 是现代首选。',
               },
               {
                 title: 'Q9: 响应式设计的核心方案？移动优先 vs 桌面优先？',
-                content: '核心方案：① 媒体查询 @media（断点切换样式）；② 弹性布局 Flex/Grid；③ 响应式单位 rem/em/vw/vh/%；④ 响应式图片 srcset/<picture>；⑤ clamp()/min()/max() 函数。移动优先：默认样式针对小屏，用 min-width 向上增强（默认即最小，渐进增强）。桌面优先：默认针对大屏，用 max-width 向下兼容。推荐移动优先——默认样式更精简，且符合「内容优先」理念。',
+                content: '核心方案：\n1. 媒体查询 @media（断点切换样式）\n2. 弹性布局 Flex/Grid\n3. 响应式单位 rem/em/vw/vh/%\n4. 响应式图片 srcset/<picture>\n5. clamp()/min()/max() 函数\n\n移动优先：默认样式针对小屏，用 min-width 向上增强（默认即最小，渐进增强）。\n桌面优先：默认针对大屏，用 max-width 向下兼容。\n\n推荐移动优先——默认样式更精简，且符合「内容优先」理念。',
               },
               {
                 title: 'Q10: CSS 变量（自定义属性）与 Sass/Less 变量的区别？',
-                content: 'CSS 变量（--var）：① 运行时动态，可被 JS 读写（getPropertyValue/setProperty）；② 遵循继承与层叠规则；③ 浏览器原生支持，无需编译；④ 可在媒体查询内重定义实现响应式。Sass/Less 变量（$var/@var）：① 编译时静态，编译后不可变；② 不遵循继承；③ 需预处理编译。现代项目优先用 CSS 变量，Sass 变量用于编译期逻辑（如循环生成样式）。两者可共存。',
+                content: 'CSS 变量（--var）：\n1. 运行时动态，可被 JS 读写（getPropertyValue/setProperty）。\n2. 遵循继承与层叠规则。\n3. 浏览器原生支持，无需编译。\n4. 可在媒体查询内重定义实现响应式。\n\nSass/Less 变量（$var/@var）：\n1. 编译时静态，编译后不可变。\n2. 不遵循继承。\n3. 需预处理编译。\n\n现代项目优先用 CSS 变量，Sass 变量用于编译期逻辑（如循环生成样式）。两者可共存。',
               },
               {
                 title: 'Q11: em、rem、px、vw/vh 的区别？什么时候用哪个？',
-                content: 'px：绝对单位，精确但不缩放。em：相对父元素 font-size，嵌套时层层放大易失控。rem：相对根 html 的 font-size，全局可调，推荐做字号。vw/vh：视口宽/高 1%，做全屏布局。%：相对父元素。clamp(最小, 首选, 最大)：响应式字号。推荐：字号用 rem（配 html{font-size:62.5%} 让 1rem=10px 好算），间距用 px/rem，全屏用 vw/vh，响应式字号用 clamp()。',
+                content: '单位对比：\n- px：绝对单位，精确但不缩放。\n- em：相对父元素 font-size，嵌套时层层放大易失控。\n- rem：相对根 html 的 font-size，全局可调，推荐做字号。\n- vw/vh：视口宽/高 1%，做全屏布局。\n- %：相对父元素。\n- clamp(最小, 首选, 最大)：响应式字号。\n\n推荐：\n- 字号用 rem（配 html{font-size:62.5%} 让 1rem=10px 好算）\n- 间距用 px/rem\n- 全屏用 vw/vh\n- 响应式字号用 clamp()',
               },
               {
                 title: 'Q12: transition 和 animation 的区别？',
-                content: 'transition：状态切换的过渡（需触发条件如 :hover），只有起止两帧，自动触发。animation：关键帧动画（@keyframes），可定义多帧，可自动播放、循环、暂停。transition 适合「状态 A→B」的平滑切换（按钮 hover）；animation 适合「持续/复杂」的动画（loading 旋转、弹跳）。性能：优先 transform/opacity（GPU 加速），避免 animating width/height/top/left（触发重排）。',
+                content: 'transition：\n- 状态切换的过渡（需触发条件如 :hover）。\n- 只有起止两帧，自动触发。\n- 适合「状态 A→B」的平滑切换（按钮 hover）。\n\nanimation：\n- 关键帧动画（@keyframes）。\n- 可定义多帧，可自动播放、循环、暂停。\n- 适合「持续/复杂」的动画（loading 旋转、弹跳）。\n\n性能：优先 transform/opacity（GPU 加速），避免 animating width/height/top/left（触发重排）。',
               },
               {
                 title: 'Q13: 场景题——页面卡顿，从 CSS 角度你会排查哪些性能问题？',
-                content: '① 触发重排的属性：避免 animating width/height/top/left/margin，改用 transform（仅重绘）；② 复杂选择器：避免深层嵌套（如 .a .b .c .d），选择器从右向左匹配，越深越慢；③ 大量盒阴影/滤镜：box-shadow/filter 耗 GPU，大面积使用会卡；④ will-change 滥用：只在动画元素上加，不要全局加；⑤ @import 阻塞：CSS 用 @import 串行加载，改 <link> 并行；⑥ 未用 contain/content-visibility 优化长列表。用 DevTools Performance 面板定位。',
+                content: '从 CSS 角度排查：\n1. 触发重排的属性：避免 animating width/height/top/left/margin，改用 transform（仅重绘）。\n2. 复杂选择器：避免深层嵌套（如 .a .b .c .d），选择器从右向左匹配，越深越慢。\n3. 大量盒阴影/滤镜：box-shadow/filter 耗 GPU，大面积使用会卡。\n4. will-change 滥用：只在动画元素上加，不要全局加。\n5. @import 阻塞：CSS 用 @import 串行加载，改 <link> 并行。\n6. 未用 contain/content-visibility 优化长列表。\n\n用 DevTools Performance 面板定位。',
               },
               {
                 title: 'Q14: 场景题——重构一个用 float + 清除浮动写的布局，你会怎么改？为什么？',
-                content: '把 float 布局改为 Flexbox 或 Grid。理由：① float 设计初衷是文字环绕图片，做布局是「误用」，需额外清除浮动（clearfix hack）；② Flex/Grid 是为布局设计，无需清除浮动，代码更少更直观；③ Flex/Grid 子项不会 margin 折叠，行为更可预期；④ Flex/Grid 支持对齐/排序/换行等 float 无法实现的能力。改完后删除所有 clearfix、float、clear 相关代码。',
+                content: '把 float 布局改为 Flexbox 或 Grid。\n\n理由：\n1. float 设计初衷是文字环绕图片，做布局是「误用」，需额外清除浮动（clearfix hack）。\n2. Flex/Grid 是为布局设计，无需清除浮动，代码更少更直观。\n3. Flex/Grid 子项不会 margin 折叠，行为更可预期。\n4. Flex/Grid 支持对齐/排序/换行等 float 无法实现的能力。\n\n改完后删除所有 clearfix、float、clear 相关代码。',
               },
               {
                 title: 'Q15: 对比题——display:none、visibility:hidden、opacity:0 的区别？',
-                content: 'display:none：完全移出渲染树，不占空间，不可交互，触发重排（重排重绘都发生）。visibility:hidden：保留空间，不可交互，仅重绘。opacity:0：保留空间，仍可交互（可点击！），仅重绘，性能最好。应用：① 彻底隐藏用 display:none；② 占位隐藏用 visibility:hidden；③ 透明过渡用 opacity:0 + transition。注意 opacity:0 的元素仍接收事件，需配 pointer-events:none。',
+                content: '三者差异：\n\ndisplay:none：\n- 完全移出渲染树，不占空间。\n- 不可交互。\n- 触发重排（重排重绘都发生）。\n\nvisibility:hidden：\n- 保留空间。\n- 不可交互。\n- 仅重绘。\n\nopacity:0：\n- 保留空间。\n- 仍可交互（可点击！）。\n- 仅重绘，性能最好。\n\n应用：\n1. 彻底隐藏用 display:none。\n2. 占位隐藏用 visibility:hidden。\n3. 透明过渡用 opacity:0 + transition。\n\n注意 opacity:0 的元素仍接收事件，需配 pointer-events:none。',
               },
               {
                 title: 'Q16: 对比题——伪类与伪元素的区别？各自举例。',
-                content: '伪类（:）选择处于特定状态的元素，单冒号，如 :hover（悬停）、:focus（聚焦）、:first-child（第一个子元素）、:nth-child(n)。伪元素（::）创建不存在于 DOM 的虚拟元素，双冒号，如 ::before/::after（在元素前后插入内容）、::first-letter（首字母）、::selection（选中文本样式）。区别：伪类是「选择已有元素的状态」，伪元素是「创建新元素」。CSS3 规定伪元素用双冒号，伪类用单冒号（兼容性上 ::before 也接受 :before）。',
+                content: '伪类（:）：选择处于特定状态的元素，单冒号。\n- :hover（悬停）\n- :focus（聚焦）\n- :first-child（第一个子元素）\n- :nth-child(n)\n\n伪元素（::）：创建不存在于 DOM 的虚拟元素，双冒号。\n- ::before/::after（在元素前后插入内容）\n- ::first-letter（首字母）\n- ::selection（选中文本样式）\n\n区别：伪类是「选择已有元素的状态」，伪元素是「创建新元素」。CSS3 规定伪元素用双冒号，伪类用单冒号（兼容性上 ::before 也接受 :before）。',
               },
             ],
           },

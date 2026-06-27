@@ -1505,123 +1505,123 @@ render()  // 首次加载渲染当前路径`,
             items: [
               {
                 title: 'Q1: 事件流三阶段及捕获/冒泡的应用',
-                content: '事件流分捕获（document→目标父级）、目标、冒泡（目标→document）三阶段。addEventListener 第三参数 useCapture 默认 false 在冒泡触发，true 在捕获触发。应用：事件委托用冒泡在父元素统一处理；拦截特定操作用捕获（早于目标执行）。stopPropagation 阻止继续传播，stopImmediatePropagation 还阻止同元素后续监听器。',
+                content: '事件流分三阶段：\n1. 捕获——document → 目标父级。\n2. 目标阶段。\n3. 冒泡——目标 → document。\n\naddEventListener 第三参数 useCapture：\n- 默认 false 在冒泡触发。\n- true 在捕获触发。\n\n应用：\n- 事件委托用冒泡在父元素统一处理。\n- 拦截特定操作用捕获（早于目标执行）。\n\nstopPropagation 阻止继续传播，stopImmediatePropagation 还阻止同元素后续监听器。',
               },
               {
                 title: 'Q2: 事件委托的原理、优势与限制',
-                content: '原理：利用冒泡在公共祖先绑定一个监听器，通过 event.target.closest 定位实际触发源。优势：1) 减少监听器数量节省内存；2) 动态增删子元素自动生效无需重新绑定。限制：1) 非冒泡事件（focus/blur/mouseenter）需用对应冒泡版本（focusin/mouseover）或 capture；2) 子元素 stopPropagation 会使委托失效；3) 回调过重时需防抖/节流。React 的合成事件系统本质就是顶层委托。',
+                content: '原理：利用冒泡在公共祖先绑定一个监听器，通过 event.target.closest 定位实际触发源。\n\n优势：\n1. 减少监听器数量节省内存。\n2. 动态增删子元素自动生效无需重新绑定。\n\n限制：\n1. 非冒泡事件（focus/blur/mouseenter）需用对应冒泡版本（focusin/mouseover）或 capture。\n2. 子元素 stopPropagation 会使委托失效。\n3. 回调过重时需防抖/节流。\n\nReact 的合成事件系统本质就是顶层委托。',
               },
               {
                 title: 'Q3: attribute 与 property 的区别',
-                content: 'property 是 DOM 对象的 JS 属性（如 input.value），attribute 是 HTML 标签上的属性（如 <input value="x">）。标准属性二者同步：attribute 初始化 property，但 property 修改通常不同步回 attribute（如 value）。自定义属性：HTML 用 data-* 对应 dataset，setAttribute/getAttribute 操作 attribute，直接赋值操作 property。规范：data-* 用 dataset，其他自定义用 setAttribute。',
+                content: 'property 是 DOM 对象的 JS 属性（如 input.value）。\nattribute 是 HTML 标签上的属性（如 <input value="x">）。\n\n同步关系：\n- 标准属性二者同步：attribute 初始化 property。\n- 但 property 修改通常不同步回 attribute（如 value）。\n\n自定义属性：\n- HTML 用 data-* 对应 dataset。\n- setAttribute/getAttribute 操作 attribute。\n- 直接赋值操作 property。\n\n规范：data-* 用 dataset，其他自定义用 setAttribute。',
               },
               {
                 title: 'Q4: DOM 节点查询 API 的区别',
-                content: 'getElementById 返回单个 Element；getElementsByClassName/TagName 返回动态 HTMLCollection（DOM 变化实时反映，无 forEach）；querySelector(All) 返回静态 NodeList（支持 forEach，快照不随 DOM 变化）。动态集合适合"监听 DOM 变化"场景但易踩迭代时修改的坑；静态集合安全但占内存。优先 querySelectorAll（可读性好），需实时性用 getElementsBy*。',
+                content: '各类 API 特性：\n\ngetElementById：返回单个 Element。\n\ngetElementsByClassName/TagName：\n- 返回动态 HTMLCollection（DOM 变化实时反映）。\n- 无 forEach。\n\nquerySelector(All)：\n- 返回静态 NodeList。\n- 支持 forEach。\n- 快照不随 DOM 变化。\n\n选型：\n- 优先 querySelectorAll（可读性好）。\n- 需实时性用 getElementsBy*。\n\n动态集合适合"监听 DOM 变化"场景但易踩迭代时修改的坑；静态集合安全但占内存。',
               },
               {
                 title: 'Q5: 批量插入 DOM 的性能优化',
-                content: '循环 appendChild 每次触发回流重绘，N 次插入 N 次回流。优化方案：1) DocumentFragment：先 append 到 fragment（不触发回流），再一次性 appendChild(fragment) 只触发一次回流；2) innerHTML 拼接字符串一次设置（需转义防 XSS）；3) cloneNode + replaceChild。现代浏览器对连续 appendChild 有批量优化，但 DocumentFragment 仍是最清晰的方式。读取布局属性（offsetHeight 等）会强制同步回流，应避免在循环中读取。',
+                content: '问题：循环 appendChild 每次触发回流重绘，N 次插入 N 次回流。\n\n优化方案：\n1. DocumentFragment：先 append 到 fragment（不触发回流），再一次性 appendChild(fragment) 只触发一次回流。\n2. innerHTML 拼接字符串一次设置（需转义防 XSS）。\n3. cloneNode + replaceChild。\n\n现代浏览器对连续 appendChild 有批量优化，但 DocumentFragment 仍是最清晰的方式。\n\n注意：读取布局属性（offsetHeight 等）会强制同步回流，应避免在循环中读取。',
               },
               {
                 title: 'Q6: reflow（回流）与 repaint（重绘）的区别',
-                content: 'reflow：几何属性变化（尺寸、位置、display）触发，需重新计算布局，开销大。repaint：外观变化（颜色、背景、visibility）触发，不重新布局，开销小。reflow 必然引起 repaint，反之不然。优化：1) 用 transform/opacity 代替 top/left/width（触发合成层而非回流）；2) 批量修改样式用 class 切换；3) 频繁操作先用 display:none 脱离文档流；4) 避免逐项读取布局属性（强制同步布局）。',
+                content: 'reflow：\n- 几何属性变化（尺寸、位置、display）触发。\n- 需重新计算布局，开销大。\n\nrepaint：\n- 外观变化（颜色、背景、visibility）触发。\n- 不重新布局，开销小。\n\n关键规则：reflow 必然引起 repaint，反之不然。\n\n优化：\n1. 用 transform/opacity 代替 top/left/width（触发合成层而非回流）。\n2. 批量修改样式用 class 切换。\n3. 频繁操作先用 display:none 脱离文档流。\n4. 避免逐项读取布局属性（强制同步布局）。',
               },
               {
                 title: 'Q7: localStorage / sessionStorage / Cookie / IndexedDB 对比',
-                content: 'localStorage：同源永久、约 5-10MB、同步、字符串键值。sessionStorage：同源+同标签页、会话级、其余同 localStorage。Cookie：同源、随请求自动发送、约 4KB、可设过期/域/路径/HttpOnly/Secure/SameSite，适合身份认证。IndexedDB：异步、大容量、对象存储、事务、索引，适合离线应用大数据。选型：身份态用 Cookie；UI 偏好用 localStorage；会话临时用 sessionStorage；离线大数据用 IndexedDB。',
+                content: '四种存储各有适用场景：\n\nlocalStorage：同源永久、约 5-10MB、同步、字符串键值。\n\nsessionStorage：同源+同标签页、会话级、其余同 localStorage。\n\nCookie：同源、随请求自动发送、约 4KB、可设过期/域/路径/HttpOnly/Secure/SameSite，适合身份认证。\n\nIndexedDB：异步、大容量、对象存储、事务、索引，适合离线应用大数据。\n\n选型：身份态用 Cookie；UI 偏好用 localStorage；会话临时用 sessionStorage；离线大数据用 IndexedDB。',
               },
               {
                 title: 'Q8: Cookie 的安全属性有哪些',
-                content: 'Secure：仅 HTTPS 传输；HttpOnly：JS 不可访问（document.cookie 读不到），防 XSS 窃取；SameSite=Strict/Lax/None：防 CSRF，Lax 为现代默认（允许顶层导航 GET），None 需配 Secure；Domain/Path：作用域；Max-Age/Expires：过期时间。Set-Cookie 时应同时设 HttpOnly+Secure+SameSite，会话 Cookie 还应考虑短期有效 + 刷新机制。',
+                content: '常见安全属性：\n1. Secure——仅 HTTPS 传输。\n2. HttpOnly——JS 不可访问（document.cookie 读不到），防 XSS 窃取。\n3. SameSite=Strict/Lax/None——防 CSRF，Lax 为现代默认（允许顶层导航 GET），None 需配 Secure。\n4. Domain/Path——作用域。\n5. Max-Age/Expires——过期时间。\n\nSet-Cookie 时应同时设 HttpOnly+Secure+SameSite，会话 Cookie 还应考虑短期有效 + 刷新机制。',
               },
               {
                 title: 'Q9: history API 与 hash 路由的区别',
-                content: 'history 模式：pushState/replaceState 改 URL 不刷新，URL 无 # 美观，但刷新需服务端 fallback 到 index.html 否则 404。hash 模式：改 location.hash（#path）触发 hashchange，URL 带 # 不美观，但刷新不请求服务端（# 后不发），无需服务端配置。选型：现代应用优先 history（URL 干净、利于 SEO），需配合服务端部署；不想配服务端或兼容旧环境用 hash。',
+                content: 'history 模式：\n- pushState/replaceState 改 URL 不刷新。\n- URL 无 # 美观。\n- 但刷新需服务端 fallback 到 index.html 否则 404。\n\nhash 模式：\n- 改 location.hash（#path）触发 hashchange。\n- URL 带 # 不美观。\n- 但刷新不请求服务端（# 后不发），无需服务端配置。\n\n选型：现代应用优先 history（URL 干净、利于 SEO），需配合服务端部署；不想配服务端或兼容旧环境用 hash。',
               },
               {
                 title: 'Q10: getBoundingClientRect 与 offset 系列的区别',
-                content: 'getBoundingClientRect()：返回相对视口的 {top,left,right,bottom,width,height,x,y}，随滚动实时变化，常用于拖拽、悬浮定位、碰撞检测。offsetTop/offsetLeft：相对 offsetParent 的偏移，不含滚动，适合相对父级布局。offsetWidth/Height：含 border 的元素自身尺寸。clientWidth/Height：含 padding 不含 border。scrollTop/scrollHeight：滚动相关。选型：相对视口用 getBoundingClientRect，相对父级用 offset，元素自身尺寸用 offsetWidth/clientWidth。',
+                content: 'getBoundingClientRect()：\n- 返回相对视口的 {top,left,right,bottom,width,height,x,y}。\n- 随滚动实时变化。\n- 常用于拖拽、悬浮定位、碰撞检测。\n\noffsetTop/offsetLeft：\n- 相对 offsetParent 的偏移。\n- 不含滚动。\n- 适合相对父级布局。\n\noffsetWidth/Height：含 border 的元素自身尺寸。\nclientWidth/Height：含 padding 不含 border。\nscrollTop/scrollHeight：滚动相关。\n\n选型：相对视口用 getBoundingClientRect，相对父级用 offset，元素自身尺寸用 offsetWidth/clientWidth。',
               },
               {
                 title: 'Q11: requestAnimationFrame 与 setTimeout/setInterval 做动画的区别',
-                content: 'rAF：回调在下一次重绘前执行，频率对齐显示器刷新率（通常 60Hz/16.67ms），后台标签自动暂停，帧率稳定无丢帧。setTimeout(fn,16)：固定延时，不与渲染同步，易丢帧或空转，后台仍执行浪费资源。setInterval：同上且可能累积执行。rAF 还能配合设备刷新率（120Hz 自适应）。退出动画需 cancelAnimationFrame(id)。非视觉逻辑（如计时）用 setTimeout，视觉动画用 rAF。',
+                content: 'rAF：\n- 回调在下一次重绘前执行。\n- 频率对齐显示器刷新率（通常 60Hz/16.67ms）。\n- 后台标签自动暂停。\n- 帧率稳定无丢帧。\n\nsetTimeout(fn,16)：\n- 固定延时。\n- 不与渲染同步，易丢帧或空转。\n- 后台仍执行浪费资源。\n\nsetInterval：同上且可能累积执行。\n\nrAF 还能配合设备刷新率（120Hz 自适应）。\n\n退出动画需 cancelAnimationFrame(id)。非视觉逻辑（如计时）用 setTimeout，视觉动画用 rAF。',
               },
               {
                 title: 'Q12: MutationObserver 的作用与使用',
-                content: 'MutationObserver 异步监听 DOM 变化（子节点、属性、文本、子树），回调在微任务执行。用途：1) 自定义组件监听子内容变化；2) 第三方库注入检测；3) 实现数据-视图双向绑定底层。使用：const obs = new MutationObserver(cb); obs.observe(target, {childList, attributes, subtree, ...}); 停止 obs.disconnect()。相比已废弃的 MutationEvent（同步、性能差），它批量异步更高效。',
+                content: 'MutationObserver 异步监听 DOM 变化（子节点、属性、文本、子树），回调在微任务执行。\n\n用途：\n1. 自定义组件监听子内容变化。\n2. 第三方库注入检测。\n3. 实现数据-视图双向绑定底层。\n\n使用：\nconst obs = new MutationObserver(cb); obs.observe(target, {childList, attributes, subtree, ...}); 停止 obs.disconnect()。\n\n相比已废弃的 MutationEvent（同步、性能差），它批量异步更高效。',
               },
               {
                 title: 'Q13 【场景题】: 列表项频繁增删导致页面卡顿，如何排查与优化',
-                content: '排查：1) Performance 面板录制，看 Scripting/Rendering 占比，定位是 JS 执行慢还是回流重绘多；2) 检查是否逐项 addEventListener 未解绑（内存与监听器堆积）；3) 检查是否循环 appendChild 触发多次回流；4) 检查是否读取布局属性强制同步布局。优化：1) 改用事件委托减少监听器；2) DocumentFragment 批量插入；3) 虚拟列表（如 react-window）只渲染可见项；4) 用 transform 代替 top/left；5) 大量数据用分页/懒加载；6) 复杂项用 will-change 提升合成层。',
+                content: '排查：\n1. Performance 面板录制，看 Scripting/Rendering 占比，定位是 JS 执行慢还是回流重绘多。\n2. 检查是否逐项 addEventListener 未解绑（内存与监听器堆积）。\n3. 检查是否循环 appendChild 触发多次回流。\n4. 检查是否读取布局属性强制同步布局。\n\n优化：\n1. 改用事件委托减少监听器。\n2. DocumentFragment 批量插入。\n3. 虚拟列表（如 react-window）只渲染可见项。\n4. 用 transform 代替 top/left。\n5. 大量数据用分页/懒加载。\n6. 复杂项用 will-change 提升合成层。',
               },
               {
                 title: 'Q14 【场景题】: 单页应用切换路由后内存持续上涨，如何排查',
-                content: '排查路径：1) Memory 面板堆快照对比，切换路由前后 Diff 找未释放对象；2) 检查路由级组件是否在卸载时 removeEventListener / clearInterval / 断开 WebSocket / disconnect MutationObserver；3) 检查全局 store/缓存是否无限增长；4) 检查闭包是否持有已卸载组件的 DOM 引用；5) 检查第三方库实例是否未 destroy。修复：在组件卸载钩子（React useEffect return / Vue onBeforeUnmount）统一清理。验证：反复切换路由后强制 GC 看堆是否回落。',
+                content: '排查路径：\n1. Memory 面板堆快照对比，切换路由前后 Diff 找未释放对象。\n2. 检查路由级组件是否在卸载时 removeEventListener / clearInterval / 断开 WebSocket / disconnect MutationObserver。\n3. 检查全局 store/缓存是否无限增长。\n4. 检查闭包是否持有已卸载组件的 DOM 引用。\n5. 检查第三方库实例是否未 destroy。\n\n修复：在组件卸载钩子（React useEffect return / Vue onBeforeUnmount）统一清理。\n\n验证：反复切换路由后强制 GC 看堆是否回落。',
               },
               {
                 title: 'Q15 【对比题】: innerHTML / textContent / insertAdjacentHTML 的区别',
-                content: 'innerHTML：读写元素的后代 HTML 字符串，写入会解析 HTML 并替换子节点（有 XSS 风险，需转义）。textContent：读写纯文本内容，不解析 HTML（写入 < 会原样显示，安全），性能优于 innerHTML。insertAdjacentHTML(position, html)：在指定位置（beforebegin/afterbegin/beforeend/afterend）插入解析后的 HTML，不替换现有子节点，适合追加。选型：纯文本用 textContent（安全高效）；插入 HTML 片段用 insertAdjacentHTML；整体替换用 innerHTML（注意转义）。',
+                content: 'innerHTML：\n- 读写元素的后代 HTML 字符串。\n- 写入会解析 HTML 并替换子节点。\n- 有 XSS 风险，需转义。\n\ntextContent：\n- 读写纯文本内容。\n- 不解析 HTML（写入 < 会原样显示，安全）。\n- 性能优于 innerHTML。\n\ninsertAdjacentHTML(position, html)：\n- 在指定位置（beforebegin/afterbegin/beforeend/afterend）插入解析后的 HTML。\n- 不替换现有子节点，适合追加。\n\n选型：纯文本用 textContent（安全高效）；插入 HTML 片段用 insertAdjacentHTML；整体替换用 innerHTML（注意转义）。',
               },
               {
                 title: 'Q16 【对比题】: appendChild / insertBefore / replaceChild / remove 的区别',
-                content: 'appendChild(node)：在子节点列表末尾添加，若 node 已存在于文档则先移除再添加（移动而非复制）。insertBefore(newNode, refNode)：在 refNode 前插入，refNode 为 null 时等价 appendChild。replaceChild(newNode, oldNode)：用 newNode 替换 oldNode。remove()：节点自删除（旧 API removeChild 需父节点调用）。注意：这些方法都返回被操作节点；移动节点不会触发复制；批量操作用 DocumentFragment 优化。prepend/append/after/before 是更现代的便捷 API。',
+                content: '四个节点操作 API：\n\nappendChild(node)：\n- 在子节点列表末尾添加。\n- 若 node 已存在于文档则先移除再添加（移动而非复制）。\n\ninsertBefore(newNode, refNode)：\n- 在 refNode 前插入。\n- refNode 为 null 时等价 appendChild。\n\nreplaceChild(newNode, oldNode)：用 newNode 替换 oldNode。\n\nremove()：节点自删除（旧 API removeChild 需父节点调用）。\n\n注意：这些方法都返回被操作节点；移动节点不会触发复制；批量操作用 DocumentFragment 优化。prepend/append/after/before 是更现代的便捷 API。',
               },
               {
                 title: 'Q17: 防抖(debounce)与节流(throttle)的原理与实现',
-                content: '防抖：N 秒内再次触发则重置计时器，只有停止触发 N 秒后才执行，用于"只关心最后一次"的场景（搜索框输入、窗口 resize 收尾）。节流：N 秒内只执行一次，用于"持续触发但需限频"的场景（scroll 滚动加载、鼠标移动）。实现要点：debounce 用 setTimeout + clearTimeout 重置；throttle 用时间戳判断上次执行时间（leading 立即执行首次）或 setTimeout 控制尾调用（trailing）。生产中优先用 lodash 的 debounce/throttle（支持 leading/trailing/maxWait 配置），自实现需注意 this 绑定与参数透传（用箭头函数或 apply）。',
+                content: '防抖：\n- N 秒内再次触发则重置计时器。\n- 只有停止触发 N 秒后才执行。\n- 用于"只关心最后一次"的场景（搜索框输入、窗口 resize 收尾）。\n\n节流：\n- N 秒内只执行一次。\n- 用于"持续触发但需限频"的场景（scroll 滚动加载、鼠标移动）。\n\n实现要点：\n- debounce 用 setTimeout + clearTimeout 重置。\n- throttle 用时间戳判断上次执行时间（leading 立即执行首次）或 setTimeout 控制尾调用（trailing）。\n\n生产中优先用 lodash 的 debounce/throttle（支持 leading/trailing/maxWait 配置），自实现需注意 this 绑定与参数透传（用箭头函数或 apply）。',
               },
               {
                 title: 'Q18: IntersectionObserver 的作用与使用',
-                content: 'IntersectionObserver 异步观察元素与视口（或指定根容器）的交叉状态变化，回调返回 entries 含 isIntersecting、intersectionRatio、target。用途：图片懒加载（进入视口再加载 src）、无限滚动、曝光统计、吸顶吸底。优势：异步、不阻塞主线程、比 scroll 事件监听 + getBoundingClientRect 高效得多（后者每次滚动都强制同步布局）。使用：const obs = new IntersectionObserver(cb, {root, rootMargin, threshold}); obs.observe(el); 停止 obs.unobserve(el) 或 obs.disconnect()。注意 threshold 是数组可设多个触发点；rootMargin 可预加载（如 "100px" 提前触发）。',
+                content: 'IntersectionObserver 异步观察元素与视口（或指定根容器）的交叉状态变化，回调返回 entries 含 isIntersecting、intersectionRatio、target。\n\n用途：\n1. 图片懒加载（进入视口再加载 src）\n2. 无限滚动\n3. 曝光统计\n4. 吸顶吸底\n\n优势：异步、不阻塞主线程、比 scroll 事件监听 + getBoundingClientRect 高效得多（后者每次滚动都强制同步布局）。\n\n使用：\nconst obs = new IntersectionObserver(cb, {root, rootMargin, threshold}); obs.observe(el); 停止 obs.unobserve(el) 或 obs.disconnect()。\n\n注意：threshold 是数组可设多个触发点；rootMargin 可预加载（如 "100px" 提前触发）。',
               },
               {
                 title: 'Q19: ResizeObserver 的作用与使用',
-                content: 'ResizeObserver 异步监听元素尺寸变化（contentRect 含 width/height/x/y），弥补 window.resize 只能监听视口、无法监听元素级尺寸变化的缺陷。用途：响应式组件（容器查询的 JS 方案）、ECharts/Canvas 图表自适应、元素尺寸变化时重排布局。使用：const obs = new ResizeObserver(entries => { for (const e of entries) { e.contentRect.width } }); obs.observe(el); 停止 obs.disconnect()。注意：回调在 resize 后异步触发，避免循环触发（修改尺寸→再次触发）；性能敏感场景应防抖。CSS 容器查询(@container)在简单布局上可替代，复杂逻辑仍需 ResizeObserver。',
+                content: 'ResizeObserver 异步监听元素尺寸变化（contentRect 含 width/height/x/y），弥补 window.resize 只能监听视口、无法监听元素级尺寸变化的缺陷。\n\n用途：\n1. 响应式组件（容器查询的 JS 方案）。\n2. ECharts/Canvas 图表自适应。\n3. 元素尺寸变化时重排布局。\n\n使用：\nconst obs = new ResizeObserver(entries => { for (const e of entries) { e.contentRect.width } }); obs.observe(el); 停止 obs.disconnect()。\n\n注意：回调在 resize 后异步触发，避免循环触发（修改尺寸→再次触发）；性能敏感场景应防抖。CSS 容器查询(@container)在简单布局上可替代，复杂逻辑仍需 ResizeObserver。',
               },
               {
                 title: 'Q20: postMessage 跨源通信机制',
-                content: 'window.postMessage(data, targetOrigin) 是跨窗口/跨文档通信的标准 API，用于 iframe 父子通信、window.open 打开的窗口、Web Worker。发送：otherWin.postMessage(data, "https://receiver.com")，targetOrigin 须指定精确源（勿用 "*"，防数据泄露给恶意页面）。接收：window.addEventListener("message", e => { e.origin 校验源；e.data 取数据 })，必须校验 e.origin 防止恶意页面伪造消息。Structured Clone 算法支持对象/数组/Map/Set 等结构化数据，不支持函数/DOM 节点。是微前端、跨域 iframe、SharedWorker 通信的基础。',
+                content: 'window.postMessage(data, targetOrigin) 是跨窗口/跨文档通信的标准 API，用于 iframe 父子通信、window.open 打开的窗口、Web Worker。\n\n发送：\notherWin.postMessage(data, "https://receiver.com")\n- targetOrigin 须指定精确源（勿用 "*"，防数据泄露给恶意页面）。\n\n接收：\nwindow.addEventListener("message", e => { ... })\n- 必须校验 e.origin 防止恶意页面伪造消息。\n- e.data 取数据。\n\nStructured Clone 算法支持对象/数组/Map/Set 等结构化数据，不支持函数/DOM 节点。是微前端、跨域 iframe、SharedWorker 通信的基础。',
               },
               {
                 title: 'Q21: Web Worker 的使用场景与限制',
-                content: 'Web Worker 在独立线程运行 JS，不阻塞主线程，用于 CPU 密集计算（大数据排序、图像处理、加密、复杂算法）。类型：Dedicated Worker（单页面专用）、Shared Worker（多页面共享）、Service Worker（离线缓存与网络代理）。限制：无法访问 DOM（window/document/parent 都不可用）、不能操作 UI、通信只能通过 postMessage（结构化克隆）、有启动开销（约几十 ms）不适合轻量任务。使用：const w = new Worker("worker.js"); w.postMessage(data); w.onmessage = e => {}; 结束 w.terminate()。注意数据需可序列化；大数据可用 Transferable 对象（ArrayBuffer 转移所有权零拷贝）。',
+                content: 'Web Worker 在独立线程运行 JS，不阻塞主线程，用于 CPU 密集计算（大数据排序、图像处理、加密、复杂算法）。\n\n类型：\n1. Dedicated Worker——单页面专用。\n2. Shared Worker——多页面共享。\n3. Service Worker——离线缓存与网络代理。\n\n限制：\n- 无法访问 DOM（window/document/parent 都不可用）。\n- 不能操作 UI。\n- 通信只能通过 postMessage（结构化克隆）。\n- 有启动开销（约几十 ms）不适合轻量任务。\n\n使用：\nconst w = new Worker("worker.js"); w.postMessage(data); w.onmessage = e => {}; 结束 w.terminate()。\n\n注意：数据需可序列化；大数据可用 Transferable 对象（ArrayBuffer 转移所有权零拷贝）。',
               },
               {
                 title: 'Q22: requestIdleCallback 的作用与使用',
-                content: 'requestIdleCallback(cb) 在浏览器空闲期执行低优先级任务，回调接收 deadline 参数含 didTimeout 与 timeRemaining()（剩余空闲毫秒），应在剩余时间内让出执行权。用途：数据预计算、日志上报、非关键 DOM 操作、预渲染。与 rAF 区别：rAF 在每帧渲染前执行（高优先级，视觉相关），rIC 在帧间空闲时执行（低优先级）。注意：超时 option（{timeout: 2000}）保证最终执行避免饿死；Safari 支持较差，可用 rAF + 自实现时间片兜底；React 18 时间分片(time slicing)思想与之同源。退出用 cancelIdleCallback(id)。',
+                content: 'requestIdleCallback(cb) 在浏览器空闲期执行低优先级任务，回调接收 deadline 参数含 didTimeout 与 timeRemaining()（剩余空闲毫秒），应在剩余时间内让出执行权。\n\n用途：\n1. 数据预计算\n2. 日志上报\n3. 非关键 DOM 操作\n4. 预渲染\n\n与 rAF 区别：\n- rAF 在每帧渲染前执行（高优先级，视觉相关）。\n- rIC 在帧间空闲时执行（低优先级）。\n\n注意：超时 option（{timeout: 2000}）保证最终执行避免饿死；Safari 支持较差，可用 rAF + 自实现时间片兜底；React 18 时间分片(time slicing)思想与之同源。退出用 cancelIdleCallback(id)。',
               },
               {
                 title: 'Q23: 拖拽 API（Drag and Drop）与 dataTransfer',
-                content: 'HTML5 原生拖拽：元素设 draggable="true"，监听 dragstart（设 e.dataTransfer.setData("text", id)）、dragover（必须 e.preventDefault() 否则不允许 drop）、drop（e.dataTransfer.getData 取数据执行逻辑）。dataTransfer 对象携带拖拽数据，支持多种 MIME 类型（"text/plain"、"application/json"、自定义）。与鼠标事件模拟拖拽对比：原生 API 支持跨窗口/文件拖入、有拖拽幽灵图、触屏不支持（需 Pointer Events 模拟）。典型场景：文件上传（拖文件到页面）、看板拖拽排序、列表项重排。注意：dragleave 误触发问题（用 relatedTarget 或计数器处理）；移动端需用 touch 事件自实现。',
+                content: 'HTML5 原生拖拽流程：\n1. 元素设 draggable="true"。\n2. 监听 dragstart（设 e.dataTransfer.setData("text", id)）。\n3. 监听 dragover（必须 e.preventDefault() 否则不允许 drop）。\n4. 监听 drop（e.dataTransfer.getData 取数据执行逻辑）。\n\ndataTransfer 对象携带拖拽数据，支持多种 MIME 类型（"text/plain"、"application/json"、自定义）。\n\n与鼠标事件模拟拖拽对比：\n- 原生 API 支持跨窗口/文件拖入、有拖拽幽灵图、触屏不支持（需 Pointer Events 模拟）。\n\n典型场景：文件上传（拖文件到页面）、看板拖拽排序、列表项重排。\n\n注意：dragleave 误触发问题（用 relatedTarget 或计数器处理）；移动端需用 touch 事件自实现。',
               },
               {
                 title: 'Q24: Clipboard API 剪贴板操作',
-                content: '现代 Clipboard API：navigator.clipboard.writeText(text) 写入文本，readText() 读取，基于 Promise 且需 HTTPS + 权限（navigator.permissions 查询 clipboard-write）。优势：异步、安全、不阻塞、可复制非文本（write 方法支持 ClipboardItem 含 image/html）。旧方案 document.execCommand("copy") 已废弃但兼容性好（需先 select() 选中文本）。权限：用户手势触发（点击按钮）才允许，脚本静默复制会被拦截。粘贴 readText 受 "clipboard-read" 权限控制，部分浏览器默认拒绝。注意：复制富文本用 ClipboardItem({ "text/html": blob })；粘贴大内容或敏感数据应让用户主动 Ctrl+V。',
+                content: '现代 Clipboard API：\n- navigator.clipboard.writeText(text) 写入文本。\n- readText() 读取。\n- 基于 Promise 且需 HTTPS + 权限（navigator.permissions 查询 clipboard-write）。\n\n优势：异步、安全、不阻塞、可复制非文本（write 方法支持 ClipboardItem 含 image/html）。\n\n旧方案：document.execCommand("copy") 已废弃但兼容性好（需先 select() 选中文本）。\n\n权限：用户手势触发（点击按钮）才允许，脚本静默复制会被拦截。粘贴 readText 受 "clipboard-read" 权限控制，部分浏览器默认拒绝。\n\n注意：复制富文本用 ClipboardItem({ "text/html": blob })；粘贴大内容或敏感数据应让用户主动 Ctrl+V。',
               },
               {
                 title: 'Q25: Page Visibility API 与后台资源管理',
-                content: 'document.visibilityState（"visible"/"hidden"）反映页面可见性，visibilitychange 事件在切换标签页/最小化时触发。用途：1) 暂停 rAF/视频/轮询节省资源（后台不渲染）；2) 切回时同步数据（"刚回来请刷新"）；3) 统计真实停留时长（剔除后台时间）；4) 暂停 WebSocket 心跳或降频。与 blur/focus 区别：visibilitychange 反映标签可见性（切到其他标签也触发），blur/focus 反映窗口焦点（切到同窗口其他应用才触发）。配合 Page Visibility 可显著降低后台资源占用，是性能优化的低成本高收益项。',
+                content: 'document.visibilityState（"visible"/"hidden"）反映页面可见性，visibilitychange 事件在切换标签页/最小化时触发。\n\n用途：\n1. 暂停 rAF/视频/轮询节省资源（后台不渲染）。\n2. 切回时同步数据（"刚回来请刷新"）。\n3. 统计真实停留时长（剔除后台时间）。\n4. 暂停 WebSocket 心跳或降频。\n\n与 blur/focus 区别：\n- visibilitychange 反映标签可见性（切到其他标签也触发）。\n- blur/focus 反映窗口焦点（切到同窗口其他应用才触发）。\n\n配合 Page Visibility 可显著降低后台资源占用，是性能优化的低成本高收益项。',
               },
               {
                 title: 'Q26 【场景题】: 实现图片懒加载，有哪些方案对比',
-                content: '方案一（传统）：监听 scroll 事件 + getBoundingClientRect 判断元素是否进入视口，进入则将 data-src 赋给 src。缺点：每次滚动强制同步布局（layout thrashing），需手动节流，性能差。方案二（推荐）：IntersectionObserver 观察 img 元素，isIntersecting 为真时赋 src 并 unobserve。优点：浏览器原生异步、无需手动计算、性能优。方案三（极致）：原生 loading="lazy" 属性，浏览器自动懒加载，零 JS，但兼容性与控制粒度有限。生产实践：loading="lazy" 做兜底 + IntersectionObserver 做精确控制 + 占位图(SVG/LQIP)防布局抖动 + 错误兜底。注意 rootMargin:"200px" 可预加载避免滚到才加载的闪烁。',
+                content: '方案一（传统）：\n- 监听 scroll 事件 + getBoundingClientRect 判断元素是否进入视口，进入则将 data-src 赋给 src。\n- 缺点：每次滚动强制同步布局（layout thrashing），需手动节流，性能差。\n\n方案二（推荐）：\n- IntersectionObserver 观察 img 元素，isIntersecting 为真时赋 src 并 unobserve。\n- 优点：浏览器原生异步、无需手动计算、性能优。\n\n方案三（极致）：\n- 原生 loading="lazy" 属性，浏览器自动懒加载，零 JS。\n- 但兼容性与控制粒度有限。\n\n生产实践：loading="lazy" 做兜底 + IntersectionObserver 做精确控制 + 占位图(SVG/LQIP)防布局抖动 + 错误兜底。注意 rootMargin:"200px" 可预加载避免滚到才加载的闪烁。',
               },
               {
                 title: 'Q27 【场景题】: 万级长列表渲染卡顿，有哪些优化方案',
-                content: '核心矛盾：DOM 节点过多导致内存占用大、初次渲染慢、滚动回流重绘多。方案一（虚拟列表）：只渲染可视区域 + 上下缓冲区，滚动时动态替换内容与 transform 偏移，库如 react-window/react-virtualized。难点：动态高度需测量或预估、滚动条同步、横向/分组。方案二（分页/无限滚动）：IntersectionObserver 触底加载下一页，简单但总量大时仍有内存问题。方案三（内容占位）：非可视区用骨架屏/占位 div，减少回流。方案四（time slicing）：用 requestIdleCallback 或 rAF 分片渲染，每帧插入 N 个避免主线程长阻塞。选型：万级且需随机滚动用虚拟列表；渐进浏览用无限滚动；首屏优化用骨架屏 + 分片。注意 key 稳定性影响虚拟列表复用性能。',
+                content: '核心矛盾：DOM 节点过多导致内存占用大、初次渲染慢、滚动回流重绘多。\n\n方案一（虚拟列表）：\n- 只渲染可视区域 + 上下缓冲区。\n- 滚动时动态替换内容与 transform 偏移。\n- 库如 react-window/react-virtualized。\n- 难点：动态高度需测量或预估、滚动条同步、横向/分组。\n\n方案二（分页/无限滚动）：IntersectionObserver 触底加载下一页，简单但总量大时仍有内存问题。\n\n方案三（内容占位）：非可视区用骨架屏/占位 div，减少回流。\n\n方案四（time slicing）：用 requestIdleCallback 或 rAF 分片渲染，每帧插入 N 个避免主线程长阻塞。\n\n选型：万级且需随机滚动用虚拟列表；渐进浏览用无限滚动；首屏优化用骨架屏 + 分片。注意 key 稳定性影响虚拟列表复用性能。',
               },
               {
                 title: 'Q28 【对比题】: scroll 事件监听 vs IntersectionObserver',
-                content: 'scroll 事件：每次滚动都触发（高频），需手动 throttle 节流；判断可见性要用 getBoundingClientRect（触发强制同步布局），性能差；兼容性好。IntersectionObserver：浏览器异步回调，只在交叉状态变化时触发，无需手动计算位置；不阻塞主线程，性能优；老浏览器需 polyfill。语义：scroll 是"我在滚动"的流式事件，IntersectionObserver 是"我进入/离开了视口"的状态事件。选型：纯可见性判断（懒加载、无限滚动、曝光统计）必用 IntersectionObserver；需要滚动位置/速率/惯性等连续信息（视差、吸附）用 scroll + rAF；两者可配合使用。',
+                content: 'scroll 事件：\n- 每次滚动都触发（高频），需手动 throttle 节流。\n- 判断可见性要用 getBoundingClientRect（触发强制同步布局），性能差。\n- 兼容性好。\n\nIntersectionObserver：\n- 浏览器异步回调，只在交叉状态变化时触发。\n- 无需手动计算位置。\n- 不阻塞主线程，性能优。\n- 老浏览器需 polyfill。\n\n语义：scroll 是"我在滚动"的流式事件，IntersectionObserver 是"我进入/离开了视口"的状态事件。\n\n选型：纯可见性判断（懒加载、无限滚动、曝光统计）必用 IntersectionObserver；需要滚动位置/速率/惯性等连续信息（视差、吸附）用 scroll + rAF；两者可配合使用。',
               },
               {
                 title: 'Q29 【对比题】: 防抖(debounce) vs 节流(throttle)',
-                content: '防抖：持续触发会不断重置计时器，只在"停止触发 N 秒后"执行一次，相当于"等用户停下来再处理"。适合搜索联想（输完再请求）、resize 收尾、表单校验。节流：持续触发时每 N 秒固定执行一次，相当于"按固定频率采样"。适合 scroll 滚动加载、mousemove 绘图、按钮防连点。形象比喻：防抖像电梯门（有人来就重开，等人齐走），节流像地铁发车（固定间隔一班，不管多少人）。边界：防抖首次可能很久不执行（配 leading 立即执行首触发）；节流尾调用可能丢最后一次（配 trailing）。选型看"关心最后一次"还是"关心过程频率"。',
+                content: '防抖：\n- 持续触发会不断重置计时器。\n- 只在"停止触发 N 秒后"执行一次。\n- 相当于"等用户停下来再处理"。\n- 适合搜索联想（输完再请求）、resize 收尾、表单校验。\n\n节流：\n- 持续触发时每 N 秒固定执行一次。\n- 相当于"按固定频率采样"。\n- 适合 scroll 滚动加载、mousemove 绘图、按钮防连点。\n\n形象比喻：防抖像电梯门（有人来就重开，等人齐走），节流像地铁发车（固定间隔一班，不管多少人）。\n\n边界：防抖首次可能很久不执行（配 leading 立即执行首触发）；节流尾调用可能丢最后一次（配 trailing）。\n\n选型看"关心最后一次"还是"关心过程频率"。',
               },
               {
                 title: 'Q30 【对比题】: localStorage 跨标签通信 vs BroadcastChannel',
-                content: 'localStorage 方案：A 标签 localStorage.setItem 触发 storage 事件，同源其他标签页的 window 监听 storage 事件接收。优点：兼容性好（IE10+）；缺点：只能传字符串（对象需序列化）、数据持久残留需清理、事件不含发送方引用（无法定向回复）。BroadcastChannel 方案：const ch = new BroadcastChannel("topic"); ch.postMessage(data); 同源其他标签 onmessage 接收。优点：原生支持对象结构化克隆、API 简洁、频道隔离、可关闭 ch.close()；缺点：兼容性较新（IE/Safari 旧版不支持）。选型：现代应用优先 BroadcastChannel；需要兼容旧浏览器或与持久数据共享（如登录态）用 localStorage + storage 事件；同源多标签退出登录同步是 storage 事件经典场景。',
+                content: 'localStorage 方案：\n- A 标签 localStorage.setItem 触发 storage 事件。\n- 同源其他标签页的 window 监听 storage 事件接收。\n- 优点：兼容性好（IE10+）。\n- 缺点：只能传字符串（对象需序列化）、数据持久残留需清理、事件不含发送方引用（无法定向回复）。\n\nBroadcastChannel 方案：\n- const ch = new BroadcastChannel("topic"); ch.postMessage(data);\n- 同源其他标签 onmessage 接收。\n- 优点：原生支持对象结构化克隆、API 简洁、频道隔离、可关闭 ch.close()。\n- 缺点：兼容性较新（IE/Safari 旧版不支持）。\n\n选型：现代应用优先 BroadcastChannel；需要兼容旧浏览器或与持久数据共享（如登录态）用 localStorage + storage 事件；同源多标签退出登录同步是 storage 事件经典场景。',
               },
             ],
           },
