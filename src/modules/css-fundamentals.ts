@@ -23,7 +23,7 @@ export const cssFundamentalsModule: ModuleMeta = {
     // ========================================================================
     {
       order: 1,
-      title: 'CSS 引入方式（内联/内部/外部）',
+      title: 'CSS 引入方式',
       difficulty: 1,
       blocks: [
         {
@@ -1156,7 +1156,7 @@ h1 { font-size: clamp(1.5rem, 4vw, 3rem); } /* 最小1.5rem，最大3rem */
     // ========================================================================
     {
       order: 14,
-      title: '动画与变换（transform/transition/animation）',
+      title: '动画与变换',
       difficulty: 3,
       visualizationType: 'sandbox',
       blocks: [

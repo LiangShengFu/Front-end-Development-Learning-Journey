@@ -108,8 +108,8 @@ export const moduleSummaries: ModuleSummary[] = [
     stageLabel: 'React 技术栈 · 第 1 模块',
     icon: '08',
     summary: 'JSX、组件、Props/State、Hooks、虚拟 DOM、表单、Router、Redux。',
-    knowledgePointCount: 22,
-    visualizationCount: 22,
+    knowledgePointCount: 24,
+    visualizationCount: 23,
   },
   {
     number: '09',
@@ -119,8 +119,8 @@ export const moduleSummaries: ModuleSummary[] = [
     stageLabel: 'React 技术栈 · 第 2 模块',
     icon: '09',
     summary: '并发模式、Fiber、Suspense、状态管理库、性能优化、生态全景。',
-    knowledgePointCount: 18,
-    visualizationCount: 9,
+    knowledgePointCount: 21,
+    visualizationCount: 15,
   },
   {
     number: '10',
@@ -130,8 +130,8 @@ export const moduleSummaries: ModuleSummary[] = [
     stageLabel: 'React 技术栈 · 第 3 模块',
     icon: '10',
     summary: 'SSR/SSG/ISR、App Router、Server Components、Server Actions、中间件。',
-    knowledgePointCount: 16,
-    visualizationCount: 8,
+    knowledgePointCount: 19,
+    visualizationCount: 18,
   },
   // 第四阶段：Vue
   {
@@ -142,8 +142,8 @@ export const moduleSummaries: ModuleSummary[] = [
     stageLabel: 'Vue 技术栈 · 第 1 模块',
     icon: '11',
     summary: 'Composition API、响应式原理、组件通信、Vue Router、Pinia、编译优化。',
-    knowledgePointCount: 17,
-    visualizationCount: 17,
+    knowledgePointCount: 20,
+    visualizationCount: 23,
   },
   {
     number: '12',
@@ -153,8 +153,8 @@ export const moduleSummaries: ModuleSummary[] = [
     stageLabel: 'Vue 技术栈 · 第 2 模块',
     icon: '12',
     summary: '响应式原理、Composable 组合、自定义指令、Nuxt 3 混合渲染、Pinia、KeepAlive、编译优化。',
-    knowledgePointCount: 15,
-    visualizationCount: 15,
+    knowledgePointCount: 17,
+    visualizationCount: 17,
   },
   // 第五阶段：跨端移动端
   {
@@ -291,9 +291,9 @@ export const moduleSummaries: ModuleSummary[] = [
     stage: 'interview',
     stageLabel: '面试冲刺 · 第 1 模块',
     icon: '24',
-    summary: '栈队列链表树图、排序搜索、DP 贪心、高频手写题、正则表达式。',
-    knowledgePointCount: 18,
-    visualizationCount: 6,
+    summary: '分层递进体系：基础前置→核心数据结构→算法思想→前端专项→面试实战，覆盖栈队列链表树图堆Trie并查集、排序查找双指针滑窗回溯分治贪心DP位运算、手写题浏览器框架业务字符串、刷题路线与面试题精选。',
+    knowledgePointCount: 30,
+    visualizationCount: 16,
   },
   {
     number: '25',

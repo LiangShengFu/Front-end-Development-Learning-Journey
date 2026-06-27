@@ -163,7 +163,7 @@ export function ModuleDetailPage() {
               <div className="mb-lg font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
                 目录
               </div>
-              <nav className="space-y-xs">
+              <nav className="max-h-[calc(100vh-10rem)] space-y-xs overflow-y-auto pr-xs">
                 {module?.points.map((p) => (
                   <a
                     key={p.order}
