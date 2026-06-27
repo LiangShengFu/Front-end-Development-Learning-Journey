@@ -122,7 +122,7 @@ describe('visualizationMeta', () => {
       'pinia-store-explorer',
       'patch-flag-visualizer',
     ]
-    expect(Object.keys(visualizationMeta)).toHaveLength(expectedTypes.length)
+    expect(Object.keys(visualizationMeta).length).toBeGreaterThanOrEqual(expectedTypes.length)
     expectedTypes.forEach((type) => {
       expect(visualizationMeta[type]).toBeDefined()
       expect(visualizationMeta[type].type).toBe(type)

@@ -170,22 +170,31 @@ describe('数据结构与前端算法模块', () => {
     expect(titles.some((t) => t.includes('小测') || t.includes('测验'))).toBe(true)
   })
 
-  // ---- 维度 B1/B4/B5/B7：面试题题量、闪卡模式 ----
-  it('面试题应 ≥20 题，启用 flashcard 模式，答案符合排版规范', () => {
+  // ---- 维度 B1/B4/B5/B7/G：面试题题量、场景/对比题计数、闪卡模式、排版规范 ----
+  it('面试题应 ≥30 题，启用 flashcard 模式，答案符合排版规范', () => {
     const interview = dataStructureAlgorithmModule.points.find((p) =>
       p.title.includes('面试题'),
     )
     expect(interview).toBeDefined()
     const demo = interview!.blocks.find(isVisualizationBlock)!
     const data = demo.data as AccordionData
-    expect(data.items.length).toBeGreaterThanOrEqual(20)
+    expect(data.items.length).toBeGreaterThanOrEqual(30)
     expect(data.defaultMode).toBe('flashcard')
     data.items.forEach((i) => {
-      expect(i.title).toMatch(/^Q\d+[:：]/)
+      expect(i.title).toMatch(/^Q\d+(\s+【[^】]+】)?[:：]/)
       expect(i.content).toBeTruthy()
       expect(i.content.length).toBeGreaterThan(20)
       expect(i.content.includes('\n\n')).toBe(true)
     })
+    // B4：场景题 ≥ 2 + 对比题 ≥ 2（计数校验，对齐标准）
+    const sceneCount = data.items.filter((i) =>
+      i.title.includes('【场景题】'),
+    ).length
+    const compareCount = data.items.filter((i) =>
+      i.title.includes('【对比题】'),
+    ).length
+    expect(sceneCount).toBeGreaterThanOrEqual(2)
+    expect(compareCount).toBeGreaterThanOrEqual(2)
   })
 
   // ---- 维度 B2/B3：小测题题量与梯度标注 ----

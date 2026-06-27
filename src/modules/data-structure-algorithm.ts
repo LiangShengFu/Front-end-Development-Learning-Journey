@@ -3233,7 +3233,7 @@ function buildNext(p) {
           id: 'p29-1',
           type: 'paragraph',
           lead: true,
-          text: '前端算法面试高频题精选 24 题，覆盖原理/对比/场景/手写四类。flashcard 模式翻转看答案，先尝试自答再核对。',
+          text: '前端算法面试高频题精选 30 题，覆盖原理/对比/场景/手写四类。flashcard 模式翻转看答案，先尝试自答再核对。',
         },
         {
           id: 'p29-2',
@@ -3265,7 +3265,7 @@ function buildNext(p) {
                 content: 'BFS 找最短路径：\n\n- BFS 按层扩展，第一次访问到目标时经过的边数最少（无权图最短）。\n- 因为先访问距离 1 的所有点，再访问距离 2 的，天然按距离排序。\n\nDFS 不行：\n\n- DFS 一条路走到底，可能绕远路才到目标，第一次到的不一定最短。\n- DFS 找所有路径后取最短也行，但效率远低于 BFS。\n\n有权图最短路径：Dijkstra（优先队列 BFS）/ Bellman-Ford（允许负权）。',
               },
               {
-                title: 'Q6: 动态规划与贪心的本质区别？',
+                title: 'Q6 【对比题】: 动态规划与贪心的本质区别？',
                 content: '贪心：\n\n- 每步选当前最优，不可撤销。\n- 要求问题有「贪心选择性质」（局部最优能推导全局最优）。\n- 不要求枚举所有状态，效率高 O(n log n) 或 O(n)。\n- 例子：跳跃游戏、区间调度。\n\nDP：\n\n- 枚举所有状态转移，从子问题最优推导全局最优。\n- 要求「最优子结构」+「重叠子问题」。\n- 效率较低 O(n²) 或更高，但能解贪心不能解的问题。\n- 例子：0-1 背包（贪心按性价比会错）、LCS、编辑距离。\n\n判断：能用贪心证明就用贪心，证明不了就用 DP。',
               },
               {
@@ -3273,15 +3273,15 @@ function buildNext(p) {
                 content: '0-1 背包逆序：\n\n- 每个物品只能选一次，dp[w] 依赖上一轮的 dp[w-weights[i]]（未选过当前物品）。\n- 逆序保证计算 dp[w] 时 dp[w-weights[i]] 还是上一轮的值。\n- 顺序会导致同一物品被选多次（变成完全背包）。\n\n完全背包顺序：\n\n- 每个物品可选无限次，dp[w] 依赖本轮已更新的 dp[w-weights[i]]（已选过当前物品还可再选）。\n- 顺序遍历让 dp[w-weights[i]] 先被更新，dp[w] 累加含当前物品的方案。\n\n口诀：0-1 逆序防重复，完全顺序允重复。',
               },
               {
-                title: 'Q8: LRU 与 LFU 的区别？为什么 LRU 更常用？',
+                title: 'Q8 【对比题】: LRU 与 LFU 的区别？为什么 LRU 更常用？',
                 content: 'LRU（Least Recently Used）：\n\n- 淘汰最久未访问的。\n- 实现：Map（插入序）或双向链表 + 哈希表。\n- get/put O(1)。\n\nLFU（Least Frequently Used）：\n\n- 淘汰访问次数最少的（次数相同再按 LRU）。\n- 实现：两个哈希表（频次→节点链表 + key→节点）。\n- get/put O(log n) 或 O(1)（复杂）。\n\nLRU 更常用原因：\n\n1. 实现简单，常数小。\n2. 局部性原理：近期访问的更可能再被访问。\n3. LFU 的「频率」可能过时（旧热点不再访问但次数高）。\n\nVue keep-alive、Redis 缓存默认都用 LRU。',
               },
               {
-                title: 'Q9: Vue3 Diff 为什么要用 LIS（最长递增子序列）？',
+                title: 'Q9 【场景题】: Vue3 Diff 为什么要用 LIS（最长递增子序列）？',
                 content: '原因：\n\n- Diff 的核心目标是「最小化 DOM 操作」，DOM 移动比 patch 更贵。\n- 旧节点在新列表中的相对顺序，如果有递增段，说明这些节点相对位置不变，无需移动。\n- LIS 就是找最长的「相对顺序不变」的节点集合，剩余节点才需要移动。\n\n例子：\n- 旧 [a,b,c,d,e] → 新 [a,c,b,d,f]\n- b,c 在新列表中位置反转，但 a,d 相对顺序不变。\n- LIS 求 [a,d] 无需移动，只移动 b,c，挂载 f，卸载 e。\n\nVue3 比 Vue2（双端对比）更优：能处理中间乱序段。',
               },
               {
-                title: 'Q10: 防抖与节流的区别？分别用于什么场景？',
+                title: 'Q10 【对比题】: 防抖与节流的区别？分别用于什么场景？',
                 content: '区别：\n\n- 防抖 debounce：连续触发只在最后一次后等待 wait 才执行（合并多次为一次）。\n- 节流 throttle：每 wait 毫秒最多执行一次（稀释执行频率）。\n\n场景：\n\n- 防抖：搜索框输入（停止输入才查询）、表单字段校验、resize 末态。\n- 节流：scroll 滚动加载、mousemove 拖拽、按钮防连点。\n\n实现关键：\n\n- 防抖：clearTimeout + setTimeout，每次触发都重置定时器。\n- 节流：记录上次执行时间，当前时间 - 上次 >= wait 才执行。',
               },
               {
@@ -3293,11 +3293,11 @@ function buildNext(p) {
                 content: '原因：\n\n- 简单递归 + 计数器实现，任务完成回调里递归调用下一个，逻辑复杂易错。\n- worker 模式：启动 limit 个 worker，每个 worker 循环抢任务（i++），完成后继续抢。\n- 优势：\n  1. 并发数严格等于 limit。\n  2. 任务索引同步自增，无竞态。\n  3. 结果按原 idx 保序存入数组。\n  4. await Promise.all(workers) 一行等待全部完成。\n\n关键：i++ 必须在 await 之前（同步执行），否则多个 worker 会抢到同一索引。',
               },
               {
-                title: 'Q13: 虚拟列表为什么必须固定 itemHeight？动态高度怎么做？',
+                title: 'Q13 【场景题】: 虚拟列表为什么必须固定 itemHeight？动态高度怎么做？',
                 content: '固定高度原因：\n\n- start/end/offsetY 都靠 itemHeight 直接计算，O(1)。\n- 滚动时无需重新测量，性能稳定。\n\n动态高度方案：\n\n1. 预估高度：初始用 estimateHeight，渲染后测量真实高度更新缓存。\n2. 位置缓存：维护 positions 数组存每个项的 offsetTop，二分查找 start。\n3. 增量更新：滚动时只更新可视区项的精确高度。\n4. 滚动条修正：totalHeight 用缓存累加，避免滚动条跳动。\n\n库：react-window（固定）/ react-virtualized（动态）/ vue-virtual-scroller。',
               },
               {
-                title: 'Q14: 数组转树为什么不能一次遍历？',
+                title: 'Q14 【场景题】: 数组转树为什么不能一次遍历？',
                 content: '可以一次遍历，但两遍更清晰：\n\n两遍法（推荐）：\n\n1. 第一遍：建 Map（id → node），所有节点先入 Map。\n2. 第二遍：遍历原数组，把每个节点挂到 parentId 对应的父节点 children。\n\n一次遍历的问题：\n\n- 子节点可能先于父节点出现，挂载时父节点还没建。\n- 需要额外维护「待挂载」队列，遇到父节点时补挂。\n- 逻辑复杂，性能差异可忽略。\n\n时间复杂度：两遍法 O(n)，比递归 O(n²) 快。',
               },
               {
@@ -3317,7 +3317,7 @@ function buildNext(p) {
                 content: '并查集：判断连通性，O(α(n)) 近似 O(1)。\n\n路径压缩：\n```\nfind(x) {\n  if (parent[x] !== x) parent[x] = find(parent[x])\n  return parent[x]\n}\n```\n- 查找时把路径上所有节点直接挂到根，下次 O(1)。\n\n按秩合并：\n```\nunion(x, y) {\n  const px = find(x), py = find(y)\n  if (rank[px] < rank[py]) parent[px] = py\n  else if (rank[px] > rank[py]) parent[py] = px\n  else { parent[py] = px; rank[px]++ }\n}\n```\n- 小树挂大树，避免链式退化。\n\n两者结合：均摊 O(α(n)) ≈ O(1)，几乎不可能再快。',
               },
               {
-                title: 'Q19: 堆与二叉搜索树的区别？为什么 TopK 用堆？',
+                title: 'Q19 【对比题】: 堆与二叉搜索树的区别？为什么 TopK 用堆？',
                 content: '区别：\n\n- BST：左 < 根 < 右，查找任意值 O(log n)，可中序遍历得有序序列。\n- 堆：完全二叉树 + 父子大小关系（大顶堆父>子），只能取堆顶 O(1)，查找任意值 O(n)。\n\nTopK 用堆的原因：\n\n- 维护大小为 K 的最小堆，遍历数组时比堆顶大的才入堆。\n- 时间 O(n log K)，空间 O(K)。\n- 对比排序 O(n log n) + O(n)：堆更快且省空间。\n- 对比快速选择 O(n) 平均：快选虽快但无法处理数据流（堆可流式处理）。\n\n场景：热门商品 Top10、实时排行榜、React 任务优先级调度。',
               },
               {
@@ -3325,11 +3325,11 @@ function buildNext(p) {
                 content: '问题：\n\n- 滑动窗口求每窗口最大值，朴素法 O(n·k)。\n- 用堆需删除非堆顶元素（懒删除），实现复杂。\n\n单调队列：\n```\nfunction maxSlidingWindow(nums, k) {\n  const res = [], q = [] // 存索引，队首是当前窗口最大\n  for (let i = 0; i < nums.length; i++) {\n    // 1. 队首出窗口\n    while (q.length && q[0] <= i - k) q.shift()\n    // 2. 队尾比当前小则弹出（保持单调递减）\n    while (q.length && nums[q[q.length-1]] <= nums[i]) q.pop()\n    q.push(i)\n    // 3. 窗口形成后记录队首\n    if (i >= k - 1) res.push(nums[q[0]])\n  }\n  return res\n}\n```\n\n时间 O(n)（每个元素入队出队各一次），空间 O(k)。',
               },
               {
-                title: 'Q21: Trie 字典树相比哈希表的优势？',
+                title: 'Q21 【对比题】: Trie 字典树相比哈希表的优势？',
                 content: 'Trie 优势：\n\n1. 前缀匹配：找所有以「app」开头的词（autocomplete），哈希表做不到。\n2. 共享前缀：存储 "apple" + "app" 只用一份 "app" 节点，省空间。\n3. 字典序遍历：DFS Trie 得到有序结果，无需排序。\n4. 最长前缀匹配：路由匹配（/api/user/:id）天然适配。\n\n哈希表优势：\n\n1. 精确查找 O(1)（Trie 是 O(m)，m=键长）。\n2. 实现简单，常数小。\n3. 不限键类型（Trie 只适合字符串）。\n\n场景：路由（Vue Router/Express）、输入联想、IP 路由表、拼写检查。',
               },
               {
-                title: 'Q22: 图的邻接矩阵与邻接表怎么选？',
+                title: 'Q22 【对比题】: 图的邻接矩阵与邻接表怎么选？',
                 content: '邻接矩阵：\n\n- 二维数组 graph[i][j] 表示边权。\n- 空间 O(V²)，稠密图适用。\n- 查边 O(1)，遍历邻接点 O(V)（要扫一行）。\n\n邻接表：\n\n- 数组 + 链表（或 Map），graph[i] 存 i 的邻接点列表。\n- 空间 O(V+E)，稀疏图适用（实际多数是稀疏图）。\n- 查边 O(deg(i))，遍历邻接点 O(deg(i))。\n\n选择：\n\n- 稠密图（E ≈ V²）：矩阵，如完全图、社交关系。\n- 稀疏图（E << V²）：邻接表，如网页链接、依赖图。\n- 前端场景（依赖图、组件树）几乎都是稀疏图，用邻接表。',
               },
               {
@@ -3337,8 +3337,32 @@ function buildNext(p) {
                 content: '本质：\n\n- 给有向无环图（DAG）的节点排成线性顺序，使所有边的方向一致。\n- 应用：任务依赖（先修课程、构建顺序、模块加载）。\n\n实现：\n\n1. DFS 后序逆序：递归访问，节点出栈时加入结果，最后反转。\n2. BFS（Kahn 算法）：维护入度数组，入度 0 的入队，弹出时把邻接点入度 -1，新的 0 入队。\n\n检测环：\n\n- DFS：三色标记（白/灰/黑），遇到灰节点说明有环。\n- BFS：若结果长度 < 节点数，说明有环（环内节点入度永远不为 0）。\n\n场景：Webpack 模块依赖图、Vue 组件依赖、Monorepo 任务调度（turbo）。',
               },
               {
-                title: 'Q24: 时间分片（requestIdleCallback）为什么不能用于动画？',
+                title: 'Q24 【场景题】: 时间分片（requestIdleCallback）为什么不能用于动画？',
                 content: '原因：\n\n1. 触发时机不稳定：只在浏览器空闲时触发，繁忙时可能几十毫秒不调用，动画卡顿。\n2. 优先级低：会被任何用户输入/渲染任务抢占。\n3. 隐藏标签页不触发：切到后台动画会停。\n4. deadline 限制：单次回调最多 50ms，长动画需要切片。\n\n动画应该用 requestAnimationFrame：\n\n1. 与浏览器渲染节拍对齐（每帧 16.67ms）。\n2. 保证流畅（60fps）。\n3. 隐藏标签页自动暂停（省电）。\n\nrIC 适合：日志上报、数据预处理、长列表分帧渲染、低优先级计算。',
+              },
+              {
+                title: 'Q25 【对比题】: 归并排序与快速排序的取舍？',
+                content: '归并排序：\n\n- 稳定排序，时间恒定 O(n log n)（最差也是）。\n- 需要额外 O(n) 空间（非原地）。\n- 适合链表排序、外部排序（大文件分块归并）。\n\n快速排序：\n\n- 不稳定（最差 O(n²)，随机化后期望 O(n log n)）。\n- 原地排序，空间 O(log n)（递归栈）。\n- 常数因子小，实际比归并快。\n- 适合内存数组排序。\n\n选择：\n\n- 需要稳定性 → 归并（Java 对象排序用 TimSort 即归并变体）。\n- 追求速度 + 原地 → 快排（C++ std::sort 即快排变体）。\n- V8 的 Array.sort 用 TimSort（归并 + 插入），兼顾稳定与性能。',
+              },
+              {
+                title: 'Q26: 二分查找的边界条件怎么写才不会死循环？',
+                content: '核心：明确「循环不变量」——区间 [left, right] 的含义。\n\n左闭右闭 [left, right]：\n\n- while (left <= right)，因为 right 是合法候选。\n- mid = (left + right) >> 1。\n- 找目标：命中返回；目标小则 right = mid - 1；目标大则 left = mid + 1。\n- 退出时 left > right，left 即插入位置。\n\n左闭右开 [left, right)：\n\n- while (left < right)，因为 right 不是合法候选。\n- 找目标：目标小则 right = mid；目标大则 left = mid + 1。\n- 退出时 left === right，left 即答案。\n\n防死循环要点：\n\n- mid = left + (right - left) / 2 防溢出。\n- 缩小区间必须让 left 或 right 至少移动一位（left = mid + 1 或 right = mid - 1），否则区间不变死循环。\n\n应用：查找插入位置（LC35）、查找第一个/最后一个（LC34）。',
+              },
+              {
+                title: 'Q27: 位运算有哪些常用技巧与前端场景？',
+                content: '常用技巧：\n\n1. 判奇偶：n & 1，0 偶 1 奇，比 % 2 快。\n2. 交换两数：a ^= b; b ^= a; a ^= b，无需临时变量。\n3. 乘除 2：n << 1 等价 n * 2，n >> 1 等价 n / 2（正数）。\n4. 清最低位的 1：n & (n - 1)，用于统计 1 的个数（Brian Kernighan 法）。\n5. 取最低位的 1：n & -n，等价 n & (~n + 1)，用于树状数组。\n6. 异或去重：a ^ a = 0，a ^ 0 = a，找唯一出现一次的数。\n\n前端场景：\n\n- 权限位掩码：const PERM = { READ: 1, WRITE: 2, EXEC: 4 }，has = perm & PERM.READ。\n- React fibers 的 flags：Placement | Update | ChildDeletion 用位运算合并判断。\n- Webpack 的 module.id 与 chunk 关系用 bitmask。\n\n注意：JS 位运算操作 32 位有符号整数，大数（>2^31）会出错。',
+              },
+              {
+                title: 'Q28 【场景题】: 千万级数据的前端渲染如何用算法优化？',
+                content: '问题拆解：\n\n- 千万级数据无法一次性渲染（DOM 节点上限 + 内存 + 渲染阻塞）。\n- 核心思路：只渲染可视区 + 按需加载。\n\n优化方案：\n\n1. 虚拟列表（必选）：只渲染可视区 + 上下缓冲区（约 20-50 个 DOM），O(可视项数) 而非 O(数据量)。\n2. 分页/无限滚动：后端分批返回，IntersectionObserver 触发加载，避免前端持有全量数据。\n3. 时间分片：用 requestIdleCallback 把非紧急计算（排序/过滤）分帧执行，避免长任务阻塞交互。\n4. Web Worker：大数据排序/聚合放 Worker，主线程只负责渲染。\n5. 增量更新：数据变更时用 key diff（React key / Vue :key）只更新变化的项，避免全量重渲染。\n\n落地：react-window（固定高度）+ 后端分页 + Web Worker 排序，可流畅渲染 100 万+ 项。',
+              },
+              {
+                title: 'Q29 【场景题】: 如何设计一个带 TTL 过期的 LRU 缓存？',
+                content: '需求：\n\n- LRU 淘汰最久未访问。\n- TTL 到期自动失效。\n- get/put 尽量 O(1)。\n\n数据结构：\n\n1. Map（插入序）：LRU 部分用 Map，访问时 delete + set 移到末尾，淘汰删首个。\n2. 过期队列：每个 entry 存 expireAt 时间戳，配合 setTimeout 或惰性删除。\n3. 惰性删除：get 时检查 expireAt，过期则 delete 并返回 -1，不主动扫描。\n4. 主动清理（可选）：setInterval 定期扫描清理过期项，避免内存堆积。\n\n实现要点：\n\n- Map 的 keys().next() 拿最旧 key，O(1) 淘汰。\n- TTL 用惰性删除省 CPU，主动清理省内存，两者结合。\n- 并发安全：JS 单线程无锁，但异步操作中需注意竞态。\n\n场景：接口缓存（5 分钟 TTL + 100 条 LRU）、图片缓存、计算结果缓存。',
+              },
+              {
+                title: 'Q30 【综合】: 面试遇到没见过的算法题如何拆解？',
+                content: '通用拆解框架（5 步法）：\n\n1. 读题 + 举例：\n- 主动举 2-3 组样例（含边界：空、单元素、全相同、超大规模）。\n- 确认输入输出与边界条件，避免理解偏差白写。\n\n2. 暴力法先出：\n- 先说最直观的 O(n²) 暴力解，保证正确性。\n- 再分析瓶颈（重复计算 / 全量遍历），针对性优化。\n\n3. 识别模式：\n- 求「最值」→ DP / 贪心 / 回溯。\n- 求「所有方案」→ 回溯 / DFS。\n- 求「连续子数组」→ 滑动窗口 / 前缀和。\n- 求「有序找值」→ 二分。\n- 求「前 K 个」→ 堆 / 快速选择。\n- 求「连通性」→ 并查集 / BFS / DFS。\n\n4. 编码 + 口述：\n- 边写边讲思路，变量名清晰，处理边界。\n- 复杂度分析主动说（时间 + 空间）。\n\n5. 测试 + 优化：\n- 用样例跑一遍，验证正确性。\n- 主动提优化方向（空间压缩、常数优化）。\n\n心法：面试官看重的是「拆解能力」而非「背过原题」，先暴力再优化比憋着不出强。',
               },
             ],
           },

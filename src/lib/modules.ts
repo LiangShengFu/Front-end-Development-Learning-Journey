@@ -302,9 +302,9 @@ export const moduleSummaries: ModuleSummary[] = [
     stage: 'interview',
     stageLabel: '面试冲刺 · 第 2 模块',
     icon: '25',
-    summary: 'JS/CSS/框架/网络/浏览器/安全八股、STAR 法则、系统设计、简历面试技巧。',
-    knowledgePointCount: 15,
-    visualizationCount: 6,
+    summary: 'JS/CSS/框架/网络/浏览器/安全八股、STAR 法则、系统设计、软技能协作、业务产品思维、简历面试技巧。',
+    knowledgePointCount: 17,
+    visualizationCount: 29,
   },
 ]
 
