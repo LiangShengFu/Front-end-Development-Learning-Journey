@@ -2,8 +2,8 @@
  * 模块 06：CSS 工程化与样式方案
  *
  * 严格遵循 docx/PROJECT_CONTENT.md 与 docx/模块六.md 设计文档：
- * - 17 个知识点（16 章节 + 1 小测验）
- * - 10 个可视化演示
+ * - 21 个知识点（16 章节 + 2 综合实战 + 面试题 + 速查表 + 小测验）
+ * - 12 个可视化演示
  *
  * 适配到项目现有 React+TS+Vite 架构，使用 ModuleMeta 数据驱动：
  * - KP1 样式方案发展历程（Timeline 发展历程）
@@ -30,8 +30,8 @@ export const cssEngineeringModule: ModuleMeta = {
   stageLabel: '通用前置 · 第 1 模块',
   icon: '06',
   summary: 'Sass/Less、Tailwind、CSS Modules、CSS-in-JS、PostCSS、CSS 架构。',
-  knowledgePointCount: 17,
-  visualizationCount: 10,
+  knowledgePointCount: 21,
+  visualizationCount: 12,
   points: [
     // ========================================================================
     // 知识点 1：样式方案发展历程
@@ -1530,6 +1530,8 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 16,
       title: 'CSS 工程化知识图谱',
       difficulty: 1,
+      isNew: true,
+      visualizationType: 'knowledgegraph',
       blocks: [
         {
           id: 'p16-1',
@@ -1539,6 +1541,46 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
         },
         {
           id: 'p16-2',
+          type: 'demo',
+          visualizationType: 'knowledgegraph',
+          data: {
+            nodes: [
+              { id: 'css-eng', label: 'CSS 工程化', group: 0 },
+              { id: 'preprocess', label: '预处理器', group: 1 },
+              { id: 'sass', label: 'Sass/Less', group: 1 },
+              { id: 'atomic', label: '原子化', group: 1 },
+              { id: 'tailwind', label: 'Tailwind', group: 1 },
+              { id: 'modules', label: 'CSS Modules', group: 1 },
+              { id: 'cinjs', label: 'CSS-in-JS', group: 1 },
+              { id: 'postcss', label: 'PostCSS', group: 1 },
+              { id: 'arch', label: 'CSS 架构', group: 1 },
+              { id: 'bem', label: 'BEM/ITCSS/SMACSS', group: 2 },
+              { id: 'modern', label: '现代 CSS', group: 1 },
+              { id: 'container', label: '@container', group: 2 },
+              { id: 'layer', label: '@layer', group: 2 },
+              { id: 'var', label: 'CSS 变量', group: 2 },
+              { id: 'has', label: ':has()', group: 2 },
+            ],
+            edges: [
+              { from: 'css-eng', to: 'preprocess' },
+              { from: 'css-eng', to: 'atomic' },
+              { from: 'css-eng', to: 'modules' },
+              { from: 'css-eng', to: 'cinjs' },
+              { from: 'css-eng', to: 'postcss' },
+              { from: 'css-eng', to: 'arch' },
+              { from: 'css-eng', to: 'modern' },
+              { from: 'preprocess', to: 'sass' },
+              { from: 'atomic', to: 'tailwind' },
+              { from: 'arch', to: 'bem' },
+              { from: 'modern', to: 'container' },
+              { from: 'modern', to: 'layer' },
+              { from: 'modern', to: 'var' },
+              { from: 'modern', to: 'has' },
+            ],
+          },
+        },
+        {
+          id: 'p16-3',
           type: 'list',
           items: [
             '预处理器（Sass/Less）：变量、嵌套、Mixin，编译时增强',
@@ -1552,14 +1594,14 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
           ],
         },
         {
-          id: 'p16-3',
+          id: 'p16-4',
           type: 'callout',
           variant: 'tip',
           title: '选型决策树',
           text: '小型项目→原生 CSS；中后台→Ant Design + CSS Modules；快速原型→Tailwind + Chakra；设计系统→Radix + Tailwind（shadcn/ui）；高度动态主题→CSS 变量 + Zero-Runtime CSS-in-JS。',
         },
         {
-          id: 'p16-4',
+          id: 'p16-5',
           type: 'callout',
           variant: 'info',
           title: '现代趋势',
@@ -1569,29 +1611,401 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
     },
 
     // ========================================================================
-    // 知识点 17：CSS 工程化测验
+    // 知识点 17：综合实战 - BEM 命名重构卡片组件
     // ========================================================================
     {
       order: 17,
-      title: 'CSS 工程化测验',
-      difficulty: 1,
+      title: '综合实战：用 BEM 命名规范重构卡片组件',
+      difficulty: 3,
       isNew: true,
-      visualizationType: 'quiz',
+      visualizationType: 'sandbox',
       blocks: [
         {
           id: 'p17-1',
           type: 'paragraph',
           lead: true,
-          text: '通过以下 8 道题目巩固 CSS 工程化核心知识点，涵盖 Sass、Tailwind、CSS Modules、CSS-in-JS、CSS 架构、现代 CSS 特性。',
+          text: 'BEM（Block__Element--Modifier）是 CSS 工程化最基础的命名规范。本实战串联 BEM 命名、CSS 变量主题、修饰符复用，构建一个可复用、可主题化的卡片组件，从"能跑"到"可维护"。',
         },
         {
           id: 'p17-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '命名冲突是 CSS 工程化的头号痛点。BEM 通过 Block__Element--Modifier 显式表达层级与状态，让类名自文档化、零冲突、易复用。掌握 BEM 是理解 CSS Modules 自动哈希方案价值的前提，也是团队协作的最低公约数。',
+        },
+        {
+          id: 'p17-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'html',
+            hint: '在下方骨架中实现 BEM 卡片：.card 块、.card__title/.card__body 元素、.card--featured 修饰符，配合 CSS 变量支持主题化。',
+            initialCode: `<!-- 综合实战：BEM 命名重构卡片组件 -->
+<!-- 目标：用 BEM 规范重构卡片，支持 featured 修饰符 + CSS 变量主题 -->
+
+<style>
+  :root {
+    /* TODO: 定义 --card-bg / --card-border / --card-accent 等主题变量 */
+  }
+
+  /* TODO: .card 块样式（含 padding、border、radius、background） */
+  /* TODO: .card__title 元素样式 */
+  /* TODO: .card__body 元素样式 */
+  /* TODO: .card--featured 修饰符（覆盖 accent 色、加阴影） */
+</style>
+
+<!-- TODO: 渲染两张卡片，一张普通、一张带 card--featured 修饰符 -->
+<!-- <article class="card">...</article> -->
+<!-- <article class="card card--featured">...</article> -->
+`,
+            checks: [
+              {
+                description: '定义 .card 块样式',
+                pattern: '\\.card\\s*\\{',
+                hint: 'BEM 的 Block 是独立可复用单元，应定义 .card { ... } 作为容器样式（padding/border/radius/background）。',
+              },
+              {
+                description: '使用 __ 命名元素（card__title / card__body）',
+                pattern: 'card__title|card__body',
+                hint: 'BEM 元素用 Block__Element 命名，如 .card__title、.card__body，表示块内子部分，不可独立使用。',
+              },
+              {
+                description: '使用 -- 命名修饰符（card--featured）',
+                pattern: 'card--featured',
+                hint: 'BEM 修饰符用 Block--Modifier 命名，如 .card--featured 表示卡片的"特色"变体，覆盖块的样式（颜色、阴影等）。',
+              },
+              {
+                description: '使用 CSS 变量定义主题色',
+                pattern: '--[a-z-]+\\s*:',
+                hint: '在 :root 定义 --card-bg、--card-border、--card-accent 等变量，样式块用 var() 引用，便于切换主题。',
+              },
+              {
+                description: '修饰符通过 var() 覆盖主题变量',
+                pattern: 'card--featured[\\s\\S]*--card-accent|--accent',
+                hint: '.card--featured 应覆盖 --card-accent 等变量（而非直接写死颜色），让修饰符也能跟随主题系统。',
+              },
+              {
+                description: 'HTML 中正确使用 BEM 类名组合',
+                pattern: 'class="card[\\s"\\S]*card--featured',
+                hint: 'HTML 中修饰符需与块名同时出现：class="card card--featured"（修饰符不能脱离块单独使用）。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p17-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思：BEM 的边界',
+          text: 'BEM 解决命名冲突但靠人工遵守，深层嵌套（.block__element1__element2）是反模式。现代项目用 CSS Modules 自动哈希（编译时保证唯一）或 Tailwind 原子类（无命名）替代手工 BEM。但理解 BEM 仍是团队规范与设计系统命名的基础，且与 CSS 变量、CSS Modules 完全兼容。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 18：综合实战 - Tailwind 响应式导航栏
+    // ========================================================================
+    {
+      order: 18,
+      title: '综合实战：Tailwind 搭建响应式导航栏',
+      difficulty: 3,
+      isNew: true,
+      visualizationType: 'sandbox',
+      blocks: [
+        {
+          id: 'p18-1',
+          type: 'paragraph',
+          lead: true,
+          text: 'Tailwind 是当前最流行的原子化 CSS 方案。本实战串联移动优先响应式断点（sm/md/lg）、flex 布局、hover/dark 变体、配色系统，搭建一个在桌面展开、移动端折叠的导航栏。',
+        },
+        {
+          id: 'p18-2',
+          type: 'callout',
+          variant: 'tip',
+          title: '为什么这个练习重要',
+          text: '响应式是前端刚需，Tailwind 的移动优先断点（sm/md/lg/xl）是其核心生产力。手写一遍能区分"断点前缀的工作机制""暗色模式策略""flex 布局组合"，是从"会用类名"到"会设计响应式系统"的关键一步。生产中 Tailwind + Headless UI 是 shadcn/ui 等主流方案的基础。',
+        },
+        {
+          id: 'p18-3',
+          type: 'demo',
+          visualizationType: 'sandbox',
+          data: {
+            language: 'html',
+            hint: '在下方骨架中实现响应式导航栏：默认（移动）垂直折叠，md: 以上水平展开，支持 hover 与 dark 变体。',
+            initialCode: `<!-- 综合实战：Tailwind 响应式导航栏 -->
+<!-- 目标：移动端垂直折叠，md: 以上水平展开，支持 dark 模式 -->
+
+<nav class="...">
+  <!-- TODO: Logo 区域 -->
+  <!-- TODO: 导航链接列表（默认垂直 flex-col，md: 以上水平 md:flex-row） -->
+  <!-- TODO: 链接 hover 变体（hover:text-blue-500） -->
+  <!-- TODO: 暗色模式变体（dark:text-gray-200） -->
+</nav>
+`,
+            checks: [
+              {
+                description: '使用移动优先响应式断点 md:',
+                pattern: 'md:',
+                hint: 'Tailwind 移动优先：默认样式针对最小屏，md: 前缀（min-width: 768px）针对平板及以上。应出现 md:flex-row 或 md:flex 等断点类名。',
+              },
+              {
+                description: '默认样式针对移动端（垂直布局）',
+                pattern: 'flex-col|flex\\s+flex-col',
+                hint: '默认（无断点前缀）应为移动端垂直布局：class 含 flex flex-col，桌面端用 md:flex-row 覆盖为水平。',
+              },
+              {
+                description: '使用 hover 变体实现交互反馈',
+                pattern: 'hover:',
+                hint: '导航链接应有 hover:text-xxx 或 hover:bg-xxx 等悬停反馈，Tailwind 用 hover: 前缀实现。',
+              },
+              {
+                description: '使用 dark 变体支持暗色模式',
+                pattern: 'dark:',
+                hint: '应包含 dark:bg-xxx / dark:text-xxx 等暗色模式类名，配合 Tailwind config 的 darkMode:"class" 策略切换。',
+              },
+              {
+                description: '使用 flex 布局组合',
+                pattern: 'flex\\s|items-center|justify-between',
+                hint: '导航栏布局用 flex + items-center + justify-between：logo 与链接分两端对齐，垂直居中。',
+              },
+              {
+                description: '导航链接使用语义化标签',
+                pattern: '<a\\s|<nav',
+                hint: '应用 <nav> 包裹导航，内部用 <a> 标签（而非 div）做链接，保证无障碍与 SEO。',
+              },
+            ],
+          },
+        },
+        {
+          id: 'p18-4',
+          type: 'callout',
+          variant: 'warning',
+          title: '实战反思：原子化的取舍',
+          text: 'Tailwind 类名冗长（class="flex items-center..."）是主要批评点，但得益于约束设计系统（限定配色/间距/字号）反而提升一致性。生产实践：复杂组件抽出 @apply 或组件封装（如 shadcn/ui），避免重复类名；暗色模式推荐 class 策略（手动切换）而非 media 策略（跟随系统），便于用户选择。',
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 19：面试题
+    // ========================================================================
+    {
+      order: 19,
+      title: '面试题',
+      difficulty: 3,
+      isNew: true,
+      visualizationType: 'accordion',
+      blocks: [
+        {
+          id: 'p19-1',
+          type: 'paragraph',
+          text: 'CSS 工程化面试高频考点：预处理器、原子化、CSS Modules、CSS-in-JS、CSS 架构、现代 CSS 特性。理解各方案的定位与取舍比背结论更重要。',
+        },
+        {
+          id: 'p19-2',
+          type: 'demo',
+          visualizationType: 'accordion',
+          data: {
+            defaultMode: 'flashcard',
+            title: '高频面试题（含场景题 / 对比题）',
+            items: [
+              {
+                title: 'Q1: CSS 样式方案的发展历程与各阶段解决的核心问题',
+                content: '阶段1 原生 CSS：解决样式与结构分离，但缺变量/复用。阶段2 预处理器(Sass/Less)：解决变量/嵌套/Mixin，编译时增强。阶段3 命名规范(BEM)：解决命名冲突，靠人工遵守。阶段4 CSS Modules：编译时自动哈希，彻底解决命名冲突。阶段5 CSS-in-JS：样式与组件耦合，支持动态主题，但运行时开销。阶段6 原子化(Tailwind)：实用优先，约束设计系统，按需生成。阶段7 现代 CSS(@container/@layer/CSS 变量)：原生能力增强，减少对工具依赖。每阶段解决前一阶段的痛点。',
+              },
+              {
+                title: 'Q2: Sass 变量与 CSS 变量的区别',
+                content: 'Sass 变量：编译时确定为静态值，无法运行时修改，编译后消失（变成字面值）；支持多种数据类型（颜色、数字、列表、map）；作用域分全局与局部（块级）。CSS 变量：运行时生效的自定义属性，可通过 JS 操作（getPropertyValue/setProperty）、媒体查询覆盖、父级覆盖；继承 DOM 树；支持 fallback（var(--x, fallback)）。选型：需运行时主题切换用 CSS 变量；需复杂计算（循环、函数）用 Sass 变量。现代项目优先 CSS 变量做主题，Sass 变量做编译期常量。',
+              },
+              {
+                title: 'Q3: @mixin 与 @extend 的区别与选择',
+                content: '@mixin：复用样式块，支持参数，输出到每个使用位置（重复输出，体积略大）。@extend：继承选择器，生成分组选择器（.a, .b 共享样式），不重复输出但可能选择器爆炸。选择原则：需要参数用 Mixin（如 @include button-variant($color)）；纯共享样式且选择器可控用 extend；复杂场景或担心选择器爆炸用 Mixin。Dart Sass 已弱化 @extend，社区倾向 Mixin + placeholder 占位类。',
+              },
+              {
+                title: 'Q4: Tailwind 的核心理念与适用场景',
+                content: '核心理念：实用优先（Utility-first），提供 bg-blue-500/p-4/flex 等原子工具类，直接在 HTML 组合，无需写自定义 CSS。优势：1) 约束设计系统（配色/间距/字号统一）；2) 按需生成（PurgeCSS 移除未用类，体积小）；3) 无命名冲突；4) 切换主题/暗色模式方便。劣势：类名冗长、学习曲线、HTML 可读性下降。适用：中后台、快速原型、设计系统约束的项目。不适用：高度定制视觉、强语义化类名需求、团队抗拒原子化的项目。',
+              },
+              {
+                title: 'Q5: Tailwind 的响应式断点机制',
+                content: 'Tailwind 移动优先：默认样式针对最小屏，断点前缀（sm/md/lg/xl/2xl）针对 min-width 升级。默认断点：sm=640px、md=768px、lg=1024px、xl=1280px、2xl=1536px。如 class="flex-col md:flex-row" 表示移动端垂直、md 及以上水平。自定义：tailwind.config.js 的 theme.screens 覆盖。注意：max-* 前缀（max-md:）针对 max-width 桌面优先，现代项目用得少。响应式组合：class="text-sm md:text-base lg:text-lg"。',
+              },
+              {
+                title: 'Q6: CSS Modules 的工作原理',
+                content: 'CSS Modules 在编译时为类名添加唯一哈希（如 .btn → .Button_btn__a1b2c），实现局部作用域，彻底解决命名冲突。文件命名约定：*.module.css。编译产物：类名被替换为哈希形式，CSS 与 JS 各自维护映射。composes: btn 复用其他样式（类似 @extend），:global(.reset) 定义全局类名。Vite/Next.js 原生支持，无需配置。TypeScript 需声明 *.module.css 模块类型。优势：编译时保证唯一、零运行时、与框架解耦。劣势：跨组件复用较弱（需 composes 或 CSS 变量）。',
+              },
+              {
+                title: 'Q7: CSS-in-JS 的运行时与零运行时方案对比',
+                content: '运行时方案（styled-components/emotion）：在浏览器中动态生成类名与样式表，支持完全动态主题（props 驱动），但有运行时开销（~10-30KB）、SSR 复杂（需提取样式表）。零运行时方案（Vanilla Extract/Linaria/Panda CSS）：编译时生成静态 CSS，无运行时开销，但动态主题受限（需用 CSS 变量传值）。React 18 + 并发渲染下，运行时 CSS-in-JS 因 hook 调用顺序问题受诟病（styled-components 曾警告），社区转向零运行时或 Tailwind。选型：SSR/性能敏感用零运行时；需完全动态样式用运行时但谨慎评估。',
+              },
+              {
+                title: 'Q8: PostCSS 的作用与典型插件',
+                content: 'PostCSS 是 CSS 后处理器（不是预处理器），用 JS 插件转换 CSS AST。典型插件：autoprefixer（自动加浏览器前缀）、cssnano（压缩）、postcss-preset-env（用未来 CSS 语法，自动降级）、tailwindcss（Tailwind 本身是 PostCSS 插件）、postcss-modules（实现 CSS Modules）。与 Sass 区别：Sass 增强语法（变量/嵌套/Mixin），PostCSS 转换现有 CSS（前缀/降级/优化）。现代项目 PostCSS 是事实标准，Tailwind/autoprefixer 都基于它。配置：postcss.config.js。',
+              },
+              {
+                title: 'Q9: BEM 命名规范的语法与优劣',
+                content: '语法：Block__Element--Modifier。Block 是独立可复用单元（.card）；Element 是块内子部分（.card__title）；Modifier 是块或元素的状态变体（.card--featured / .card__title--large）。HTML 中修饰符需与块名同时出现：class="card card--featured"。优势：类名自文档化、零命名冲突、表达层级与状态、易复用。劣势：类名冗长、深层嵌套是反模式（.block__e1__e2 错误）、靠人工遵守。现代替代：CSS Modules 自动哈希、Tailwind 原子类无命名。但 BEM 仍是团队规范与设计系统命名的基础。',
+              },
+              {
+                title: 'Q10: ITCSS 与 SMACSS 的分层思想',
+                content: 'ITCSS（Inverted Triangle CSS）：从通用到具体分 7 层 - Settings/Tokens（变量）、Tools（Mixin/Function）、Generic（reset/normalize）、Elements（标签样式）、Objects（无视觉的布局类）、Components（组件样式）、Utilities（工具类）。下层可使用上层，不可反向。SMACSS（Scalable Modular CSS）：分 5 类 - Base（标签样式）、Layout（布局）、Module（组件）、State（状态类 .is-active）、Theme（主题）。两者都是"分层 + 限定依赖方向"思想，解决大项目的样式组织。现代项目用 CSS Modules/Tailwind 后，分层思想体现在 tokens 层（CSS 变量）与组件层。',
+              },
+              {
+                title: 'Q11: 容器查询 @container 与媒体查询 @media 的区别',
+                content: '@media 基于视口宽度，组件在不同位置表现一致（无法感知容器），适合页面级响应式。@container 基于父容器宽度（需先 container-type: inline-size），组件根据可用空间自适应，适合可复用组件。使用：1) 父级声明 container-type: inline-size；2) 子级用 @container (min-width: 400px) { ... }。优势：组件级响应式，真正解耦组件与页面布局。劣势：兼容性较新（2023 年主流浏览器支持），旧项目需 polyfill。选型：可复用组件（卡片、侧边栏、表格）用容器查询；页面整体布局用媒体查询。',
+              },
+              {
+                title: 'Q12: @layer 层叠层的作用与使用',
+                content: '@layer 声明层叠层，显式控制样式优先级。声明顺序决定优先级：后声明的层优先级高。如 @layer reset, base, components, utilities; 中 utilities 层优先级最高，即使特异性低也会覆盖其他层。用途：1) 覆盖第三方库样式无需 !important；2) 组织样式架构（reset/base/components/utilities）；3) 解决样式覆盖难题。注意：未声明在层中的样式优先级高于所有层（"未分层样式"最强）。浏览器兼容性 2022 年后主流支持。选型：大型项目组织样式层；覆盖第三方库优先用 @layer 而非 !important。',
+              },
+              {
+                title: 'Q13: CSS 变量如何实现主题切换',
+                content: '原理：CSS 变量（自定义属性）运行时生效，可被 JS 操作与选择器覆盖。实现：1) :root 定义默认变量（--color-bg、--color-text 等）；2) [data-theme="dark"] 或 .dark 选择器覆盖变量值；3) 样式用 var() 引用变量。切换：JS 操作 document.documentElement.dataset.theme = "dark" 或 classList.toggle("dark")。优势：零运行时开销（纯 CSS）、切换瞬时、SSR 友好、可与 Tailwind dark: 变体配合。注意：变量继承 DOM 树，组件级变量可被父级覆盖（.hero { --card-padding: 32px }）；fallback 语法 var(--x, #fff) 防未定义。',
+              },
+              {
+                title: 'Q14: CSS 作用域与样式隔离的方案',
+                content: '方案一 Shadow DOM：Web Components 原生隔离，样式与子树完全封闭，外部无法渗透（除非用 ::part）。方案二 CSS Modules：编译时哈希类名，逻辑隔离（仍全局样式表，但类名唯一）。方案三 CSS-in-JS：运行时生成唯一类名（styled-components）或作用域容器（emotion css={...}）。方案四 @scope（新）：CSS 原生作用域，@scope (.card) { ... } 限定样式作用范围。方案五 iframe：物理隔离，但通信与样式注入复杂。选型：Web Components 用 Shadow DOM；React 组件用 CSS Modules 或 CSS-in-JS；样式隔离实验用 @scope（兼容性较新）。',
+              },
+              {
+                title: 'Q15: CSS 性能优化方案',
+                content: '1) 减少选择器复杂度：避免深层嵌套（.a .b .c .d）、避免通用选择器（*）、避免属性选择器过度使用。2) 减少回流重绘：transform/opacity 代替 top/left/width（触发合成层而非回流）；批量改样式用 class 切换；脱离文档流（display:none）操作。3) 减少样式表体积：PurgeCSS/Tailwind 按需生成移除未用类；cssnano 压缩；@import 改为 <link>（避免串行加载）。4) 关键 CSS 内联：首屏样式 inline 到 <head>，非关键 CSS 异步加载。5) CSS containment：contain: layout paint 隔离重排范围。6) will-careful 用 will-change 提示浏览器优化（但勿滥用）。',
+              },
+              {
+                title: 'Q16: will-change 的作用与陷阱',
+                content: 'will-change: transform 提示浏览器该元素即将变化，提前优化（创建合成层、预分配资源），用于动画/拖拽元素提升流畅度。陷阱：1) 滥用导致内存爆炸（每个 will-change 元素都创建合成层）；2) 长期保留 will-change 浪费资源（应在变化结束后移除）；3) 已用 transform 做动画时无需 will-change（浏览器已优化）。正确用法：在动画开始前设置（如 hover 时），动画结束后移除；或仅对频繁动画的元素长期设置。替代：CSS containment（contain）隔离重排范围，更轻量。',
+              },
+              {
+                title: 'Q17: CSS Houdini 的能力与限制',
+                content: 'CSS Houdini 让 JS 直接操作 CSS 引擎，扩展 CSS 能力。API：1) Paint API（自定义绘制，如实现气泡箭头、复杂背景）；2) Layout API（自定义布局，如实现 masonry 瀑布流）；3) Properties & Values API（注册自定义属性类型，如 @property --angle { syntax: "<angle>"; ... } 让变量参与动画）；4) Worklet（在独立线程跑自定义渲染逻辑）。优势：突破 CSS 原生限制，性能优（独立线程）。限制：兼容性差（Chrome 较好，Safari/Firefox 部分支持），生产用得少。@property 是最实用的子集，已用于高级动画（如渐变角度动画）。',
+              },
+              {
+                title: 'Q18: :has() 选择器的作用与场景',
+                content: ':has() 是父选择器（实际是"关系选择器"），让 CSS 能根据子元素状态选父级。如 .card:has(img) 选中含 img 的 .card；.form:has(input:invalid) 高亮含非法输入的表单。场景：1) 根据子元素状态样式化父级（以前需 JS）；2) 实现复杂条件样式（如"前一个兄弟是 h1 的 p 加 margin"）。兼容性 2023 年主流浏览器支持。注意：性能敏感场景慎用（需回溯检查），但浏览器已优化。:has() 是 CSS 选择器近年最大增强，替代大量 JS 交互逻辑。',
+              },
+              {
+                title: 'Q19: CSS 调试技巧',
+                content: '1) Chrome DevTools Elements 面板：实时编辑样式、查看计算值（Computed）、盒模型可视化。2) :hover/:focus 调试：在 Styles 面板点 :hov 触发伪类，无需实际交互。3) 选择器特异性：Styles 面板显示被覆盖规则（划线），可判断为何样式未生效。4) 层叠层调试：@layer 顺序影响优先级，用 Layers 面板查看。5) 未生效排查：检查选择器拼写、特异性、层叠层顺序、!important 滥用、CSS Modules 哈希、Tailwind 类名拼写。6) 性能：Performance 面板看 Layout/Recalculate Style 耗时，定位回流重绘热点。7) CSS overview 面板：统计配色/字号/对比度，发现设计系统不一致。',
+              },
+              {
+                title: 'Q20: CSS 样式覆盖的优先级规则',
+                content: '优先级（从低到高）：1) 浏览器默认样式（user-agent）；2) 用户样式（浏览器设置）；3) 作者样式（开发者写的 CSS）。作者样式内：1) !important > 普通；2) 层叠层（@layer）：未分层 > 后声明层 > 先声明层；3) 特异性：内联 style > ID > 类/属性/伪类 > 元素/伪元素（计算 a,b,c,d）；4) 来源顺序：后写的覆盖先写的。注意：!important 会破坏正常层叠，应优先用 @layer 或调整特异性；CSS Modules 哈希不影响特异性（仍是类选择器）；内联 style 可被 !important 覆盖但不可被普通规则覆盖。',
+              },
+              {
+                title: 'Q21: CSS 加载与渲染阻塞',
+                content: 'CSS 是渲染阻塞资源：浏览器需等 CSSOM 构建完才会渲染，避免 FOUC（无样式闪烁）。优化：1) 关键 CSS 内联到 <head>（首屏样式）；2) 非关键 CSS 异步加载（media="print" onload="this.media=\'all\'" 或 preload）；3) 减少 CSS 体积（PurgeCSS/压缩）；4) 避免 @import（串行加载，改用 <link> 并行）；5) preload 关键 CSS（<link rel="preload" as="style">）。注意：JS 执行会等 CSSOM（因 JS 可能读样式），CSS 阻塞渲染也间接阻塞 JS 执行。SSR 项目尤其要控制首屏 CSS 体积。',
+              },
+              {
+                title: 'Q22: CSS 与 SEO/无障碍的关系',
+                content: 'SEO：1) 语义化标签（<nav>/<main>/<article>）优于 div + class，搜索引擎理解结构；2) 隐藏内容用 .visually-hidden（clip/position）而非 display:none（后者不索引）；3) 关键内容在 DOM 前部（CSS 定位调整视觉顺序不影响 DOM 顺序）。无障碍：1) 颜色对比度（WCAG AA 4.5:1 文本、3:1 大文本）；2) :focus-visible 显示焦点轮廓（勿 outline:none 无替代）；3) 动画尊重 prefers-reduced-motion；4) 暗色模式对比度。CSS 工程化应将这些标准内置到设计 tokens（--color-text-contrast 等）。',
+              },
+              {
+                title: 'Q23: 设计系统的 CSS 实现方案',
+                content: '设计系统（Design System）包含 tokens、组件、规范，CSS 实现核心是 tokens 层。方案：1) CSS 变量做 tokens（--color-primary、--space-md、--radius），运行时可切换；2) Sass/Less 变量做编译期 tokens（配色/字号），编译后静态；3) Tailwind config 做 tokens（theme.extend.colors/spacing），约束设计系统；4) Style Dictionary 跨平台 tokens（Web/iOS/Android 共享）。组件层：CSS Modules 或 CSS-in-JS 或 Tailwind 组件类。现代主流：CSS 变量做主题 tokens + Tailwind 做工具类 + shadcn/ui 做组件层（基于 Radix Headless + Tailwind）。',
+              },
+              {
+                title: 'Q24: Tailwind 的 @apply 指令',
+                content: '@apply 在 CSS 中复用 Tailwind 工具类，如 .btn { @apply bg-blue-500 text-white p-4 rounded; }。用途：1) 抽取重复工具类组合为语义化类名（组件类）；2) 在第三方库样式中应用 Tailwind；3) 与 CSS 变量结合做主题化组件。争议：过度使用 @apply 会失去 Tailwind 的"无命名"优势，回到传统语义化类名。社区建议：简单组合用 @apply，复杂逻辑直接写工具类；@apply 适合组件封装层（如 .btn-primary），不适合业务页面。注意：@apply 不能应用 @screen、@variant 等特殊指令；Tailwind v4 调整了 @apply 语义。',
+              },
+              {
+                title: 'Q25: CSS Modules 的 composes 用法',
+                content: 'composes 复用其他类样式，类似 Sass @extend 但作用域在模块内。用法：1) 同文件 composes: btn;（.primary { composes: btn; background: blue; }）；2) 跨文件 composes: btn from "./button.module.css";。编译后类名组合：class="Button_btn__a1b2 Button_primary__d3e4"，样式叠加。优势：编译时保证唯一、无运行时、与框架解耦。与 @extend 区别：composes 是模块级（不跨文件除非显式 import），@extend 是全局（易选择器爆炸）。与 Tailwind 区别：composes 仍是语义化类名，Tailwind 是原子类无命名。',
+              },
+              {
+                title: 'Q26 【场景题】: 老项目从 Sass 迁移到 Tailwind，如何评估与执行',
+                content: '评估：1) 项目规模与团队熟悉度（团队抗拒则失败）；2) 现有设计系统是否约束（Sass 自由配色难迁移）；3) 组件复用程度（高复用适合 Tailwind 约束）。执行步骤：1) 渐进迁移，非大爆炸重写（先新页面用 Tailwind，旧页面保留 Sass）；2) 配置 tailwind.config.js 映射现有设计 tokens（colors 映射 Sass 变量值）；3) 提取重复工具类组合为组件类（@apply）；4) 旧 Sass 文件用 PurgeCSS 移除未用样式；5) 团队培训与代码评审。风险：类名冗长可读性下降、设计系统漂移、与 CSS Modules 兼容（混用）。回退方案：保留 Sass，仅新项目用 Tailwind。',
+              },
+              {
+                title: 'Q27 【场景题】: 首屏 LCP 慢，定位到 CSS 阻塞，如何优化',
+                content: '排查：1) DevTools Network 看 CSS 加载顺序与体积；2) Performance 看渲染阻塞时间（CSSOM 构建耗时）；3) Lighthouse 看 LCP 元素与阻塞资源。优化方案：1) 关键 CSS（首屏用到的样式）内联到 <head>（<style> 标签），消除阻塞；2) 非关键 CSS 异步加载（media="print" onload、preload）；3) 压缩 CSS（cssnano）、移除未用样式（PurgeCSS）；4) 避免 @import（串行加载，改 <link> 并行）；5) 拆分 CSS 按路由加载（如 Vue/React 路由级 CSS）；6) preload 关键 CSS（<link rel="preload" as="style">）；7) 减少选择器复杂度加速 CSSOM 解析。验证：Lighthouse LCP < 2.5s，Coverage 工具看未用 CSS 占比。',
+              },
+              {
+                title: 'Q28 【对比题】: CSS Modules vs CSS-in-JS',
+                content: 'CSS Modules：编译时哈希类名，零运行时，与框架解耦（Vue/React/原生都支持），SSR 友好。劣势：动态主题需借 CSS 变量，跨组件复用较弱（composes）。CSS-in-JS：运行时（styled-components）或零运行时（Vanilla Extract），样式与组件耦合，支持完全动态主题（props 驱动），TypeScript 类型安全。劣势：运行时方案有性能开销与 SSR 复杂，React 18 并发渲染下受诟病。选型：SSR/性能敏感用 CSS Modules；需完全动态样式（如根据 props 变色）用零运行时 CSS-in-JS；纯静态项目两者皆可，CSS Modules 更轻。',
+              },
+              {
+                title: 'Q29 【对比题】: Tailwind vs 传统 BEM + Sass',
+                content: 'Tailwind：原子类无命名，约束设计系统，按需生成体积小，移动优先响应式便捷。劣势：类名冗长、HTML 可读性差、学习曲线、强约束可能限制创意。BEM + Sass：语义化类名可读，Sass 提供变量/嵌套/Mixin 增强表达力，团队熟悉。劣势：命名靠人工遵守易冲突，样式体积大（写多少用多少），设计系统约束弱。选型：快速开发/中后台/设计系统约束用 Tailwind；复杂视觉/团队抗拒原子化/需强语义化用 BEM + Sass。现代实践：两者可混用，Tailwind 做布局与原子，BEM 做复杂组件，Sass 变量做编译期常量。',
+              },
+              {
+                title: 'Q30 【对比题】: 媒体查询 @media vs 容器查询 @container',
+                content: '@media：基于视口宽度（min-width: 768px），全局唯一参照系，组件在不同位置表现一致。优势：兼容性好（IE9+）、简单。劣势：无法感知容器，组件在窄侧边栏与宽主区域表现一致。@container：基于父容器宽度（需先 container-type: inline-size），组件根据可用空间自适应。优势：组件级响应式、真正解耦组件与页面、可复用。劣势：兼容性较新（2023 年主流支持）、需显式声明 container-type。选型：可复用组件（卡片、表格、侧边栏）用容器查询；页面整体布局用媒体查询；两者可配合（页面用媒体查询，组件内用容器查询）。',
+              },
+            ],
+          },
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 20：知识点速查表
+    // ========================================================================
+    {
+      order: 20,
+      title: '知识点速查表',
+      difficulty: 1,
+      isNew: true,
+      blocks: [
+        {
+          id: 'p20-1',
+          type: 'paragraph',
+          lead: true,
+          text: '浓缩 CSS 工程化各方案的核心语法与要点，复习时快速定位关键点。',
+        },
+        {
+          id: 'p20-2',
+          type: 'table',
+          caption: 'CSS 工程化核心知识点速查',
+          headers: ['主题', '核心语法 / API', '要点提示'],
+          rows: [
+            ['Sass 变量', '$primary: #3b82f6;', '编译时确定；支持颜色/数字/列表/map；块级作用域'],
+            ['CSS 变量', '--color-primary: #3b82f6; var(--color-primary)', '运行时生效；可被 JS 操作与选择器覆盖；继承 DOM 树'],
+            ['Sass 嵌套', '.card { &__title { } }', '& 引用父选择器；避免深层嵌套（>3 层反模式）'],
+            ['Sass Mixin', '@mixin name($arg) { } @include name(x);', '复用样式块支持参数；输出到每个使用位置'],
+            ['Sass extend', '%base { } .a { @extend %base; }', '继承选择器生成分组（.a, .b）；易选择器爆炸'],
+            ['BEM', '.block__element--modifier', 'Block 独立单元；__Element 子部分；--Modifier 状态变体'],
+            ['Tailwind 断点', 'sm: md: lg: xl: 2xl: (640/768/1024/1280/1536)', '移动优先；默认针对最小屏；前缀针对 min-width'],
+            ['Tailwind 变体', 'hover: focus: dark: group-hover:', '变体前缀实现交互/状态/暗色模式；可叠加 hover:dark:bg-x'],
+            ['Tailwind @apply', '.btn { @apply bg-blue-500 p-4; }', 'CSS 中复用工具类；适合组件封装层；勿滥用'],
+            ['CSS Modules', '*.module.css; .btn 哈希为 Button_btn__a1b2', '编译时自动哈希；composes 复用；:global 全局类'],
+            ['CSS-in-JS', 'styled.button`color: red` (运行时)', '样式与组件耦合；支持动态主题；SSR 复杂'],
+            ['Zero-Runtime', 'Vanilla Extract/Linaria/Panda CSS', '编译时生成静态 CSS；无运行时开销；动态主题受限'],
+            ['PostCSS', 'postcss.config.js + 插件', 'CSS 后处理器；autoprefixer/cssnano/preset-env'],
+            ['autoprefixer', '自动加 -webkit-/-moz- 等前缀', '基于 browserslist；无需手写前缀'],
+            ['@container', 'container-type: inline-size; @container (min-width: 400px)', '基于父容器宽度；组件级响应式；2023 主流支持'],
+            ['@layer', '@layer reset, base, components;', '显式控制优先级；后声明层优先；未分层样式最强'],
+            [':has()', '.card:has(img) { }', '父选择器（关系选择器）；根据子元素状态选父级'],
+            ['CSS 变量主题', ':root { --x } [data-theme="dark"] { --x }', '切换 data-theme 或 class 即切换主题；零运行时'],
+            ['composes', '.primary { composes: btn; }', 'CSS Modules 内复用样式；编译为类名组合'],
+            ['prefers-color-scheme', '@media (prefers-color-scheme: dark)', '跟随系统暗色模式；可配合 class 策略手动切换'],
+            ['contain', 'contain: layout paint style;', '隔离重排重绘范围；性能优化；will-change 替代'],
+          ],
+        },
+      ],
+    },
+
+    // ========================================================================
+    // 知识点 21：CSS 工程化小测验
+    // ========================================================================
+    {
+      order: 21,
+      title: 'CSS 工程化小测验',
+      difficulty: 3,
+      isNew: true,
+      visualizationType: 'quiz',
+      blocks: [
+        {
+          id: 'p21-1',
+          type: 'paragraph',
+          lead: true,
+          text: '通过以下 20 道题目巩固 CSS 工程化核心知识点，涵盖 Sass、Tailwind、CSS Modules、CSS-in-JS、CSS 架构、现代 CSS 特性，含记忆/理解/应用三梯度。',
+        },
+        {
+          id: 'p21-2',
           type: 'demo',
           visualizationType: 'quiz',
           data: {
             questions: [
               {
-                question: 'Tailwind CSS 的设计理念是什么？',
+                question: '【记忆】Tailwind CSS 的设计理念是什么？',
                 options: [
                   '组件优先，提供预制组件',
                   '实用优先，提供原子化工具类',
@@ -1602,7 +2016,7 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: 'Tailwind 采用实用优先（Utility-first）理念，提供 bg-blue-500、p-4 等原子化工具类，直接在 HTML 中组合，无需编写自定义 CSS。',
               },
               {
-                question: 'Sass 中 @extend 和 @mixin 的主要区别是什么？',
+                question: '【记忆】Sass 中 @extend 和 @mixin 的主要区别是什么？',
                 options: [
                   '@extend 支持参数，@mixin 不支持',
                   '@mixin 复用样式块（支持参数），@extend 继承选择器',
@@ -1613,7 +2027,7 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: '@mixin 复用样式块且支持参数，输出到每个使用位置；@extend 继承选择器，生成分组选择器（.a, .b）。需要参数用 Mixin，纯共享样式用 extend。',
               },
               {
-                question: 'CSS Modules 如何解决命名冲突？',
+                question: '【记忆】CSS Modules 如何解决命名冲突？',
                 options: [
                   '使用 BEM 命名规范',
                   '编译时为类名添加唯一哈希',
@@ -1624,13 +2038,13 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: 'CSS Modules 在编译时为类名添加唯一哈希（如 Button_primary__a1b2c），实现局部作用域，彻底解决命名冲突，无需人工遵守命名规范。',
               },
               {
-                question: 'Tailwind 的移动优先响应式中，md: 前缀对应的最小宽度是多少？',
+                question: '【记忆】Tailwind 的移动优先响应式中，md: 前缀对应的最小宽度是多少？',
                 options: ['640px', '768px', '1024px', '1280px'],
                 correctIndex: 1,
                 explanation: 'Tailwind 默认断点：sm=640px、md=768px、lg=1024px、xl=1280px、2xl=1536px。md: 对应 min-width: 768px，针对平板设备。',
               },
               {
-                question: 'CSS 变量与 Sass 变量的关键区别是什么？',
+                question: '【记忆】CSS 变量与 Sass 变量的关键区别是什么？',
                 options: [
                   'CSS 变量性能更好',
                   'CSS 变量运行时生效，Sass 变量编译时确定',
@@ -1641,7 +2055,7 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: 'Sass 变量在编译时确定为静态值，无法运行时修改。CSS 变量（自定义属性）在运行时生效，可通过 JS 操作、媒体查询覆盖，实现动态主题切换。',
               },
               {
-                question: '@layer 层叠层的主要作用是什么？',
+                question: '【记忆】@layer 层叠层的主要作用是什么？',
                 options: [
                   '压缩 CSS 文件体积',
                   '自动添加浏览器前缀',
@@ -1652,7 +2066,7 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: '@layer 声明层叠层，显式控制优先级。低优先级层的规则即使特异性高也会被高优先级层覆盖，无需 !important 即可覆盖第三方库样式。',
               },
               {
-                question: 'BEM 命名规范中，.card__title--active 表示什么？',
+                question: '【记忆】BEM 命名规范中，.card__title--active 表示什么？',
                 options: [
                   'card 组件的 title 元素的 active 修饰符',
                   'card 组件的 active 元素',
@@ -1663,7 +2077,7 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 explanation: 'BEM 格式 Block__Element--Modifier。.card__title--active 中 card 是块（Block），title 是元素（Element），active 是修饰符（Modifier）。',
               },
               {
-                question: '容器查询 @container 与媒体查询 @media 的核心区别是什么？',
+                question: '【记忆】容器查询 @container 与媒体查询 @media 的核心区别是什么？',
                 options: [
                   '容器查询性能更好',
                   '容器查询基于父容器宽度，媒体查询基于视口宽度',
@@ -1672,6 +2086,138 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
                 ],
                 correctIndex: 1,
                 explanation: '媒体查询基于视口宽度，组件在不同位置表现一致。容器查询基于父容器宽度，组件根据可用空间自适应，实现真正的组件级响应式，适合可复用组件。',
+              },
+              {
+                question: '【理解】PostCSS 与 Sass 的本质区别是什么？',
+                options: [
+                  'PostCSS 是预处理器，Sass 是后处理器',
+                  'PostCSS 是后处理器转换 CSS AST，Sass 是预处理器增强语法',
+                  '两者都是预处理器，仅语法不同',
+                  'PostCSS 只能压缩，Sass 才能加前缀',
+                ],
+                correctIndex: 1,
+                explanation: 'Sass 增强语法（变量/嵌套/Mixin），生成新 CSS；PostCSS 是后处理器，转换现有 CSS 的 AST（前缀/降级/优化）。现代项目 PostCSS 是事实标准，autoprefixer/Tailwind 都基于它。',
+              },
+              {
+                question: '【理解】CSS-in-JS 运行时方案与零运行时方案的主要区别是什么？',
+                options: [
+                  '运行时方案体积更小',
+                  '零运行时方案编译时生成静态 CSS，无运行时开销但动态主题受限',
+                  '零运行时方案已废弃',
+                  '运行时方案不支持动态主题',
+                ],
+                correctIndex: 1,
+                explanation: '运行时方案（styled-components）浏览器动态生成样式，支持完全动态主题但有开销；零运行时方案（Vanilla Extract）编译时生成静态 CSS，无开销但动态主题需借 CSS 变量。',
+              },
+              {
+                question: '【理解】Tailwind 移动优先响应式与桌面优先的根本区别是什么？',
+                options: [
+                  '移动优先默认样式针对最小屏，断点前缀针对 min-width 升级',
+                  '移动优先只支持手机，不支持桌面',
+                  '移动优先体积更小',
+                  '桌面优先性能更好',
+                ],
+                correctIndex: 0,
+                explanation: '移动优先：默认样式针对最小屏，md: 前缀（min-width: 768px）针对平板及以上升级。桌面优先相反，默认针对桌面，max-md: 针对 max-width 降级。现代项目主流移动优先。',
+              },
+              {
+                question: '【理解】CSS Modules 的 composes 与 Sass @extend 的关键区别是什么？',
+                options: [
+                  'composes 是全局的，@extend 是模块级的',
+                  'composes 是模块级（除非显式 import），@extend 是全局易选择器爆炸',
+                  'composes 不支持跨文件，@extend 支持',
+                  '两者完全等价',
+                ],
+                correctIndex: 1,
+                explanation: 'composes 作用域在模块内（除非 from 显式 import），编译为类名组合；@extend 是全局的，生成分组选择器（.a, .b），易选择器爆炸。composes 更安全可控。',
+              },
+              {
+                question: '【理解】@layer 中"未分层样式"与"分层样式"的优先级关系是什么？',
+                options: [
+                  '未分层样式优先级最低',
+                  '未分层样式优先级最高，覆盖所有层',
+                  '两者优先级相同',
+                  '取决于声明顺序',
+                ],
+                correctIndex: 1,
+                explanation: '@layer 中，未声明在任何层中的样式（"未分层样式"）优先级最高，覆盖所有分层样式。分层样式间，后声明的层优先级高于先声明的层。这是 @layer 的关键规则。',
+              },
+              {
+                question: '【理解】ITCSS 的分层思想是什么？',
+                options: [
+                  '从具体到通用分层，上层依赖下层',
+                  '从通用到具体分层（Settings→Tools→Generic→Elements→Objects→Components→Utilities），下层可用上层',
+                  '不分层，所有样式平等',
+                  '只分两层：基础与组件',
+                ],
+                correctIndex: 1,
+                explanation: 'ITCSS（倒三角 CSS）从通用到具体分 7 层：Settings/Tokens（变量）→Tools（Mixin）→Generic（reset）→Elements（标签）→Objects（布局）→Components（组件）→Utilities（工具类）。下层可用上层，不可反向。',
+              },
+              {
+                question: '【应用】以下哪个场景最适合用容器查询 @container？',
+                options: [
+                  '页面整体布局随视口变化',
+                  '可复用卡片组件在不同容器宽度下自适应',
+                  '主题色切换',
+                  '压缩 CSS 体积',
+                ],
+                correctIndex: 1,
+                explanation: '容器查询基于父容器宽度，适合可复用组件（卡片、表格、侧边栏）在不同位置自适应。页面整体布局用媒体查询；主题切换用 CSS 变量；压缩用 PostCSS。',
+              },
+              {
+                question: '【应用】实现暗色模式切换，最佳方案是什么？',
+                options: [
+                  '用 Sass 变量定义两套主题，编译切换',
+                  '用 CSS 变量 + [data-theme="dark"] 选择器覆盖，JS 切换 data 属性',
+                  '用 @media 强制覆盖所有样式',
+                  '用 !important 强制切换颜色',
+                ],
+                correctIndex: 1,
+                explanation: 'CSS 变量运行时生效，:root 定义默认值，[data-theme="dark"] 覆盖变量值，样式用 var() 引用。JS 切换 document.documentElement.dataset.theme 即瞬时切换，零运行时开销，SSR 友好。',
+              },
+              {
+                question: '【应用】要覆盖第三方库样式但不污染全局，最佳实践是？',
+                options: [
+                  '直接用 !important 强制覆盖',
+                  '用 @layer 声明层叠层，将覆盖样式放在更高优先级层',
+                  '删除第三方库样式表',
+                  '用内联 style 覆盖',
+                ],
+                correctIndex: 1,
+                explanation: '@layer 显式控制优先级，将覆盖样式放在更高优先级层，即使特异性低也能覆盖第三方库样式，无需 !important。注意未分层样式优先级最高，第三方库若未分层需把覆盖也放未分层或更高层。',
+              },
+              {
+                question: '【应用】CSS Modules 中要复用其他文件的 .btn 样式，正确写法是？',
+                options: [
+                  '.primary { @extend btn; }',
+                  '.primary { composes: btn from "./button.module.css"; }',
+                  'import btn from "./button.module.css"',
+                  '.primary { @apply btn; }',
+                ],
+                correctIndex: 1,
+                explanation: 'composes 跨文件复用语法：composes: btn from "./button.module.css";。编译后类名组合（Button_btn__a1b2 Button_primary__d3e4）。同文件用 composes: btn;。@extend 是 Sass 语法，@apply 是 Tailwind 语法。',
+              },
+              {
+                question: '【对比】CSS Modules 与 CSS-in-JS 的核心区别是什么？',
+                options: [
+                  'CSS Modules 有运行时开销，CSS-in-JS 没有',
+                  'CSS Modules 编译时哈希零运行时，CSS-in-JS 运行时方案支持完全动态主题',
+                  '两者完全等价',
+                  'CSS Modules 只支持 Vue，CSS-in-JS 只支持 React',
+                ],
+                correctIndex: 1,
+                explanation: 'CSS Modules 编译时哈希类名，零运行时，与框架解耦，SSR 友好，但动态主题需借 CSS 变量。CSS-in-JS 运行时方案（styled-components）支持 props 驱动完全动态主题，但有开销与 SSR 复杂。',
+              },
+              {
+                question: '【对比】媒体查询 @media 与容器查询 @container 的核心区别是什么？',
+                options: [
+                  '媒体查询基于视口宽度，容器查询基于父容器宽度',
+                  '媒体查询性能更好',
+                  '容器查询已废弃',
+                  '两者完全等价',
+                ],
+                correctIndex: 0,
+                explanation: '@media 基于视口宽度，组件在不同位置表现一致，适合页面级响应式。@container 基于父容器宽度（需 container-type: inline-size），组件根据可用空间自适应，适合可复用组件。可配合使用。',
               },
             ],
           },

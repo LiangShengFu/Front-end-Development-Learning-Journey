@@ -434,7 +434,7 @@ console.log('display:', computed.display)`,
     {
       order: 7,
       title: '事件流三阶段',
-      difficulty: 4,
+      difficulty: 3,
       visualizationType: 'event-flow-visualizer',
       blocks: [
         {
@@ -502,7 +502,7 @@ link.addEventListener('click', (e) => {
     {
       order: 8,
       title: '事件委托',
-      difficulty: 4,
+      difficulty: 3,
       visualizationType: 'event-delegation',
       blocks: [
         {
@@ -1567,6 +1567,62 @@ render()  // 首次加载渲染当前路径`,
                 title: 'Q16 【对比题】: appendChild / insertBefore / replaceChild / remove 的区别',
                 content: 'appendChild(node)：在子节点列表末尾添加，若 node 已存在于文档则先移除再添加（移动而非复制）。insertBefore(newNode, refNode)：在 refNode 前插入，refNode 为 null 时等价 appendChild。replaceChild(newNode, oldNode)：用 newNode 替换 oldNode。remove()：节点自删除（旧 API removeChild 需父节点调用）。注意：这些方法都返回被操作节点；移动节点不会触发复制；批量操作用 DocumentFragment 优化。prepend/append/after/before 是更现代的便捷 API。',
               },
+              {
+                title: 'Q17: 防抖(debounce)与节流(throttle)的原理与实现',
+                content: '防抖：N 秒内再次触发则重置计时器，只有停止触发 N 秒后才执行，用于"只关心最后一次"的场景（搜索框输入、窗口 resize 收尾）。节流：N 秒内只执行一次，用于"持续触发但需限频"的场景（scroll 滚动加载、鼠标移动）。实现要点：debounce 用 setTimeout + clearTimeout 重置；throttle 用时间戳判断上次执行时间（leading 立即执行首次）或 setTimeout 控制尾调用（trailing）。生产中优先用 lodash 的 debounce/throttle（支持 leading/trailing/maxWait 配置），自实现需注意 this 绑定与参数透传（用箭头函数或 apply）。',
+              },
+              {
+                title: 'Q18: IntersectionObserver 的作用与使用',
+                content: 'IntersectionObserver 异步观察元素与视口（或指定根容器）的交叉状态变化，回调返回 entries 含 isIntersecting、intersectionRatio、target。用途：图片懒加载（进入视口再加载 src）、无限滚动、曝光统计、吸顶吸底。优势：异步、不阻塞主线程、比 scroll 事件监听 + getBoundingClientRect 高效得多（后者每次滚动都强制同步布局）。使用：const obs = new IntersectionObserver(cb, {root, rootMargin, threshold}); obs.observe(el); 停止 obs.unobserve(el) 或 obs.disconnect()。注意 threshold 是数组可设多个触发点；rootMargin 可预加载（如 "100px" 提前触发）。',
+              },
+              {
+                title: 'Q19: ResizeObserver 的作用与使用',
+                content: 'ResizeObserver 异步监听元素尺寸变化（contentRect 含 width/height/x/y），弥补 window.resize 只能监听视口、无法监听元素级尺寸变化的缺陷。用途：响应式组件（容器查询的 JS 方案）、ECharts/Canvas 图表自适应、元素尺寸变化时重排布局。使用：const obs = new ResizeObserver(entries => { for (const e of entries) { e.contentRect.width } }); obs.observe(el); 停止 obs.disconnect()。注意：回调在 resize 后异步触发，避免循环触发（修改尺寸→再次触发）；性能敏感场景应防抖。CSS 容器查询(@container)在简单布局上可替代，复杂逻辑仍需 ResizeObserver。',
+              },
+              {
+                title: 'Q20: postMessage 跨源通信机制',
+                content: 'window.postMessage(data, targetOrigin) 是跨窗口/跨文档通信的标准 API，用于 iframe 父子通信、window.open 打开的窗口、Web Worker。发送：otherWin.postMessage(data, "https://receiver.com")，targetOrigin 须指定精确源（勿用 "*"，防数据泄露给恶意页面）。接收：window.addEventListener("message", e => { e.origin 校验源；e.data 取数据 })，必须校验 e.origin 防止恶意页面伪造消息。Structured Clone 算法支持对象/数组/Map/Set 等结构化数据，不支持函数/DOM 节点。是微前端、跨域 iframe、SharedWorker 通信的基础。',
+              },
+              {
+                title: 'Q21: Web Worker 的使用场景与限制',
+                content: 'Web Worker 在独立线程运行 JS，不阻塞主线程，用于 CPU 密集计算（大数据排序、图像处理、加密、复杂算法）。类型：Dedicated Worker（单页面专用）、Shared Worker（多页面共享）、Service Worker（离线缓存与网络代理）。限制：无法访问 DOM（window/document/parent 都不可用）、不能操作 UI、通信只能通过 postMessage（结构化克隆）、有启动开销（约几十 ms）不适合轻量任务。使用：const w = new Worker("worker.js"); w.postMessage(data); w.onmessage = e => {}; 结束 w.terminate()。注意数据需可序列化；大数据可用 Transferable 对象（ArrayBuffer 转移所有权零拷贝）。',
+              },
+              {
+                title: 'Q22: requestIdleCallback 的作用与使用',
+                content: 'requestIdleCallback(cb) 在浏览器空闲期执行低优先级任务，回调接收 deadline 参数含 didTimeout 与 timeRemaining()（剩余空闲毫秒），应在剩余时间内让出执行权。用途：数据预计算、日志上报、非关键 DOM 操作、预渲染。与 rAF 区别：rAF 在每帧渲染前执行（高优先级，视觉相关），rIC 在帧间空闲时执行（低优先级）。注意：超时 option（{timeout: 2000}）保证最终执行避免饿死；Safari 支持较差，可用 rAF + 自实现时间片兜底；React 18 时间分片(time slicing)思想与之同源。退出用 cancelIdleCallback(id)。',
+              },
+              {
+                title: 'Q23: 拖拽 API（Drag and Drop）与 dataTransfer',
+                content: 'HTML5 原生拖拽：元素设 draggable="true"，监听 dragstart（设 e.dataTransfer.setData("text", id)）、dragover（必须 e.preventDefault() 否则不允许 drop）、drop（e.dataTransfer.getData 取数据执行逻辑）。dataTransfer 对象携带拖拽数据，支持多种 MIME 类型（"text/plain"、"application/json"、自定义）。与鼠标事件模拟拖拽对比：原生 API 支持跨窗口/文件拖入、有拖拽幽灵图、触屏不支持（需 Pointer Events 模拟）。典型场景：文件上传（拖文件到页面）、看板拖拽排序、列表项重排。注意：dragleave 误触发问题（用 relatedTarget 或计数器处理）；移动端需用 touch 事件自实现。',
+              },
+              {
+                title: 'Q24: Clipboard API 剪贴板操作',
+                content: '现代 Clipboard API：navigator.clipboard.writeText(text) 写入文本，readText() 读取，基于 Promise 且需 HTTPS + 权限（navigator.permissions 查询 clipboard-write）。优势：异步、安全、不阻塞、可复制非文本（write 方法支持 ClipboardItem 含 image/html）。旧方案 document.execCommand("copy") 已废弃但兼容性好（需先 select() 选中文本）。权限：用户手势触发（点击按钮）才允许，脚本静默复制会被拦截。粘贴 readText 受 "clipboard-read" 权限控制，部分浏览器默认拒绝。注意：复制富文本用 ClipboardItem({ "text/html": blob })；粘贴大内容或敏感数据应让用户主动 Ctrl+V。',
+              },
+              {
+                title: 'Q25: Page Visibility API 与后台资源管理',
+                content: 'document.visibilityState（"visible"/"hidden"）反映页面可见性，visibilitychange 事件在切换标签页/最小化时触发。用途：1) 暂停 rAF/视频/轮询节省资源（后台不渲染）；2) 切回时同步数据（"刚回来请刷新"）；3) 统计真实停留时长（剔除后台时间）；4) 暂停 WebSocket 心跳或降频。与 blur/focus 区别：visibilitychange 反映标签可见性（切到其他标签也触发），blur/focus 反映窗口焦点（切到同窗口其他应用才触发）。配合 Page Visibility 可显著降低后台资源占用，是性能优化的低成本高收益项。',
+              },
+              {
+                title: 'Q26 【场景题】: 实现图片懒加载，有哪些方案对比',
+                content: '方案一（传统）：监听 scroll 事件 + getBoundingClientRect 判断元素是否进入视口，进入则将 data-src 赋给 src。缺点：每次滚动强制同步布局（layout thrashing），需手动节流，性能差。方案二（推荐）：IntersectionObserver 观察 img 元素，isIntersecting 为真时赋 src 并 unobserve。优点：浏览器原生异步、无需手动计算、性能优。方案三（极致）：原生 loading="lazy" 属性，浏览器自动懒加载，零 JS，但兼容性与控制粒度有限。生产实践：loading="lazy" 做兜底 + IntersectionObserver 做精确控制 + 占位图(SVG/LQIP)防布局抖动 + 错误兜底。注意 rootMargin:"200px" 可预加载避免滚到才加载的闪烁。',
+              },
+              {
+                title: 'Q27 【场景题】: 万级长列表渲染卡顿，有哪些优化方案',
+                content: '核心矛盾：DOM 节点过多导致内存占用大、初次渲染慢、滚动回流重绘多。方案一（虚拟列表）：只渲染可视区域 + 上下缓冲区，滚动时动态替换内容与 transform 偏移，库如 react-window/react-virtualized。难点：动态高度需测量或预估、滚动条同步、横向/分组。方案二（分页/无限滚动）：IntersectionObserver 触底加载下一页，简单但总量大时仍有内存问题。方案三（内容占位）：非可视区用骨架屏/占位 div，减少回流。方案四（time slicing）：用 requestIdleCallback 或 rAF 分片渲染，每帧插入 N 个避免主线程长阻塞。选型：万级且需随机滚动用虚拟列表；渐进浏览用无限滚动；首屏优化用骨架屏 + 分片。注意 key 稳定性影响虚拟列表复用性能。',
+              },
+              {
+                title: 'Q28 【对比题】: scroll 事件监听 vs IntersectionObserver',
+                content: 'scroll 事件：每次滚动都触发（高频），需手动 throttle 节流；判断可见性要用 getBoundingClientRect（触发强制同步布局），性能差；兼容性好。IntersectionObserver：浏览器异步回调，只在交叉状态变化时触发，无需手动计算位置；不阻塞主线程，性能优；老浏览器需 polyfill。语义：scroll 是"我在滚动"的流式事件，IntersectionObserver 是"我进入/离开了视口"的状态事件。选型：纯可见性判断（懒加载、无限滚动、曝光统计）必用 IntersectionObserver；需要滚动位置/速率/惯性等连续信息（视差、吸附）用 scroll + rAF；两者可配合使用。',
+              },
+              {
+                title: 'Q29 【对比题】: 防抖(debounce) vs 节流(throttle)',
+                content: '防抖：持续触发会不断重置计时器，只在"停止触发 N 秒后"执行一次，相当于"等用户停下来再处理"。适合搜索联想（输完再请求）、resize 收尾、表单校验。节流：持续触发时每 N 秒固定执行一次，相当于"按固定频率采样"。适合 scroll 滚动加载、mousemove 绘图、按钮防连点。形象比喻：防抖像电梯门（有人来就重开，等人齐走），节流像地铁发车（固定间隔一班，不管多少人）。边界：防抖首次可能很久不执行（配 leading 立即执行首触发）；节流尾调用可能丢最后一次（配 trailing）。选型看"关心最后一次"还是"关心过程频率"。',
+              },
+              {
+                title: 'Q30 【对比题】: localStorage 跨标签通信 vs BroadcastChannel',
+                content: 'localStorage 方案：A 标签 localStorage.setItem 触发 storage 事件，同源其他标签页的 window 监听 storage 事件接收。优点：兼容性好（IE10+）；缺点：只能传字符串（对象需序列化）、数据持久残留需清理、事件不含发送方引用（无法定向回复）。BroadcastChannel 方案：const ch = new BroadcastChannel("topic"); ch.postMessage(data); 同源其他标签 onmessage 接收。优点：原生支持对象结构化克隆、API 简洁、频道隔离、可关闭 ch.close()；缺点：兼容性较新（IE/Safari 旧版不支持）。选型：现代应用优先 BroadcastChannel；需要兼容旧浏览器或与持久数据共享（如登录态）用 localStorage + storage 事件；同源多标签退出登录同步是 storage 事件经典场景。',
+              },
             ],
           },
         },
@@ -1627,6 +1683,7 @@ render()  // 首次加载渲染当前路径`,
       order: 25,
       title: 'DOM / BOM / Web API 小测验',
       difficulty: 3,
+      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {
