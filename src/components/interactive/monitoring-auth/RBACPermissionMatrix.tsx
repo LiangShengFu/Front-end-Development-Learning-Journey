@@ -20,6 +20,7 @@ import type {
   RBACResource,
   RBACPermission,
   RBACRoute,
+  PermissionAction,
 } from '../../../lib/monitoring-auth-visualization-types'
 import { cn } from '../../../lib/utils'
 
@@ -99,9 +100,9 @@ export function RBACPermissionMatrix({ data }: RBACPermissionMatrixProps) {
   if (!role) return null
 
   /** 判断角色对资源的操作权限 */
-  const hasPermission = (resourceId: string, action: string): boolean => {
+  const hasPermission = (resourceId: string, action: PermissionAction): boolean => {
     const perm = permissions.find((p) => p.roleId === currentRole && p.resourceId === resourceId)
-    return perm?.actions.includes(action as any) ?? false
+    return perm?.actions.includes(action) ?? false
   }
 
   /** 判断路由是否可访问 */
@@ -146,14 +147,14 @@ export function RBACPermissionMatrix({ data }: RBACPermissionMatrixProps) {
 
       {/* 视图切换 */}
       <div className="mb-md flex flex-wrap gap-xs">
-        {[
+        {([
           { id: 'matrix', label: '权限矩阵' },
           { id: 'button', label: '按钮级控制' },
           { id: 'route', label: '路由级控制' },
-        ].map((v) => (
+        ] as const).map((v) => (
           <button
             key={v.id}
-            onClick={() => setActiveView(v.id as any)}
+            onClick={() => setActiveView(v.id)}
             className={cn(
               'rounded-md border px-sm py-xs text-caption transition-colors',
               v.id === activeView

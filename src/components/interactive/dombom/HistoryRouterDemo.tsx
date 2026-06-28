@@ -3,7 +3,7 @@
  *
  * 模拟 SPA 路由，pushState/replaceState/back/forward 操作，显示历史栈。
  */
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import type { HistoryRouterData } from '../../../lib/dom-bom-visualization-types'
 import { cn } from '../../../lib/utils'
 import { DemoCard, ControlRow, GroupLabel, PillBtn, CodeOutput } from './shared'
@@ -23,12 +23,12 @@ export function HistoryRouterDemo({ data }: HistoryRouterDemoProps) {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [lastOp, setLastOp] = useState<string>('初始化')
 
-  const routeTitles: Record<string, string> = {
+  const routeTitles = useMemo<Record<string, string>>(() => ({
     '/': '首页',
     '/about': '关于',
     '/users': '用户',
     '/contact': '联系',
-  }
+  }), [])
 
   const pushState = useCallback((path: string) => {
     setHistory((prev) => {

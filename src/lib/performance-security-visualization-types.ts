@@ -123,7 +123,7 @@ export interface DebounceThrottleConfig {
   title?: string
 }
 
-export interface DebounceThrottleVisualizerData extends DebounceThrottleConfig {}
+export type DebounceThrottleVisualizerData = DebounceThrottleConfig
 
 // ============================================================================
 // VirtualListVisualizer — 虚拟列表原理
@@ -143,7 +143,7 @@ export interface VirtualListConfig {
   title?: string
 }
 
-export interface VirtualListVisualizerData extends VirtualListConfig {}
+export type VirtualListVisualizerData = VirtualListConfig
 
 // ============================================================================
 // SecurityAttackFlowVisualizer — XSS 攻击向量流程

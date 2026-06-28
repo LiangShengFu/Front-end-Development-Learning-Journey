@@ -10,6 +10,7 @@ describe('cn', () => {
   })
 
   it('应处理条件类名', () => {
+    // eslint-disable-next-line no-constant-binary-expression
     expect(cn('base', false && 'no', true && 'yes', null, undefined)).toBe('base yes')
   })
 

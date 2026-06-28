@@ -7,8 +7,10 @@
  * - 文字 body-sm
  */
 import { Link } from 'react-router-dom'
+import { useI18n } from '../../lib/i18n'
 
 export function Footer() {
+  const { t } = useI18n()
   const year = new Date().getFullYear()
 
   return (
@@ -20,28 +22,26 @@ export function Footer() {
             <div className="font-mono text-caption-mono uppercase tracking-[1.4px] text-ink">
               FE·Journey
             </div>
-            <p className="mt-md max-w-md text-body-sm text-body">
-              前端开发学习之旅 — 交互式学习平台。
-            </p>
+            <p className="mt-md max-w-md text-body-sm text-body">{t('footer.tagline')}</p>
           </div>
 
           {/* Links */}
           <div>
-            <div className="eyebrow-sm mb-md">导航</div>
+            <div className="eyebrow-sm mb-md">{t('footer.navTitle')}</div>
             <ul className="space-y-sm text-body-sm">
               <li>
                 <Link to="/" className="text-body transition-colors hover:text-ink">
-                  首页
+                  {t('footer.home')}
                 </Link>
               </li>
               <li>
                 <Link to="/modules" className="text-body transition-colors hover:text-ink">
-                  全部模块
+                  {t('footer.allModules')}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-body transition-colors hover:text-ink">
-                  关于项目
+                  {t('footer.about')}
                 </Link>
               </li>
             </ul>
@@ -49,7 +49,7 @@ export function Footer() {
 
           {/* Tech */}
           <div>
-            <div className="eyebrow-sm mb-md">技术栈</div>
+            <div className="eyebrow-sm mb-md">{t('footer.techStack')}</div>
             <ul className="space-y-sm text-body-sm text-body">
               <li>React 19 + TypeScript</li>
               <li>Vite + Tailwind CSS</li>
@@ -59,8 +59,8 @@ export function Footer() {
         </div>
 
         <div className="mt-3xl flex flex-col items-start justify-between gap-sm border-t border-hairline pt-xl text-caption-mono-sm text-body-mid md:flex-row md:items-center">
-          <span>© {year} Front-end Development Learning Journey</span>
-          <span className="uppercase tracking-[1.2px]">Built with inspired design language</span>
+          <span>{t('footer.copyright', { year })}</span>
+          <span className="uppercase tracking-[1.2px]">{t('footer.builtWith')}</span>
         </div>
       </div>
     </footer>

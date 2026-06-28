@@ -1802,11 +1802,11 @@ interface User {
               },
               {
                 title: 'Q28: 模板字面量类型有哪些实战应用？',
-                content: '模板字面量类型用反引号在类型层拼接字符串，实现强类型字符串。\n\n语法：\n- type EventName<T extends string> = `on${Capitalize<T>}`。\n- type Click = EventName<"click"> → "onClick"。\n\n实战应用：\n1. 事件名映射：type Listener<K extends keyof Events> = (e: Events[K]) => void，键约束为 `on${Capitalize<K>}`。\n2. CSS 类名联合：type Align = "left" | "center" | "right"；type Class = `text-${Align}` → "text-left" | "text-center" | "text-right"。\n3. 路由路径：type Route = `/users/${number}/posts/${number}`。\n4. 配合 Uppercase/Lowercase/Uncapitalize 做大小写变换。\n5. 键重映射中重命名：`[K in keyof T as \`get${Capitalize<K>}\`]`。\n\n局限：拼接结果过多时会膨胀成超大联合，影响编译性能。',
+                content: '模板字面量类型用反引号在类型层拼接字符串，实现强类型字符串。\n\n语法：\n- type EventName<T extends string> = `on${Capitalize<T>}`。\n- type Click = EventName<"click"> → "onClick"。\n\n实战应用：\n1. 事件名映射：type Listener<K extends keyof Events> = (e: Events[K]) => void，键约束为 `on${Capitalize<K>}`。\n2. CSS 类名联合：type Align = "left" | "center" | "right"；type Class = `text-${Align}` → "text-left" | "text-center" | "text-right"。\n3. 路由路径：type Route = `/users/${number}/posts/${number}`。\n4. 配合 Uppercase/Lowercase/Uncapitalize 做大小写变换。\n5. 键重映射中重命名：`[K in keyof T as `get${Capitalize<K>}`]`。\n\n局限：拼接结果过多时会膨胀成超大联合，影响编译性能。',
               },
               {
                 title: 'Q29: 映射类型的键重映射 as 与修饰符增删 -?/-readonly 怎么用？',
-                content: '两者是映射类型的高级能力，TS 4.1+ 引入。\n\n键重映射 as：\n- 语法：{ [K in keyof T as NewKey]: T[K] }。\n- 重命名键：`[K in keyof T as \`get${Capitalize<string & K>}\`]`。\n- 过滤键：[K in keyof T as K extends "id" ? never : K] 把 id 排除（映射类型自动跳过 never）。\n\n修饰符增删：\n- 加 ?：{ [K in keyof T]?: T[K] }（Partial 实现）。\n- 删 ?：{ [K in keyof T]-?: T[K] }（Required 实现）。\n- 加 readonly：{ readonly [K in keyof T]: T[K] }（Readonly 实现）。\n- 删 readonly：{ -readonly [K in keyof T]: T[K] }（Mutable 实现）。\n- 可叠加：-readonly + -? 同时移除。\n\n组合能力：键重映射 + 修饰符增删让自定义工具类型表达力接近运行时 map/filter。',
+                content: '两者是映射类型的高级能力，TS 4.1+ 引入。\n\n键重映射 as：\n- 语法：{ [K in keyof T as NewKey]: T[K] }。\n- 重命名键：`[K in keyof T as `get${Capitalize<string & K>}`]`。\n- 过滤键：[K in keyof T as K extends "id" ? never : K] 把 id 排除（映射类型自动跳过 never）。\n\n修饰符增删：\n- 加 ?：{ [K in keyof T]?: T[K] }（Partial 实现）。\n- 删 ?：{ [K in keyof T]-?: T[K] }（Required 实现）。\n- 加 readonly：{ readonly [K in keyof T]: T[K] }（Readonly 实现）。\n- 删 readonly：{ -readonly [K in keyof T]: T[K] }（Mutable 实现）。\n- 可叠加：-readonly + -? 同时移除。\n\n组合能力：键重映射 + 修饰符增删让自定义工具类型表达力接近运行时 map/filter。',
               },
               {
                 title: 'Q30: 函数类型、可调用签名与构造签名怎么写？',

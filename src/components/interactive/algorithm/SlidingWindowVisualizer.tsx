@@ -39,7 +39,7 @@ function maxSumK(arr: number[], k: number): SWStep[] {
   const steps: SWStep[] = []
   const tokens = arr.map(String)
   let windowSum = 0
-  let bestSum = 0
+  let bestSum: number
   let bestLeft = 0
   let bestRight = k - 1
 

@@ -2006,6 +2006,7 @@ function candy(ratings) {
       order: 18,
       title: '动态规划（DP）',
       difficulty: 3,
+      visualizationType: 'dynamic-programming-visualizer',
       blocks: [
         {
           id: 'p18-1',

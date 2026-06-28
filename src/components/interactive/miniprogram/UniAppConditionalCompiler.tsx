@@ -137,7 +137,7 @@ function annotateSource(source: string, activeBlocks: string[]): Array<{ text: s
   const lines = source.split('\n')
   const result: Array<{ text: string; state: 'active' | 'inactive' | 'normal' }> = []
   let inBlock: 'active' | 'inactive' | null = null
-  let blockPlatform = ''
+  let blockPlatform: string
 
   for (const line of lines) {
     const trimmed = line.trim()
@@ -164,7 +164,6 @@ function annotateSource(source: string, activeBlocks: string[]): Array<{ text: s
     }
     if (endifMatch) {
       inBlock = null
-      blockPlatform = ''
       result.push({ text: line, state: 'normal' })
       continue
     }

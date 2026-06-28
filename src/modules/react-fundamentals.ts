@@ -7,6 +7,7 @@
  * 使用 23 个可视化组件辅助理解（含 9 个新增 React 专属组件）。
  */
 import type { ModuleMeta } from '../lib/types'
+import type { DataFetchStateMachineData } from '../lib/react-visualization-types'
 
 export const reactFundamentalsModule: ModuleMeta = {
   number: '08',
@@ -623,9 +624,9 @@ useEffect(() => {
 <html>
 <head>
   <meta charset="utf-8" />
-  <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     body { font-family: sans-serif; padding: 16px; }
     .err { color: #d33; font-size: 12px; margin: 2px 0 8px; }
@@ -748,7 +749,7 @@ useEffect(() => {
           id: 'p12-2',
           type: 'demo',
           visualizationType: 'data-fetch-state-machine',
-          data: ({
+          data: {
             title: '数据获取三态机',
             scenarios: [
               {
@@ -776,7 +777,7 @@ useEffect(() => {
                 hasRaceCondition: true,
               },
             ],
-          } as any),
+          } as DataFetchStateMachineData,
         },
         {
           id: 'p12-3',
@@ -1158,9 +1159,9 @@ function ThemedButton() {
 <html>
 <head>
   <meta charset="utf-8" />
-  <script src="https://unpkg.com/react@18/umd/react.development.js"><\/script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\/script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"><\/script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
     body { font-family: sans-serif; padding: 16px; }
     ul { list-style: none; padding: 0; }

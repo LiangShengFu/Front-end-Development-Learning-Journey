@@ -109,7 +109,7 @@ export function TextInput({
 /** 安全执行 JS 表达式（仅字面量与运算） */
 export function safeEval(expr: string): unknown {
   try {
-    // eslint-disable-next-line no-new-func
+     
     return Function(`"use strict"; return (${expr});`)()
   } catch {
     return undefined

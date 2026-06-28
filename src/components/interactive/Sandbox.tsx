@@ -101,7 +101,7 @@ const JS_CONSOLE_HOOK = `<script>
       window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: ['Unhandled Promise Rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))] } }, '__SANDBOX_TARGET_ORIGIN__');
     });
   })();
-<\/script>`
+</script>`
 
 export function Sandbox({ data }: SandboxProps) {
   const [code, setCode] = useState(data.initialCode)
@@ -124,7 +124,7 @@ export function Sandbox({ data }: SandboxProps) {
   const checkResults = useMemo(() => {
     if (!data.checks || data.checks.length === 0) return null
     return data.checks.map((check) => {
-      let passed = false
+      let passed: boolean
       try {
         const re = new RegExp(check.pattern, check.flags ?? 'i')
         passed = re.test(code)
@@ -183,7 +183,7 @@ ${userCode}
   } catch (e) {
     window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message] } }, ${targetOrigin});
   }
-<\/script>
+</script>
 </body>
 </html>`
     },

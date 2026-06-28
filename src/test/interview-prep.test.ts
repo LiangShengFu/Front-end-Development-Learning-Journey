@@ -11,13 +11,12 @@ import { visualizationMeta, isVisualizationBlock } from '../lib/types'
 import type {
   VisualizationBlock,
   QuizData,
-  AccordionData,
+  CodeStepperData,
+  CompareTableData,
 } from '../lib/types'
 import type {
   InterviewQuizEngineData,
-  InterviewProgressDashboardData,
-  CodeStepperData,
-  CompareTableData,
+  ProgressDashboardData,
 } from '../lib/interview-visualization-types'
 
 /** 收集模块内所有 quiz-engine 题目（含 mock-interview-timer 中的题） */
@@ -249,7 +248,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
     )
     expect(quiz).toBeDefined()
-    const data = quiz!.data as InterviewQuizEngineData
+    const data = (quiz as VisualizationBlock)!.data as InterviewQuizEngineData
     expect(data.questions.length).toBeGreaterThanOrEqual(30)
     // 验证难度分布合理（含至少 2 种难度）
     const difficulties = new Set(data.questions.map((q) => q.difficulty))
@@ -271,7 +270,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
     )
     expect(quiz).toBeDefined()
-    const data = quiz!.data as InterviewQuizEngineData
+    const data = (quiz as VisualizationBlock)!.data as InterviewQuizEngineData
     expect(data.questions.length).toBeGreaterThanOrEqual(30)
     // 验证难度分布合理（含至少 2 种难度）
     const difficulties = new Set(data.questions.map((q) => q.difficulty))
@@ -291,14 +290,11 @@ describe('面试八股与综合能力模块（模块25）', () => {
     const kp3 = interviewPrepModule.points.find((p) => p.order === 3)!
     const quizzes = kp3.blocks.filter(
       (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
-    ) as Extract<
-      (typeof kp3.blocks)[number],
-      { type: 'demo'; visualizationType: 'interview-quiz-engine' }
-    >[]
+    ) as VisualizationBlock[]
     // 找到 domain 为 react 的 quiz block
     const reactQuiz = quizzes.find((q) => (q.data as InterviewQuizEngineData).domain === 'react')
     expect(reactQuiz).toBeDefined()
-    const data = reactQuiz!.data as InterviewQuizEngineData
+    const data = (reactQuiz as VisualizationBlock)!.data as InterviewQuizEngineData
     expect(data.questions.length).toBeGreaterThanOrEqual(30)
     // 验证所有题目 domain 为 react
     data.questions.forEach((q) => {
@@ -322,14 +318,11 @@ describe('面试八股与综合能力模块（模块25）', () => {
     const kp3 = interviewPrepModule.points.find((p) => p.order === 3)!
     const quizzes = kp3.blocks.filter(
       (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
-    ) as Extract<
-      (typeof kp3.blocks)[number],
-      { type: 'demo'; visualizationType: 'interview-quiz-engine' }
-    >[]
+    ) as VisualizationBlock[]
     // 找到 domain 为 vue 的 quiz block
     const vueQuiz = quizzes.find((q) => (q.data as InterviewQuizEngineData).domain === 'vue')
     expect(vueQuiz).toBeDefined()
-    const data = vueQuiz!.data as InterviewQuizEngineData
+    const data = (vueQuiz as VisualizationBlock)!.data as InterviewQuizEngineData
     expect(data.questions.length).toBeGreaterThanOrEqual(30)
     // 验证所有题目 domain 为 vue
     data.questions.forEach((q) => {
@@ -353,14 +346,11 @@ describe('面试八股与综合能力模块（模块25）', () => {
     const kp4 = interviewPrepModule.points.find((p) => p.order === 4)!
     const quizzes = kp4.blocks.filter(
       (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
-    ) as Extract<
-      (typeof kp4.blocks)[number],
-      { type: 'demo'; visualizationType: 'interview-quiz-engine' }
-    >[]
+    ) as VisualizationBlock[]
     // 找到 domain 为 network 的 quiz block
     const networkQuiz = quizzes.find((q) => (q.data as InterviewQuizEngineData).domain === 'network')
     expect(networkQuiz).toBeDefined()
-    const data = networkQuiz!.data as InterviewQuizEngineData
+    const data = (networkQuiz as VisualizationBlock)!.data as InterviewQuizEngineData
     expect(data.questions.length).toBeGreaterThanOrEqual(30)
     // 验证所有题目 domain 为 network
     data.questions.forEach((q) => {
@@ -394,7 +384,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'codestepper',
     )
     expect(codestepper).toBeDefined()
-    const data = codestepper!.data as CodeStepperData
+    const data = (codestepper as VisualizationBlock)!.data as CodeStepperData
     expect(data.steps?.length).toBeGreaterThanOrEqual(4)
     expect(data.lines?.length).toBeGreaterThan(0)
   })
@@ -405,7 +395,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'codestepper',
     )
     expect(codestepper).toBeDefined()
-    const data = codestepper!.data as CodeStepperData
+    const data = (codestepper as VisualizationBlock)!.data as CodeStepperData
     expect(data.steps?.length).toBeGreaterThanOrEqual(4)
   })
 
@@ -416,7 +406,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
         (b) => isVisualizationBlock(b) && b.visualizationType === 'interview-quiz-engine',
       )
       expect(quiz).toBeDefined()
-      const data = quiz!.data as InterviewQuizEngineData
+      const data = (quiz as VisualizationBlock)!.data as InterviewQuizEngineData
       expect(data.questions.length).toBeGreaterThanOrEqual(5)
     })
   })
@@ -428,7 +418,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'comparetable',
     )
     expect(compare).toBeDefined()
-    const data = compare!.data as CompareTableData
+    const data = (compare as VisualizationBlock)!.data as CompareTableData
     expect(data.columns?.length).toBeGreaterThanOrEqual(3)
     const allText = JSON.stringify(data)
     expect(allText).toContain('ToB')
@@ -443,7 +433,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'progress-dashboard',
     )
     expect(dashboard).toBeDefined()
-    const data = dashboard!.data as InterviewProgressDashboardData
+    const data = (dashboard as VisualizationBlock)!.data as ProgressDashboardData
     const allQuestions = collectQuizEngineQuestions().flatMap((r) => r.questions)
     const actualByDomain = new Map<string, number>()
     allQuestions.forEach((q) => {
@@ -501,7 +491,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'mock-interview-timer',
     )
     expect(mock).toBeDefined()
-    const data = mock!.data as { questions: { domain: string }[]; defaultTimePerQuestion: number }
+    const data = (mock as VisualizationBlock)!.data as { questions: { domain: string }[]; defaultTimePerQuestion: number }
     expect(data.questions.length).toBeGreaterThanOrEqual(6)
     expect(data.defaultTimePerQuestion).toBeGreaterThan(0)
     const domains = new Set(data.questions.map((q) => q.domain))
@@ -515,7 +505,7 @@ describe('面试八股与综合能力模块（模块25）', () => {
       (b) => isVisualizationBlock(b) && b.visualizationType === 'quiz',
     )
     expect(quiz).toBeDefined()
-    const data = quiz!.data as QuizData
+    const data = (quiz as VisualizationBlock)!.data as QuizData
     expect(data.questions.length).toBeGreaterThanOrEqual(8)
     data.questions.forEach((q) => {
       expect(q.options.length).toBeGreaterThanOrEqual(4)

@@ -10,7 +10,7 @@
  *
  * ⚠️ 教学模拟：使用 React hooks 模拟微信小程序 Component() 的行为。
  */
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import type {
   MiniComponentWorkbenchData,
   MiniComponentSpec,
@@ -96,7 +96,7 @@ export function MiniComponentWorkbench({ data }: MiniComponentWorkbenchProps) {
   const [events, setEvents] = useState<string[]>([])
   // 模拟 lifetimes 时间线
   const [lifecycle, setLifecycle] = useState<{ stage: string; ts: number }[]>([])
-  const mountedRef = useRef(false)
+  const [mounted, setMounted] = useState(false)
 
   /** 触发 handleTap */
   const fireTap = () => {
@@ -108,14 +108,14 @@ export function MiniComponentWorkbench({ data }: MiniComponentWorkbenchProps) {
 
   /** 模拟组件挂载/卸载，记录生命周期 */
   const toggleMount = () => {
-    if (!mountedRef.current) {
-      mountedRef.current = true
+    if (!mounted) {
+      setMounted(true)
       const ts = Date.now()
       setLifecycle([{ stage: 'attached · 组件挂载', ts }])
       // ready 紧随其后
       setTimeout(() => setLifecycle((prev) => [...prev, { stage: 'ready · 布局完成', ts: Date.now() }]), 300)
     } else {
-      mountedRef.current = false
+      setMounted(false)
       setLifecycle((prev) => [...prev, { stage: 'detached · 组件卸载', ts: Date.now() }])
     }
   }
@@ -127,7 +127,7 @@ export function MiniComponentWorkbench({ data }: MiniComponentWorkbenchProps) {
     setCount(0)
     setEvents([])
     setLifecycle([])
-    mountedRef.current = false
+    setMounted(false)
   }
 
   /** 按钮类型样式 */
@@ -275,7 +275,7 @@ export function MiniComponentWorkbench({ data }: MiniComponentWorkbenchProps) {
                     onClick={toggleMount}
                     className="rounded-pill border border-[#07c160] bg-[#07c160]/10 px-lg py-sm font-mono text-caption-mono-sm text-[#07c160]"
                   >
-                    {mountedRef.current ? '卸载组件' : '挂载组件'}
+                    {mounted ? '卸载组件' : '挂载组件'}
                   </button>
                   <button
                     type="button"

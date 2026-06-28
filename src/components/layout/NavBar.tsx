@@ -10,11 +10,13 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { cn } from '../../lib/utils'
+import { useI18n, type Locale } from '../../lib/i18n'
 
 export function NavBar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
+  const { t, locale, setLocale } = useI18n()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8)
@@ -29,10 +31,13 @@ export function NavBar() {
   }, [location.pathname])
 
   const navItems = [
-    { to: '/', label: '首页' },
-    { to: '/modules', label: '模块' },
-    { to: '/about', label: '关于' },
+    { to: '/', label: t('nav.home') },
+    { to: '/modules', label: t('nav.modules') },
+    { to: '/progress', label: t('nav.progress') },
+    { to: '/about', label: t('nav.about') },
   ]
+
+  const toggleLang = () => setLocale(locale === 'zh' ? 'en' : 'zh')
 
   return (
     <header
@@ -43,11 +48,13 @@ export function NavBar() {
     >
       <nav className="container-page flex items-center justify-between py-md">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-sm" aria-label="返回首页">
+        <Link to="/" className="flex items-center gap-sm" aria-label={t('common.backToHome')}>
           <span className="font-mono text-caption-mono uppercase tracking-[1.4px] text-ink">
             FE·Journey
           </span>
-          <span className="hidden text-caption-mono-sm text-body-mid sm:inline">/ 前端学习之旅</span>
+          <span className="hidden text-caption-mono-sm text-body-mid sm:inline">
+            {t('nav.brandSubtitle')}
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -67,8 +74,19 @@ export function NavBar() {
               {item.label}
             </NavLink>
           ))}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
+            className="flex items-center gap-xs rounded-sm border border-hairline px-sm py-xs text-caption-mono-sm text-body-mid transition-colors hover:text-ink"
+            aria-label={t('nav.search')}
+          >
+            <span aria-hidden="true">⌕</span>
+            {t('nav.search')}
+            <kbd className="font-mono text-caption-mono-sm text-body-mid/60">⌘K</kbd>
+          </button>
+          <LangToggle locale={locale} onToggle={toggleLang} ariaLabel={t('nav.toggleLang')} />
           <Link to="/modules" className="btn-pill-sm">
-            开始学习
+            {t('nav.startLearning')}
           </Link>
         </div>
 
@@ -76,7 +94,7 @@ export function NavBar() {
         <button
           type="button"
           className="flex h-10 w-10 items-center justify-center rounded-sm border border-hairline md:hidden"
-          aria-label="切换菜单"
+          aria-label={t('nav.toggleMenu')}
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((v) => !v)}
         >
@@ -122,9 +140,46 @@ export function NavBar() {
                 {item.label}
               </NavLink>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false)
+                window.dispatchEvent(new CustomEvent('open-command-palette'))
+              }}
+              className="flex items-center gap-sm text-body-md text-body-mid transition-colors hover:text-ink"
+              aria-label={t('nav.search')}
+            >
+              <span aria-hidden="true">⌕</span>
+              {t('nav.search')}
+            </button>
+            <LangToggle locale={locale} onToggle={toggleLang} ariaLabel={t('nav.toggleLang')} />
           </div>
         </div>
       )}
     </header>
+  )
+}
+
+/** 语言切换器（ZH / EN） */
+function LangToggle({
+  locale,
+  onToggle,
+  ariaLabel,
+}: {
+  locale: Locale
+  onToggle: () => void
+  ariaLabel: string
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={ariaLabel}
+      className="flex items-center gap-xs rounded-sm border border-hairline px-sm py-xs text-caption-mono-sm text-body-mid transition-colors hover:text-ink"
+    >
+      <span className={locale === 'zh' ? 'text-ink' : ''}>ZH</span>
+      <span aria-hidden="true" className="text-body-mid/40">/</span>
+      <span className={locale === 'en' ? 'text-ink' : ''}>EN</span>
+    </button>
   )
 }

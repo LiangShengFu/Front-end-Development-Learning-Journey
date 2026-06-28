@@ -95,8 +95,8 @@ export function HttpRequestResponseFlow({ data }: HttpRequestResponseFlowProps) 
   const [isRunning, setIsRunning] = useState(false)
 
   const stage = stages[currentIdx]
-  const totalDuration = stages.reduce((sum, s) => sum + s.durationMs, 0)
-  const accumulatedDuration = stages.slice(0, currentIdx + 1).reduce((sum, s) => sum + s.durationMs, 0)
+  const totalDuration = stages.reduce((sum, s) => sum + (s.durationMs ?? 0), 0)
+  const accumulatedDuration = stages.slice(0, currentIdx + 1).reduce((sum, s) => sum + (s.durationMs ?? 0), 0)
 
   /** 自动播放 */
   const handleAutoRun = () => {
@@ -191,7 +191,7 @@ export function HttpRequestResponseFlow({ data }: HttpRequestResponseFlowProps) 
           <div className="space-y-sm">
             <div className="flex items-start gap-sm">
               <span className="shrink-0 rounded-pill bg-canvas-bg-inset px-sm py-xxs font-mono text-caption-mono-sm text-body-mid">方向</span>
-              <span className="min-w-0 flex-1 font-mono text-caption-mono-sm text-body-hi">{directionLabel[stage.direction]}</span>
+              <span className="min-w-0 flex-1 font-mono text-caption-mono-sm text-body-hi">{directionLabel[stage.direction ?? 'bidirectional']}</span>
             </div>
             <div className="flex items-start gap-sm">
               <span className="shrink-0 rounded-pill bg-canvas-bg-inset px-sm py-xxs font-mono text-caption-mono-sm text-body-mid">耗时</span>

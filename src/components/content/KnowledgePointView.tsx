@@ -3,16 +3,22 @@
  *
  * 渲染单个知识点：标题、难度标记、内容块列表。
  * 每个知识点带有序号锚点，便于模块内导航。
+ * 标题区集成 PointActions：完成标记、收藏、SM-2 复习。
  */
 import type { KnowledgePoint } from '../../lib/types'
 import { ContentBlockRenderer } from './ContentBlockRenderer'
-import { difficultyLabel, difficultyStars } from '../../lib/utils'
+import { difficultyStars } from '../../lib/utils'
+import { PointActions } from '../progress/PointActions'
+import { useI18n } from '../../lib/i18n'
 
 interface KnowledgePointViewProps {
   point: KnowledgePoint
+  /** 模块 slug，用于学习进度记录 */
+  moduleSlug: string
 }
 
-export function KnowledgePointView({ point }: KnowledgePointViewProps) {
+export function KnowledgePointView({ point, moduleSlug }: KnowledgePointViewProps) {
+  const { t } = useI18n()
   const anchorId = `point-${point.order}`
 
   return (
@@ -30,18 +36,23 @@ export function KnowledgePointView({ point }: KnowledgePointViewProps) {
         </div>
 
         {/* Meta */}
-        <div className="mt-xs flex items-center gap-lg font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
+        <div className="mt-xs flex flex-wrap items-center gap-lg font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
           <span>
-            难度 <span className="text-body">{difficultyStars(point.difficulty)}</span>
+            {t('kp.difficulty')} <span className="text-body">{difficultyStars(point.difficulty)}</span>
           </span>
           <span className="text-body-mid/60">·</span>
-          <span>{difficultyLabel(point.difficulty)}</span>
+          <span>{t(`kp.difficultyLevel${point.difficulty}`)}</span>
           {point.visualizationType && (
             <>
               <span className="text-body-mid/60">·</span>
-              <span className="text-accent-breeze">含可视化</span>
+              <span className="text-accent-breeze">{t('kp.withVisualization')}</span>
             </>
           )}
+        </div>
+
+        {/* 学习进度操作 */}
+        <div className="mt-md">
+          <PointActions moduleSlug={moduleSlug} pointOrder={point.order} />
         </div>
       </header>
 

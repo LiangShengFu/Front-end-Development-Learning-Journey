@@ -78,7 +78,7 @@ export interface FetchScenario {
   id: string
   label: string
   description: string
-  initialState: 'loading' | 'success' | 'error'
+  initialState: 'idle' | 'loading' | 'success' | 'error'
   transitionSequence: Array<{
     from: string
     to: string

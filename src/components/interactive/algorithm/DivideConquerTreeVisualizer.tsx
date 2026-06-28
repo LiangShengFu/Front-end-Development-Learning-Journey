@@ -3,7 +3,7 @@
  *
  * 递归树展开：分解→解决→合并三阶段，支持归并排序 / Pow(x,n) / 最大子数组和。
  */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { DivideConquerTreeVisualizerData, DivideConquerExample } from '../../../lib/algorithm-visualization-types'
 import { cn } from '../../../lib/utils'
 

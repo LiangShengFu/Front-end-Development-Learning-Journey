@@ -10,8 +10,10 @@ import { Eyebrow } from '../components/layout/Eyebrow'
 import { MagicCard, MagicSpotlightScope, useMobileDetection } from '../components/ui/MagicBento'
 import { stages } from '../lib/stages'
 import { moduleSummaries } from '../lib/modules'
+import { useI18n } from '../lib/i18n'
 
 export function ModulesPage() {
+  const { t } = useI18n()
   const sectionRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobileDetection()
 
@@ -20,12 +22,10 @@ export function ModulesPage() {
       <section className="border-b border-hairline py-3xl">
         <div className="container-page">
           <Eyebrow index="ALL /" className="mb-md">
-            Modules
+            {t('modules.allEyebrow')}
           </Eyebrow>
-          <h1 className="text-display-md tracking-display text-ink">全部模块</h1>
-          <p className="mt-md max-w-2xl text-body-lg text-body">
-            25 个模块覆盖前端开发完整知识体系，按 8 个学习阶段组织。点击任意模块开始学习。
-          </p>
+          <h1 className="text-display-md tracking-display text-ink">{t('modules.allTitle')}</h1>
+          <p className="mt-md max-w-2xl text-body-lg text-body">{t('modules.allDesc')}</p>
         </div>
       </section>
 
@@ -49,8 +49,10 @@ export function ModulesPage() {
                 <div className="mb-xl flex items-baseline gap-md">
                   <span className="text-display-xs">{stage.icon}</span>
                   <div>
-                    <h2 className="text-display-xs text-ink">{stage.label}</h2>
-                    <p className="mt-xs text-body-sm text-body-mid">{stage.description}</p>
+                    <h2 className="text-display-xs text-ink">{t(`stage.${stage.id}.label`)}</h2>
+                    <p className="mt-xs text-body-sm text-body-mid">
+                      {t(`stage.${stage.id}.description`)}
+                    </p>
                   </div>
                 </div>
 
@@ -75,13 +77,15 @@ export function ModulesPage() {
                           <span className="text-display-xs">{m.icon}</span>
                         </div>
                         <h3 className="mt-md text-body-lg text-ink group-hover:text-accent-sunset">
-                          {m.title}
+                          {t(`module.${m.slug}.title`)}
                         </h3>
-                        <p className="mt-xs flex-1 text-body-sm text-body-mid">{m.summary}</p>
+                        <p className="mt-xs flex-1 text-body-sm text-body-mid">
+                          {t(`module.${m.slug}.summary`)}
+                        </p>
                         <div className="mt-lg flex items-center gap-md font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                          <span>{m.knowledgePointCount} 知识点</span>
+                          <span>{t('modules.kpCount', { count: m.knowledgePointCount })}</span>
                           <span>·</span>
-                          <span>{m.visualizationCount} 可视化</span>
+                          <span>{t('modules.vizCount', { count: m.visualizationCount })}</span>
                         </div>
                       </MagicCard>
                     </Link>

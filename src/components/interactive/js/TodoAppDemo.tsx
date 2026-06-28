@@ -37,7 +37,9 @@ export function TodoAppDemo({ data }: TodoAppDemoProps) {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) return JSON.parse(saved)
-    } catch {}
+    } catch {
+      // 忽略解析错误
+    }
     return data.initialTodos?.map((t, i) => ({ id: i + 1, ...t })) ?? DEFAULT_TODOS
   })
   const [input, setInput] = useState('')
@@ -47,7 +49,9 @@ export function TodoAppDemo({ data }: TodoAppDemoProps) {
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
-    } catch {}
+    } catch {
+      // 忽略存储错误（如隐私模式）
+    }
   }, [todos])
 
   const addTodo = () => {

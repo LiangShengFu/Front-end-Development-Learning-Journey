@@ -165,7 +165,7 @@ export function GraphQLSchemaExplorer({ data }: GraphQLSchemaExplorerProps) {
         // 对返回 User/Post 类型的字段，附加子字段选择
         const fieldMeta = activeType.fields.find((x) => x.name === f)
         if (!fieldMeta) return `  ${f}`
-        const retType = fieldMeta.type.replace(/[\[\]!]/g, '')
+        const retType = fieldMeta.type.replace(/[[\]!]/g, '')
         if (retType === 'User') {
           return `  ${f} {\n    id\n    name\n    email\n  }`
         }

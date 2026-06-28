@@ -339,7 +339,7 @@ export function BinarySearchVisualizer({ data }: BinarySearchVisualizerProps) {
   const initialTarget = data?.target ?? 11
 
   const [variant, setVariant] = useState<BinarySearchVariant>(initialVariant)
-  const [array, setArray] = useState<number[]>(initialArray)
+  const [, setArray] = useState<number[]>(initialArray)
   const [arrayInput, setArrayInput] = useState(initialArray.join(','))
   const [target, setTarget] = useState(initialTarget)
   const [steps, setSteps] = useState<BSStep[]>([])

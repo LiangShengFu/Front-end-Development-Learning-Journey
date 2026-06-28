@@ -19,8 +19,10 @@ import { stages } from '../lib/stages'
 import { moduleSummaries } from '../lib/modules'
 import { visualizationMeta } from '../lib/types'
 import { cn } from '../lib/utils'
+import { useI18n } from '../lib/i18n'
 
 export function HomePage() {
+  const { t } = useI18n()
   const totalPoints = moduleSummaries.reduce((sum, m) => sum + m.knowledgePointCount, 0)
   const pathGridRef = useRef<HTMLDivElement>(null)
   const isMobile = useMobileDetection()
@@ -31,32 +33,31 @@ export function HomePage() {
       <section className="border-b border-hairline py-4xl md:py-[120px]">
         <div className="container-page">
           <Eyebrow index="00 /" className="mb-xl">
-            Front-end Development Learning Journey
+            {t('home.heroEyebrow')}
           </Eyebrow>
           <h1 className="text-display-xl tracking-display-lg text-ink md:text-display-lg">
-            前端开发
+            {t('home.heroTitle1')}
             <br />
-            学习之旅
+            {t('home.heroTitle2')}
           </h1>
           <p className="mt-2xl max-w-2xl text-body-lg text-body">
-            25 个模块 · 13 种可视化组件 · {totalPoints}+ 知识点的交互式前端学习平台。
-            从 HTML 基础到面试冲刺，系统化覆盖前端工程师的完整知识体系。
+            {t('home.heroDesc', { totalPoints })}
           </p>
           <div className="mt-3xl flex flex-wrap gap-sm">
             <Link to="/modules/html-fundamentals" className="btn-primary">
-              从 HTML 基础开始 →
+              {t('common.startWithHtml')}
             </Link>
             <Link to="/modules" className="btn-pill">
-              浏览全部模块
+              {t('common.browseAllModules')}
             </Link>
           </div>
 
           {/* Stats */}
           <div className="mt-4xl grid grid-cols-2 gap-lg md:grid-cols-4">
-            <Stat label="模块数" to={25} />
-            <Stat label="知识点" to={totalPoints} suffix="+" />
-            <Stat label="可视化组件" to={Object.keys(visualizationMeta).length} />
-            <Stat label="学习阶段" to={stages.length} />
+            <Stat label={t('home.statModules')} to={25} />
+            <Stat label={t('home.statPoints')} to={totalPoints} suffix="+" />
+            <Stat label={t('home.statVisualizations')} to={Object.keys(visualizationMeta).length} />
+            <Stat label={t('home.statStages')} to={stages.length} />
           </div>
         </div>
       </section>
@@ -64,9 +65,9 @@ export function HomePage() {
       {/* 学习路径 - 路径式可视化（MagicBento 动效） */}
       <CollapsibleSection
         index="01 /"
-        eyebrow="学习路径"
-        title="8 个阶段 · 25 个模块"
-        description="从基础到面试冲刺，循序渐进的完整学习路径。每个阶段聚焦一个核心能力域。"
+        eyebrow={t('home.pathEyebrow')}
+        title={t('home.pathTitle')}
+        description={t('home.pathDesc')}
         defaultOpen
         className="border-b-0 mb-section"
       >
@@ -153,6 +154,7 @@ function PathStageNode({
   isLast: boolean
   isMobile: boolean
 }) {
+  const { t } = useI18n()
   const [open, setOpen] = useState(index === 0)
 
   return (
@@ -198,17 +200,20 @@ function PathStageNode({
           <div className="flex flex-col gap-xs md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-sm">
               <span className="text-display-xs">{stage.icon}</span>
-              <h3 className="text-body-lg text-ink">{stage.label}</h3>
+              <h3 className="text-body-lg text-ink">{t(`stage.${stage.id}.label`)}</h3>
             </div>
             <div className="flex items-center gap-sm">
               <span
                 className="rounded-pill border px-sm py-xxs font-mono text-caption-mono-sm"
                 style={{ borderColor: `${color}40`, color }}
               >
-                模块 {stage.moduleRange[0]}-{stage.moduleRange[1]}
+                {t('home.stageModule', {
+                  from: stage.moduleRange[0],
+                  to: stage.moduleRange[1],
+                })}
               </span>
               <span className="font-mono text-caption-mono-sm text-body-mid">
-                {modules.length} 个模块
+                {t('home.stageModulesCount', { count: modules.length })}
               </span>
               <span
                 className={cn(
@@ -230,7 +235,7 @@ function PathStageNode({
               </span>
             </div>
           </div>
-          <p className="mt-xs text-body-sm text-body-mid">{stage.description}</p>
+          <p className="mt-xs text-body-sm text-body-mid">{t(`stage.${stage.id}.description`)}</p>
         </button>
 
         {/* 模块列表 - 展开动画 */}
@@ -267,11 +272,14 @@ function PathStageNode({
                         <div className="flex items-center gap-xs">
                           <span>{m.icon}</span>
                           <span className="text-body-sm text-ink group-hover:text-accent-sunset">
-                            {m.title}
+                            {t(`module.${m.slug}.title`)}
                           </span>
                         </div>
                         <div className="mt-xs text-caption-mono-sm text-body-mid">
-                          {m.knowledgePointCount} 知识点 · {m.visualizationCount} 可视化
+                          {t('home.kpVizCount', {
+                            kp: m.knowledgePointCount,
+                            viz: m.visualizationCount,
+                          })}
                         </div>
                       </div>
                     </MagicCard>

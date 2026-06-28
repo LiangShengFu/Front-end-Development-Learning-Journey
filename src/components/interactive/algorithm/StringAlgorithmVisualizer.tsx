@@ -262,7 +262,7 @@ export function StringAlgorithmVisualizer({ data }: StringAlgorithmVisualizerPro
 
   /** 生成步骤 */
   const generateSteps = (m: StringAlgorithmMode, t: string, p: string) => {
-    let s: StringStep[] = []
+    let s: StringStep[]
     if (m === 'reverse') s = reverseSteps(t)
     else if (m === 'palindrome') s = palindromeSteps(t)
     else if (m === 'longest-palindrome') s = longestPalindromeSteps(t)

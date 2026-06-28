@@ -443,7 +443,7 @@ $primary: blue !default;
   .shadow { box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
   .border { border: 1px solid #e5e7eb; }
   .mt-4 { margin-top: 16px; }
-  .hover\:bg-blue-600:hover { background-color: #2563eb; }
+  .hover\\:bg-blue-600:hover { background-color: #2563eb; }
 </style>
 
 <!-- 按钮 -->
@@ -1554,20 +1554,20 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
               { id: 'has', label: ':has()', group: 2 },
             ],
             edges: [
-              { from: 'css-eng', to: 'preprocess' },
-              { from: 'css-eng', to: 'atomic' },
-              { from: 'css-eng', to: 'modules' },
-              { from: 'css-eng', to: 'cinjs' },
-              { from: 'css-eng', to: 'postcss' },
-              { from: 'css-eng', to: 'arch' },
-              { from: 'css-eng', to: 'modern' },
-              { from: 'preprocess', to: 'sass' },
-              { from: 'atomic', to: 'tailwind' },
-              { from: 'arch', to: 'bem' },
-              { from: 'modern', to: 'container' },
-              { from: 'modern', to: 'layer' },
-              { from: 'modern', to: 'var' },
-              { from: 'modern', to: 'has' },
+              { source: 'css-eng', target: 'preprocess' },
+              { source: 'css-eng', target: 'atomic' },
+              { source: 'css-eng', target: 'modules' },
+              { source: 'css-eng', target: 'cinjs' },
+              { source: 'css-eng', target: 'postcss' },
+              { source: 'css-eng', target: 'arch' },
+              { source: 'css-eng', target: 'modern' },
+              { source: 'preprocess', target: 'sass' },
+              { source: 'atomic', target: 'tailwind' },
+              { source: 'arch', target: 'bem' },
+              { source: 'modern', target: 'container' },
+              { source: 'modern', target: 'layer' },
+              { source: 'modern', target: 'var' },
+              { source: 'modern', target: 'has' },
             ],
           },
         },

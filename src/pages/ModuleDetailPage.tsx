@@ -13,11 +13,14 @@ import { Eyebrow } from '../components/layout/Eyebrow'
 import { KnowledgePointView } from '../components/content/KnowledgePointView'
 import { loadModule } from '../lib/moduleRegistry'
 import { getModuleSummary, getAdjacentModules } from '../lib/modules'
+import { indexModuleIfNeeded } from '../lib/search-index'
+import { useI18n } from '../lib/i18n'
 import type { ModuleMeta } from '../lib/types'
 
 export function ModuleDetailPage() {
   const { slug = '' } = useParams<{ slug: string }>()
   const location = useLocation()
+  const { t, locale } = useI18n()
   const [module, setModule] = useState<ModuleMeta | null>(null)
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
@@ -28,11 +31,13 @@ export function ModuleDetailPage() {
     setNotFound(false)
     setModule(null)
 
-    loadModule(slug)
+    loadModule(slug, locale)
       .then((m) => {
         if (cancelled) return
         if (m) {
           setModule(m)
+          // 将该模块知识点加入搜索索引，便于后续全局搜索覆盖当前正在学习的内容
+          indexModuleIfNeeded(slug)
         } else {
           setNotFound(true)
         }
@@ -44,7 +49,7 @@ export function ModuleDetailPage() {
     return () => {
       cancelled = true
     }
-  }, [slug])
+  }, [slug, locale])
 
   // 哈希锚点滚动：React Router v6 拦截 <a href="#..."> 但不滚动，
   // 需手动监听 location.hash 变化并滚动到对应知识点。
@@ -88,7 +93,7 @@ export function ModuleDetailPage() {
     return (
       <div className="container-page py-4xl">
         <div className="font-mono text-caption-mono uppercase tracking-[1.4px] text-body-mid">
-          加载中...
+          {t('detail.loading')}
         </div>
       </div>
     )
@@ -97,13 +102,13 @@ export function ModuleDetailPage() {
   if (notFound || !summary) {
     return (
       <div className="container-page py-4xl">
-        <Eyebrow className="mb-md">404</Eyebrow>
-        <h1 className="text-display-md tracking-display text-ink">模块未找到</h1>
+        <Eyebrow className="mb-md">{t('detail.notFoundEyebrow')}</Eyebrow>
+        <h1 className="text-display-md tracking-display text-ink">{t('detail.notFoundTitle')}</h1>
         <p className="mt-md text-body-md text-body">
-          模块 "{slug}" 不存在或尚未实现。
+          {t('detail.notFoundDesc', { slug })}
         </p>
         <Link to="/modules" className="btn-pill mt-xl">
-          ← 返回模块列表
+          {t('detail.backToModules')}
         </Link>
       </div>
     )
@@ -116,28 +121,30 @@ export function ModuleDetailPage() {
         <div className="container-page">
           <div className="flex items-center gap-sm text-body-sm text-body-mid">
             <Link to="/modules" className="transition-colors hover:text-ink">
-              模块
+              {t('detail.breadcrumbModules')}
             </Link>
             <span>/</span>
-            <span className="text-ink">{summary.title}</span>
+            <span className="text-ink">{t(`module.${summary.slug}.title`)}</span>
           </div>
 
           <div className="mt-xl flex flex-col gap-md md:flex-row md:items-baseline md:justify-between">
             <div>
               <Eyebrow index={`${summary.number} /`} className="mb-md">
-                {summary.stageLabel}
+                {t(`module.${summary.slug}.stageLabel`)}
               </Eyebrow>
               <h1 className="flex items-center gap-md text-display-md tracking-display text-ink">
                 <span className="text-display-sm">{summary.icon}</span>
-                {summary.title}
+                {t(`module.${summary.slug}.title`)}
               </h1>
-              <p className="mt-md max-w-2xl text-body-lg text-body">{summary.summary}</p>
+              <p className="mt-md max-w-2xl text-body-lg text-body">
+                {t(`module.${summary.slug}.summary`)}
+              </p>
             </div>
 
             <div className="flex gap-xl">
               <div>
                 <div className="font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                  知识点
+                  {t('detail.kpLabel')}
                 </div>
                 <div className="mt-xs text-display-xs text-ink">
                   {module?.points.length ?? summary.knowledgePointCount}
@@ -145,7 +152,7 @@ export function ModuleDetailPage() {
               </div>
               <div>
                 <div className="font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                  可视化
+                  {t('detail.vizLabel')}
                 </div>
                 <div className="mt-xs text-display-xs text-ink">{summary.visualizationCount}</div>
               </div>
@@ -161,7 +168,7 @@ export function ModuleDetailPage() {
           <aside className="hidden lg:block">
             <div className="sticky top-24">
               <div className="mb-lg font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                目录
+                {t('detail.toc')}
               </div>
               <nav className="max-h-[calc(100vh-10rem)] space-y-xs overflow-y-auto pr-xs">
                 {module?.points.map((p) => (
@@ -186,16 +193,14 @@ export function ModuleDetailPage() {
             {module ? (
               <div className="space-y-0">
                 {module.points.map((point) => (
-                  <KnowledgePointView key={point.order} point={point} />
+                  <KnowledgePointView key={point.order} point={point} moduleSlug={slug} />
                 ))}
               </div>
             ) : (
               <div className="rounded-sm border border-hairline bg-canvas-card p-xl">
-                <p className="text-body-md text-body">
-                  该模块的详细内容正在完善中。请先查看其他已实现的模块。
-                </p>
+                <p className="text-body-md text-body">{t('detail.emptyContent')}</p>
                 <Link to="/modules/html-fundamentals" className="btn-pill mt-lg">
-                  查看 HTML 基础模块 →
+                  {t('detail.viewHtmlModule')}
                 </Link>
               </div>
             )}
@@ -212,12 +217,12 @@ export function ModuleDetailPage() {
               className="group rounded-sm border border-hairline bg-canvas-card p-xl transition-colors hover:border-accent-sunset/40"
             >
               <div className="font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                ← 上一模块
+                {t('detail.prevModule')}
               </div>
               <div className="mt-xs flex items-center gap-sm">
                 <span className="font-mono text-caption-mono text-body-mid">{adjacent.prev.number}</span>
                 <span className="text-body-md text-ink group-hover:text-accent-sunset">
-                  {adjacent.prev.title}
+                  {t(`module.${adjacent.prev.slug}.title`)}
                 </span>
               </div>
             </Link>
@@ -231,11 +236,11 @@ export function ModuleDetailPage() {
               className="group rounded-sm border border-hairline bg-canvas-card p-xl text-right transition-colors hover:border-accent-sunset/40"
             >
               <div className="font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-body-mid">
-                下一模块 →
+                {t('detail.nextModule')}
               </div>
               <div className="mt-xs flex items-center justify-end gap-sm">
                 <span className="text-body-md text-ink group-hover:text-accent-sunset">
-                  {adjacent.next.title}
+                  {t(`module.${adjacent.next.slug}.title`)}
                 </span>
                 <span className="font-mono text-caption-mono text-body-mid">{adjacent.next.number}</span>
               </div>

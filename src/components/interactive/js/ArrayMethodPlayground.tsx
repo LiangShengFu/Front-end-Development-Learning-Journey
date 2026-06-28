@@ -30,7 +30,7 @@ export function ArrayMethodPlayground({ data }: ArrayMethodPlaygroundProps) {
     try {
       const arr = JSON.parse(input)
       if (!Array.isArray(arr)) throw new Error('输入必须是数组')
-      // eslint-disable-next-line no-new-func
+       
       const fn = Function(`"use strict"; return (${callback});`)()
       if (typeof fn !== 'function') throw new Error('回调必须是函数')
       const newSteps: string[] = []

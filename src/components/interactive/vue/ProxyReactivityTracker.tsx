@@ -139,6 +139,9 @@ export function ProxyReactivityTracker({ data }: ProxyReactivityTrackerProps) {
     [scenario.effects, addLog],
   )
 
+  // 用 ref 持有 createReactive 以支持递归调用，避免自引用
+  const createReactiveRef = useRef<((target: Record<string, unknown>) => Record<string, unknown>) | null>(null)
+
   const createReactive = useCallback(
     (target: Record<string, unknown>): Record<string, unknown> => {
       const graph: Record<string, string[]> = {}
@@ -166,7 +169,7 @@ export function ProxyReactivityTracker({ data }: ProxyReactivityTrackerProps) {
           track(prop)
           const val = obj[prop]
           if (val && typeof val === 'object' && !Array.isArray(val)) {
-            return createReactive(val as Record<string, unknown>)
+            return createReactiveRef.current?.(val as Record<string, unknown>)
           }
           return val
         },
@@ -185,6 +188,11 @@ export function ProxyReactivityTracker({ data }: ProxyReactivityTrackerProps) {
     },
     [addLog, runEffects],
   )
+
+  // 绑定 ref 以支持递归调用
+  useEffect(() => {
+    createReactiveRef.current = createReactive
+  }, [createReactive])
 
   useEffect(() => {
     const raw = JSON.parse(JSON.stringify(scenario.initialData)) as Record<string, unknown>

@@ -22,8 +22,14 @@ export function RafAnimationDemo({ data }: RafAnimationDemoProps) {
   const rafRef = useRef<number | null>(null)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const frameCountRef = useRef(0)
-  const lastFpsUpdateRef = useRef(performance.now())
+  const lastFpsUpdateRef = useRef(0)
   const rafStartRef = useRef(0)
+  // 用 ref 持有最新回调，避免循环引用
+  const rafLoopRef = useRef<(timestamp: number) => void>(undefined)
+
+  useEffect(() => {
+    lastFpsUpdateRef.current = performance.now()
+  }, [])
 
   // rAF 动画循环
   const rafLoop = useCallback((timestamp: number) => {
@@ -42,9 +48,13 @@ export function RafAnimationDemo({ data }: RafAnimationDemoProps) {
     }
 
     if (running && mode === 'raf') {
-      rafRef.current = requestAnimationFrame(rafLoop)
+      rafRef.current = requestAnimationFrame((t) => rafLoopRef.current?.(t))
     }
   }, [running, mode])
+
+  useEffect(() => {
+    rafLoopRef.current = rafLoop
+  }, [rafLoop])
 
   // 启动 rAF
   useEffect(() => {

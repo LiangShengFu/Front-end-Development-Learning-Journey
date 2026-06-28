@@ -35,7 +35,7 @@ function buildTrie(words: string[]): { root: TrieNode; allNodes: { node: TrieNod
   function addNode(node: TrieNode, parentId: string | null) {
     const id = `n${idCounter++}`
     allNodes.push({ node, parentId, id })
-    for (const [_, child] of node.children) {
+    for (const [, child] of node.children) {
       addNode(child, id)
     }
   }
@@ -167,12 +167,6 @@ export function TrieVisualizer({ data }: TrieVisualizerProps) {
 
   const treeHeight = (maxLevel + 1) * 60 + 40
 
-  /** 获取节点高亮类型 */
-  const getNodeHighlight = (id: string): 'insert' | 'search' | 'prefix' | null => {
-    if (highlightPath.has(id)) return 'search'
-    return null
-  }
-
   return (
     <div className="rounded-sm border border-hairline bg-canvas-card p-xl">
       {/* 控制栏 */}
@@ -265,7 +259,6 @@ export function TrieVisualizer({ data }: TrieVisualizerProps) {
                 const pos = positions.get(item.id)
                 if (!pos) return null
                 const isRoot = item.id === 'n0'
-                const highlight = getNodeHighlight(item.id)
                 const isInPath = highlightPath.has(item.id)
                 return (
                   <g key={item.id}>

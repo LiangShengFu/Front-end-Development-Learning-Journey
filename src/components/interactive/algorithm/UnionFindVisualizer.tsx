@@ -213,24 +213,6 @@ export function UnionFindVisualizer({ data }: UnionFindVisualizerProps) {
   const positions = getNodePositions(nodeCount)
   const svgSize = 100
 
-  /** 获取节点颜色（按根分组） */
-  const getNodeColor = (idx: number): string => {
-    if (!currentStep) return 'border-hairline'
-    let root = idx
-    while (currentStep.parent[root] !== root) root = currentStep.parent[root]
-    const colors = [
-      'border-accent-sunset bg-accent-sunset/10',
-      'border-accent-breeze bg-accent-breeze/10',
-      'border-purple-400 bg-purple-400/10',
-      'border-amber-400 bg-amber-400/10',
-      'border-emerald-400 bg-emerald-400/10',
-      'border-pink-400 bg-pink-400/10',
-      'border-cyan-400 bg-cyan-400/10',
-      'border-indigo-400 bg-indigo-400/10',
-    ]
-    return colors[root % colors.length]
-  }
-
   return (
     <div className="rounded-sm border border-hairline bg-canvas-card p-xl">
       {/* 控制栏 */}

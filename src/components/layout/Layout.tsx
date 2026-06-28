@@ -13,6 +13,7 @@ import { Outlet, ScrollRestoration } from 'react-router-dom'
 import { NavBar } from './NavBar'
 import { Footer } from './Footer'
 import ShapeGrid from '../background/ShapeGrid'
+import { GlobalSearch } from '../search/GlobalSearch'
 
 export function Layout() {
   return (
@@ -42,6 +43,9 @@ export function Layout() {
         <Footer />
         <ScrollRestoration />
       </div>
+
+      {/* 全局搜索命令面板（Cmd/Ctrl + K 唤起） */}
+      <GlobalSearch />
     </div>
   )
 }

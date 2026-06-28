@@ -147,16 +147,20 @@ export type HttpRequestStageId =
   | 'response'
 
 export interface HttpRequestStage {
-  /** 阶段标识 */
-  id: HttpRequestStageId
-  /** 阶段名称 */
-  name: string
+  /** 阶段标识（标准 HTTP 阶段用 HttpRequestStageId；自定义流程可用任意 string） */
+  id: string
+  /** 阶段名称（标准 HTTP 阶段用 name；自定义流程可用 title） */
+  name?: string
+  /** 阶段标题（自定义流程用，如 "① 测试触发"） */
+  title?: string
   /** 描述 */
   description: string
+  /** 详细说明（自定义流程用） */
+  detail?: string
   /** 方向（请求/响应） */
-  direction: 'request' | 'response' | 'bidirectional'
+  direction?: 'request' | 'response' | 'bidirectional'
   /** 模拟耗时（ms） */
-  durationMs: number
+  durationMs?: number
   /** 数据包/报文示例 */
   payload?: string
   /** 主题色 */
@@ -168,6 +172,8 @@ export interface HttpRequestResponseFlowData {
   /** 完整 URL 示例 */
   urlExample?: string
   title?: string
+  /** 流程说明（自定义流程用，如 E2E 测试视角的补充说明） */
+  note?: string
 }
 
 // ============================================================================

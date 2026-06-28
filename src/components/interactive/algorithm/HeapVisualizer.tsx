@@ -134,7 +134,6 @@ function getTreePositions(heap: number[]) {
 export function HeapVisualizer({ data }: HeapVisualizerProps) {
   const initialHeap = data?.initialHeap ?? DEFAULT_HEAP
   const initialType = data?.heapType ?? 'min-heap'
-  const isMin = initialType === 'min-heap'
 
   const [heap, setHeap] = useState<number[]>([])
   const [steps, setSteps] = useState<HeapStep[]>([])

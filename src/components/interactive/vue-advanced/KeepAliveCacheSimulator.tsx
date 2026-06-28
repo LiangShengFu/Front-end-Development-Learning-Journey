@@ -90,7 +90,7 @@ function reducer(state: KeepAliveState, action: Action): KeepAliveState {
       return { ...state, activeTab: tabId, cacheOrder, renderCounts, cacheHits }
     }
     case 'SET_MAX': {
-      let cacheOrder = [...state.cacheOrder]
+      const cacheOrder = [...state.cacheOrder]
       while (cacheOrder.length > action.max) cacheOrder.shift()
       return { ...state, max: action.max, cacheOrder }
     }

@@ -14,7 +14,6 @@
  */
 import { useRef, useState, useCallback, useEffect } from 'react'
 import type { VirtualListVisualizerData } from '../../../lib/performance-security-visualization-types'
-import { cn } from '../../../lib/utils'
 
 interface VirtualListVisualizerProps {
   data?: VirtualListVisualizerData

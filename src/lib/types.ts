@@ -102,6 +102,16 @@ import type {
   SortingRaceArenaData,
   BfsPathFinderData,
   HandwritingChallengeData,
+  HeapVisualizerData,
+  TrieVisualizerData,
+  UnionFindVisualizerData,
+  DivideConquerTreeVisualizerData,
+  StringAlgorithmVisualizerData,
+  HashTableVisualizerData,
+  BinarySearchVisualizerData,
+  SlidingWindowVisualizerData,
+  BacktrackingTreeVisualizerData,
+  DynamicProgrammingVisualizerData,
   AlgorithmVisualizationType,
 } from './algorithm-visualization-types'
 import { algorithmVisualizationMeta } from './algorithm-visualization-types'
@@ -436,13 +446,39 @@ export type ContentBlock =
 // 各可视化组件的数据类型定义
 // ============================================================================
 
+/**
+ * VisualizationType 到 Data 类型的精确映射。
+ *
+ * 用途：让 `renderVisualization` 在 switch case 内自动收窄 data 类型，
+ * 消除 `as any`。当前覆盖算法类高频崩溃组件，其余类型保留 `VisualizationData`
+ * 联合（仍受编译期校验），后续按需扩展此映射即可。
+ *
+ * 用法：`const data = block.data as VisualizationTypeToData[typeof block.visualizationType]`
+ */
+export interface VisualizationTypeToData {
+  knowledgegraph: KnowledgeGraphData
+  flipcard: FlipCardData
+  skillbar: SkillBarData
+  // 算法类（高频崩溃区，已精确映射）
+  'heap-visualizer': HeapVisualizerData
+  'trie-visualizer': TrieVisualizerData
+  'union-find-visualizer': UnionFindVisualizerData
+  'divide-conquer-tree-visualizer': DivideConquerTreeVisualizerData
+  'string-algorithm-visualizer': StringAlgorithmVisualizerData
+  'hash-table-visualizer': HashTableVisualizerData
+  'binary-search-visualizer': BinarySearchVisualizerData
+  'sliding-window-visualizer': SlidingWindowVisualizerData
+  'backtracking-tree-visualizer': BacktrackingTreeVisualizerData
+  'dynamic-programming-visualizer': DynamicProgrammingVisualizerData
+}
+
 /** KnowledgeGraph - 知识节点关系图 */
 export interface KnowledgeGraphData {
   nodes: Array<{
     id: string
     label: string
-    /** 节点分组（用于着色） */
-    group?: string
+    /** 节点分组（用于着色，支持字符串或数字） */
+    group?: string | number
     /** 节点大小权重 */
     weight?: number
   }>
@@ -613,6 +649,8 @@ export interface AccordionData {
   defaultMode?: 'list' | 'flashcard'
   /** 面板项 */
   items: Array<{
+    /** 可选的唯一标识（用于 React key 稳定性） */
+    id?: string
     /** 标题 */
     title: string
     /** 内容（支持多段落） */
@@ -799,6 +837,16 @@ export type VisualizationData =
   | PerformanceObserverDemoData
   | UserTrackingFunnelData
   | RBACPermissionMatrixData
+  | HeapVisualizerData
+  | TrieVisualizerData
+  | UnionFindVisualizerData
+  | DivideConquerTreeVisualizerData
+  | StringAlgorithmVisualizerData
+  | HashTableVisualizerData
+  | BinarySearchVisualizerData
+  | SlidingWindowVisualizerData
+  | BacktrackingTreeVisualizerData
+  | DynamicProgrammingVisualizerData
 
 // ============================================================================
 // 模块元数据类型
