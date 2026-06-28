@@ -213,17 +213,6 @@ describe('Next.js 与 SSR/SSG 全栈模块', () => {
     expect(table!.rows.length).toBeGreaterThanOrEqual(10)
   })
 
-  // ---- 维度 A4：新增/实战知识点标注 isNew ----
-  it('综合实战与新增知识点应标注 isNew', () => {
-    const titles = nextjsSsrModule.points
-      .filter((p) => p.isNew === true)
-      .map((p) => p.title)
-    // 至少包含综合实战、面试题、速查表三个新增知识点
-    expect(titles).toContain('综合实战：Server Action 表单提交')
-    expect(titles).toContain('Next.js 全栈面试题精选')
-    expect(titles).toContain('Next.js 全栈速查表')
-  })
-
   // ---- 维度 D：综合实战沙盒存在 ----
   it('应包含至少 1 个综合实战沙盒（Server Action 表单提交）', () => {
     const practiceTitles = nextjsSsrModule.points

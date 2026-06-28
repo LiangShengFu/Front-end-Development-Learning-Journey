@@ -325,7 +325,6 @@ function riskyCalc(a, b) {
       order: 5,
       title: '条件断点 / 日志断点',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -527,7 +526,6 @@ fetch('/api/user?id=1')  // 执行到这里暂停
       order: 8,
       title: '接口 Mock 与拦截',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -770,7 +768,6 @@ function fixed() {
       order: 11,
       title: 'Application 面板（存储/缓存）',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p11-1',
@@ -1055,7 +1052,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 15,
       title: '调试方法论与排错思路',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -1134,7 +1130,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 16,
       title: '前端调试面试题精选',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1226,7 +1221,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 17,
       title: '综合实战：用断点调试定位闭包变量泄漏',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1321,7 +1315,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 18,
       title: '综合实战：用 Performance 面板定位长任务卡顿',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1446,7 +1439,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 19,
       title: '前端调试知识点速查表',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -1495,7 +1487,6 @@ if (process.env.NODE_ENV !== 'production') {
       order: 20,
       title: '调试测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

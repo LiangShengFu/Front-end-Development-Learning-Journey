@@ -48,7 +48,6 @@ export const monitoringAuthModule: ModuleMeta = {
       order: 1,
       title: 'i18n 基础与 Intl API',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'i18n-format-playground',
       blocks: [
         {
@@ -115,7 +114,6 @@ new Intl.NumberFormat('en-US', { notation: 'compact' })
       order: 2,
       title: 'ICU MessageFormat 与 i18next',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -216,7 +214,6 @@ await i18next.changeLanguage('en-US')`,
       order: 3,
       title: 'react-i18next / Vue I18n 框架集成',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -308,7 +305,6 @@ function switchToEN() {
       order: 4,
       title: 'SEO 基础：meta / OG / JSON-LD / sitemap',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -431,7 +427,6 @@ Sitemap: https://example.com/sitemap.xml`,
       order: 5,
       title: 'SSR/SSG 与多语言 SEO',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -520,7 +515,6 @@ export async function generateMetadata({
       order: 6,
       title: '前端监控与可观测性概述',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -584,7 +578,6 @@ export async function generateMetadata({
       order: 7,
       title: '错误监控与 Source Map 还原',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'error-monitoring-dashboard',
       blocks: [
         {
@@ -685,7 +678,6 @@ const original = smc.originalPositionFor({
       order: 8,
       title: '性能监控与 Web Vitals',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'performance-observer-demo',
       blocks: [
         {
@@ -781,7 +773,6 @@ function report(metric, value) {
       order: 9,
       title: 'Sentry 集成与采样策略',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -892,7 +883,6 @@ project=your-project`,
       order: 10,
       title: '用户行为埋点与漏斗分析',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'user-tracking-funnel',
       blocks: [
         {
@@ -982,7 +972,6 @@ function usePageView() {
       order: 11,
       title: 'JWT 与 Session 对比',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'jwt-payload-decoder',
       blocks: [
         {
@@ -1073,7 +1062,6 @@ function authMiddleware(req, res, next) {
       order: 12,
       title: 'OAuth 2.0 / PKCE / NextAuth',
       difficulty: 5,
-      isNew: true,
       visualizationType: 'auth-flow-graph',
       blocks: [
         {
@@ -1195,7 +1183,6 @@ export default async function Page() {
       order: 13,
       title: 'RBAC 前端鉴权与综合速查测验',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'rbac-permission-matrix',
       blocks: [
         {

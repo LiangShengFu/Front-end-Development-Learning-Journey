@@ -40,7 +40,6 @@ export const performanceSecurityModule: ModuleMeta = {
       order: 1,
       title: '性能与安全总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -103,7 +102,6 @@ export const performanceSecurityModule: ModuleMeta = {
       order: 2,
       title: 'Core Web Vitals 指标矩阵',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'core-web-vitals-visualizer',
       blocks: [
         {
@@ -168,7 +166,6 @@ onTTFB(sendToAnalytics)`,
       order: 3,
       title: 'Resource Hints 策略',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'resource-hints-visualizer',
       blocks: [
         {
@@ -228,7 +225,6 @@ onTTFB(sendToAnalytics)`,
       order: 4,
       title: '防抖节流可视化',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'debounce-throttle-visualizer',
       blocks: [
         {
@@ -273,7 +269,6 @@ onTTFB(sendToAnalytics)`,
       order: 5,
       title: '虚拟列表原理',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'virtual-list-visualizer',
       blocks: [
         {
@@ -320,7 +315,6 @@ onTTFB(sendToAnalytics)`,
       order: 6,
       title: 'Service Worker 与 PWA 缓存策略',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -423,7 +417,6 @@ registerRoute(
       order: 7,
       title: 'XSS 攻击向量流程',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'security-attack-flow-visualizer',
       blocks: [
         {
@@ -483,7 +476,6 @@ el.textContent = userInput // ✅ 安全
       order: 8,
       title: 'CSRF 攻击链（攻击视角）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'http-request-response-flow',
       blocks: [
         {
@@ -590,7 +582,6 @@ Content-Type: application/json
       order: 9,
       title: 'CSRF 攻击向量替换（攻击视角）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'mock-flow-visualizer',
       blocks: [
         {
@@ -718,7 +709,6 @@ app.use((req, res, next) => {
       order: 10,
       title: '安全响应头矩阵',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -829,7 +819,6 @@ app.use(helmet({
       order: 11,
       title: '性能与安全知识点速查',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -917,7 +906,6 @@ app.use(helmet({
       order: 12,
       title: '性能与安全小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

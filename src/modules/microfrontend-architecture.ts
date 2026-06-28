@@ -41,7 +41,6 @@ export const microfrontendModule: ModuleMeta = {
       order: 1,
       title: '微前端概念与总览',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -111,7 +110,6 @@ export const microfrontendModule: ModuleMeta = {
       order: 2,
       title: 'Module Federation',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'mf-module-federation',
       blocks: [
         {
@@ -189,7 +187,6 @@ function App() {
       order: 3,
       title: 'qiankun 微前端框架',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'mf-qiankun-lifecycle',
       blocks: [
         {
@@ -289,7 +286,6 @@ export async function unmount(props) {
       order: 4,
       title: 'Web Components / micro-app 方案',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'mf-css-isolation',
       blocks: [
         {
@@ -384,7 +380,6 @@ customElements.define('micro-element', MicroElement)`,
       order: 5,
       title: '微前端核心问题与沙箱隔离',
       difficulty: 5,
-      isNew: true,
       visualizationType: 'mf-sandbox-isolation',
       blocks: [
         {
@@ -470,7 +465,6 @@ console.log(window.__subAppConfig) // undefined，全局未污染`,
       order: 6,
       title: '方案对比表与架构演进',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'mf-architecture-graph',
       blocks: [
         {
@@ -543,7 +537,6 @@ console.log(window.__subAppConfig) // undefined，全局未污染`,
       order: 7,
       title: '知识点速查表与小测验',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {

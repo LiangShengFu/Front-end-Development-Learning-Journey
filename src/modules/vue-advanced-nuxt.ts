@@ -52,7 +52,6 @@ export const vueAdvancedNuxtModule: ModuleMeta = {
       order: 1,
       title: 'Vue 进阶总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -248,7 +247,6 @@ export function useMouse() {
       order: 4,
       title: 'Composable 组合模式：多函数协同',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'composable-flow-visualizer',
       blocks: [
         {
@@ -282,7 +280,6 @@ export function useMouse() {
       order: 5,
       title: '自定义指令系统',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'custom-directive-workbench',
       blocks: [
         {
@@ -326,7 +323,6 @@ export function useMouse() {
       order: 6,
       title: 'Nuxt 3 混合渲染：SSR / SSG / ISR / SPA',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'nuxt-hybrid-render-studio',
       blocks: [
         {
@@ -687,7 +683,6 @@ createTextVNode("共 " + _ctx.users.length + " 位用户", 1 /* TEXT */)`,
       order: 12,
       title: 'KeepAlive 缓存策略',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'keepalive-cache-simulator',
       blocks: [
         {
@@ -862,7 +857,6 @@ watchEffect(() => console.log(state.count))`,
       order: 15,
       title: '综合实战：Composable useMouseTracker 封装',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p15-1',
@@ -979,7 +973,6 @@ export function useMouseTracker(throttleMs = 100) {
       order: 16,
       title: 'Vue 进阶面试题精选',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p16-1',
@@ -1137,7 +1130,6 @@ export function useMouseTracker(throttleMs = 100) {
       order: 17,
       title: 'Vue 进阶小测验',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

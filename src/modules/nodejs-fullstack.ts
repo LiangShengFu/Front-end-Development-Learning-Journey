@@ -39,7 +39,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 1,
       title: 'Node.js 与全栈总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -93,7 +92,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 2,
       title: 'Node.js 事件循环六阶段',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'event-loop-visualizer',
       blocks: [
         {
@@ -128,7 +126,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 3,
       title: 'CommonJS vs ESM 模块系统',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'module-system-comparator',
       blocks: [
         {
@@ -156,7 +153,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 4,
       title: '异步文件 IO 三种范式',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'filesystem-async-comparator',
       blocks: [
         {
@@ -188,7 +184,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 5,
       title: 'Express 中间件洋葱模型',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'express-middleware-flow',
       blocks: [
         {
@@ -223,7 +218,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 6,
       title: 'Express vs Koa 框架对比',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -273,7 +267,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 7,
       title: 'RESTful API 设计矩阵',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'restful-api-designer',
       blocks: [
         {
@@ -308,7 +301,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 8,
       title: 'HTTP 状态码（服务端视角）',
       difficulty: 1,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -362,7 +354,6 @@ export const nodejsFullstackModule: ModuleMeta = {
       order: 9,
       title: 'HTTP 请求响应流（服务端视角）',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'http-request-response-flow',
       blocks: [
         {
@@ -461,7 +452,6 @@ X-Response-Time: 93ms
       order: 10,
       title: 'TCP 三次握手（服务端视角）',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'tcp-handshake-visualizer',
       blocks: [
         {
@@ -584,7 +574,6 @@ X-Response-Time: 93ms
       order: 11,
       title: 'Node.js 全栈知识点速查',
       difficulty: 1,
-      isNew: false,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -695,7 +684,6 @@ function errorHandler(err, req, res, next) {
       order: 12,
       title: 'Node.js 全栈小测验',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'quiz',
       blocks: [
         {

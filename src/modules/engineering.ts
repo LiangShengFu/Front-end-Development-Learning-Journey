@@ -41,7 +41,6 @@ export const engineeringModule: ModuleMeta = {
       order: 1,
       title: '前端工程化总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -101,7 +100,6 @@ export const engineeringModule: ModuleMeta = {
       order: 2,
       title: 'Webpack 构建流程：Entry → Resolve → Loader → Plugin → Output',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'webpack-build-flow-visualizer',
       blocks: [
         {
@@ -251,7 +249,6 @@ optimization: {
       order: 3,
       title: 'Vite ESM 加载流程：浏览器原生 ESM + 按需编译',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'vite-esm-loading-flow',
       blocks: [
         {
@@ -328,7 +325,6 @@ optimization: {
       order: 5,
       title: 'pnpm 硬链接机制：全局 store + 硬链接 + 符号链接',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'pnpm-hardlink-visualizer',
       blocks: [
         {
@@ -487,7 +483,6 @@ trim_trailing_whitespace = false`,
       order: 8,
       title: '约定式提交（Conventional Commits）解析',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'commit-message-parser',
       blocks: [
         {
@@ -609,7 +604,6 @@ BREAKING CHANGE: 用户接口返回从 { code, data, msg } 改为 { success, dat
       order: 10,
       title: 'Monorepo 结构：pnpm workspace 多包仓库',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'monorepo-tree-visualizer',
       blocks: [
         {
@@ -733,7 +727,6 @@ BREAKING CHANGE: 用户接口返回从 { code, data, msg } 改为 { success, dat
       order: 11,
       title: 'Turborepo 任务编排：依赖图 + 增量构建 + 远程缓存',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'turborepo-task-flow',
       blocks: [
         {
@@ -773,7 +766,6 @@ BREAKING CHANGE: 用户接口返回从 { code, data, msg } 改为 { success, dat
       order: 12,
       title: 'CI/CD 流水线：GitHub Actions 端到端流程',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'cicd-pipeline-visualizer',
       blocks: [
         {

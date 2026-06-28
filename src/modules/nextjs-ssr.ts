@@ -1300,7 +1300,6 @@ revalidateTag('posts')`,
       order: 17,
       title: '综合实战：Server Action 表单提交',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p17-1',
@@ -1414,7 +1413,6 @@ function NewPostForm() {
       order: 18,
       title: 'Next.js 全栈面试题精选',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1570,7 +1568,6 @@ function NewPostForm() {
       order: 19,
       title: 'Next.js 全栈速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p19-1',

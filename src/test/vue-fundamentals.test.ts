@@ -206,16 +206,6 @@ describe('Vue.js 核心基础模块', () => {
     expect(table!.rows.length).toBeGreaterThanOrEqual(10)
   })
 
-  // ---- 维度 A4：新增/实战知识点标注 isNew ----
-  it('综合实战与新增知识点应标注 isNew', () => {
-    const titles = vueFundamentalsModule.points
-      .filter((p) => p.isNew === true)
-      .map((p) => p.title)
-    expect(titles).toContain('综合实战：组合式函数 useFetch 封装')
-    expect(titles).toContain('Vue.js 基础面试题精选')
-    expect(titles).toContain('Vue.js 基础速查表')
-  })
-
   // ---- 维度 D：综合实战沙盒存在 ----
   it('应包含至少 1 个综合实战沙盒（组合式函数 useFetch 封装）', () => {
     const practiceTitles = vueFundamentalsModule.points

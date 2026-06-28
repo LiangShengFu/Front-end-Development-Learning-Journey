@@ -37,7 +37,6 @@ export const miniprogramModule: ModuleMeta = {
       order: 1,
       title: '小程序开发总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -96,7 +95,6 @@ export const miniprogramModule: ModuleMeta = {
       order: 2,
       title: '双线程模型与 setData 通信',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'dual-thread-model-visualizer',
       blocks: [
         {
@@ -161,7 +159,6 @@ export const miniprogramModule: ModuleMeta = {
       order: 3,
       title: 'setData 性能优化策略',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'setdata-performance-comparator',
       blocks: [
         {
@@ -236,7 +233,6 @@ this.setData({
       order: 4,
       title: 'Page() 构造器与页面生命周期',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -280,7 +276,6 @@ this.setData({
       order: 5,
       title: 'Component() 自定义组件',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'mini-component-workbench',
       blocks: [
         {
@@ -373,7 +368,6 @@ this.setData({
       order: 6,
       title: 'Taro 跨端框架与多端编译',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'taro-compile-flow-visualizer',
       blocks: [
         {
@@ -462,7 +456,6 @@ export default function Hello() {
       order: 7,
       title: 'uni-app 条件编译',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'uniapp-conditional-compiler',
       blocks: [
         {
@@ -588,7 +581,6 @@ plus.net.XMLHttpRequest('/api')`,
       order: 8,
       title: '分包加载与预加载策略',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'subpackage-loading-visualizer',
       blocks: [
         {
@@ -643,7 +635,6 @@ plus.net.XMLHttpRequest('/api')`,
       order: 9,
       title: '性能优化手段对比矩阵',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -682,7 +673,6 @@ plus.net.XMLHttpRequest('/api')`,
       order: 10,
       title: '微信原生 / Taro / uni-app 对比',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -722,7 +712,6 @@ plus.net.XMLHttpRequest('/api')`,
       order: 11,
       title: '小程序开发速查',
       difficulty: 1,
-      isNew: false,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -806,7 +795,6 @@ this.setData({ [\`list[\${i}].name\`]: v })`,
       order: 12,
       title: '小程序开发小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

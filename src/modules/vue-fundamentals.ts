@@ -994,7 +994,6 @@ const vFocus = {
       order: 18,
       title: '综合实战：组合式函数 useFetch 封装',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p18-1',
@@ -1109,7 +1108,6 @@ export function useFetch<T>(url: () => string) {
       order: 19,
       title: 'Vue.js 基础面试题精选',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p19-1',
@@ -1277,7 +1275,6 @@ export function useFetch<T>(url: () => string) {
       order: 20,
       title: 'Vue.js 基础速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p20-1',

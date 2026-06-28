@@ -24,6 +24,7 @@ const DOMAIN_LABELS: Record<QuestionDomain, string> = {
   javascript: 'JavaScript',
   css: 'CSS',
   react: 'React',
+  vue: 'Vue',
   network: '网络',
   security: '安全',
   engineering: '工程化',

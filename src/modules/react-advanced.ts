@@ -1250,7 +1250,6 @@ function Timer() {
       order: 19,
       title: '综合实战：列表性能优化',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p19-1',
@@ -1380,7 +1379,6 @@ function Timer() {
       order: 20,
       title: 'React 进阶面试题精选',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1536,7 +1534,6 @@ function Timer() {
       order: 21,
       title: 'React 进阶速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p21-1',

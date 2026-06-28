@@ -42,6 +42,8 @@ interface SortResult {
 
 const ALGO_META: Record<SortAlgorithm, { label: string; complexity: string; space: string; stable: boolean }> = {
   bubble: { label: '冒泡排序', complexity: 'O(n²)', space: 'O(1)', stable: true },
+  selection: { label: '选择排序', complexity: 'O(n²)', space: 'O(1)', stable: false },
+  insertion: { label: '插入排序', complexity: 'O(n²)', space: 'O(1)', stable: true },
   quick: { label: '快速排序', complexity: 'O(n log n)', space: 'O(log n)', stable: false },
   merge: { label: '归并排序', complexity: 'O(n log n)', space: 'O(n)', stable: true },
   counting: { label: '计数排序', complexity: 'O(n+k)', space: 'O(k)', stable: true },
@@ -70,6 +72,68 @@ function recordBubble(arr: number[]): SortResult {
     sorted.unshift(n - 1 - i)
   }
   sorted.unshift(0)
+  steps.push({ array: [...a], comparing: [], swapping: [], sorted: [...sorted] })
+  return { steps, comparisons, swaps }
+}
+
+function recordSelection(arr: number[]): SortResult {
+  const steps: SortStep[] = []
+  const a = [...arr]
+  let comparisons = 0
+  let swaps = 0
+  const n = a.length
+  const sorted: number[] = []
+
+  steps.push({ array: [...a], comparing: [], swapping: [], sorted: [] })
+
+  for (let i = 0; i < n - 1; i++) {
+    let minIdx = i
+    for (let j = i + 1; j < n; j++) {
+      comparisons++
+      steps.push({ array: [...a], comparing: [minIdx, j], swapping: [], sorted: [...sorted] })
+      if (a[j] < a[minIdx]) {
+        minIdx = j
+      }
+    }
+    if (minIdx !== i) {
+      ;[a[i], a[minIdx]] = [a[minIdx], a[i]]
+      swaps++
+      steps.push({ array: [...a], comparing: [], swapping: [i, minIdx], sorted: [...sorted] })
+    }
+    sorted.push(i)
+  }
+  sorted.push(n - 1)
+  steps.push({ array: [...a], comparing: [], swapping: [], sorted: [...sorted] })
+  return { steps, comparisons, swaps }
+}
+
+function recordInsertion(arr: number[]): SortResult {
+  const steps: SortStep[] = []
+  const a = [...arr]
+  let comparisons = 0
+  let swaps = 0
+  const n = a.length
+  // 已排序区初始为 [0]
+  const sorted: number[] = [0]
+
+  steps.push({ array: [...a], comparing: [], swapping: [], sorted: [...sorted] })
+
+  for (let i = 1; i < n; i++) {
+    let j = i
+    while (j > 0) {
+      comparisons++
+      steps.push({ array: [...a], comparing: [j - 1, j], swapping: [], sorted: [...sorted] })
+      if (a[j - 1] > a[j]) {
+        ;[a[j - 1], a[j]] = [a[j], a[j - 1]]
+        swaps++
+        steps.push({ array: [...a], comparing: [], swapping: [j - 1, j], sorted: [...sorted] })
+        j--
+      } else {
+        break
+      }
+    }
+    sorted.push(i)
+  }
   steps.push({ array: [...a], comparing: [], swapping: [], sorted: [...sorted] })
   return { steps, comparisons, swaps }
 }
@@ -196,6 +260,8 @@ function recordCounting(arr: number[]): SortResult {
 
 const RECORDERS: Record<SortAlgorithm, (arr: number[]) => SortResult> = {
   bubble: recordBubble,
+  selection: recordSelection,
+  insertion: recordInsertion,
   quick: recordQuick,
   merge: recordMerge,
   counting: recordCounting,
@@ -207,7 +273,10 @@ const RECORDERS: Record<SortAlgorithm, (arr: number[]) => SortResult> = {
 
 export function SortingRaceArena({ data }: SortingRaceArenaProps) {
   const arraySize = data?.arraySize ?? 24
-  const algorithms = useMemo<SortAlgorithm[]>(() => data?.algorithms ?? ['bubble', 'quick', 'merge', 'counting'], [data?.algorithms])
+  const algorithms = useMemo<SortAlgorithm[]>(
+    () => data?.algorithms ?? ['bubble', 'selection', 'insertion', 'quick', 'merge', 'counting'],
+    [data?.algorithms],
+  )
 
   const [baseArray, setBaseArray] = useState<number[]>(() => generateArray(arraySize))
   const [stepIdx, setStepIdx] = useState(0)

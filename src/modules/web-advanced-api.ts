@@ -39,7 +39,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 1,
       title: 'Web 高级 API 与 GraphQL 总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -91,7 +90,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 2,
       title: 'Web Components 生命周期',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'web-components-lifecycle',
       blocks: [
         {
@@ -126,7 +124,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 3,
       title: 'Web Workers 数据传输',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'worker-data-transfer',
       blocks: [
         {
@@ -154,7 +151,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 4,
       title: 'Observer API 三剑客',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'observer-api-showcase',
       blocks: [
         {
@@ -182,7 +178,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 5,
       title: 'WebAssembly 性能与互操作',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -231,7 +226,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 6,
       title: 'Intersection Observer 性能对比',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'debounce-throttle-visualizer',
       blocks: [
         {
@@ -264,7 +258,6 @@ export const webAdvancedApiModule: ModuleMeta = {
       order: 7,
       title: 'Web Components 测试流程',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'component-test-playground',
       blocks: [
         {
@@ -361,7 +354,6 @@ it('my-counter 生命周期测试', async () => {
       order: 8,
       title: 'Web 高级 API 知识点速查',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -446,7 +438,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 9,
       title: 'GraphQL Schema 与查询构建',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'graphql-schema-explorer',
       blocks: [
         {
@@ -474,7 +465,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 10,
       title: 'GraphQL 与 REST 对比',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -510,7 +500,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 11,
       title: 'API 层方案对比',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'api-layer-comparison',
       blocks: [
         {
@@ -538,7 +527,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 12,
       title: 'tRPC 与 GraphQL 对比',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -572,7 +560,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 13,
       title: 'TanStack Query 缓存策略',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -613,7 +600,6 @@ instance.exports.compute(bufferPtr, len)`,
       order: 14,
       title: 'GraphQL 与 API 层知识点速查',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -689,7 +675,6 @@ subscription { messageAdded{ text } }`,
       order: 15,
       title: '模块二十一小测验',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

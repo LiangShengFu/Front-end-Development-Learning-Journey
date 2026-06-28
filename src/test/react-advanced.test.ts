@@ -202,16 +202,6 @@ describe('React 进阶模块', () => {
     expect(table!.rows.length).toBeGreaterThanOrEqual(10)
   })
 
-  // ---- 维度 A4：新增/实战知识点标注 isNew ----
-  it('综合实战与新增知识点应标注 isNew', () => {
-    const titles = reactAdvancedModule.points
-      .filter((p) => p.isNew === true)
-      .map((p) => p.title)
-    expect(titles).toContain('综合实战：列表性能优化')
-    expect(titles).toContain('React 进阶面试题精选')
-    expect(titles).toContain('React 进阶速查表')
-  })
-
   // ---- 维度 D：综合实战沙盒存在 ----
   it('应包含至少 1 个综合实战沙盒', () => {
     const practiceTitles = reactAdvancedModule.points

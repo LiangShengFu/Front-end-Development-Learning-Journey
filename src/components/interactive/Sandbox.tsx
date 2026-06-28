@@ -90,15 +90,15 @@ const JS_CONSOLE_HOOK = `<script>
             return String(a);
           } catch(e) { return String(a); }
         });
-        window.parent.postMessage({ __sandbox: true, log: { type: method, args: args } }, '*');
+        window.parent.postMessage({ __sandbox: true, log: { type: method, args: args } }, '__SANDBOX_TARGET_ORIGIN__');
         orig.apply(console, arguments);
       };
     });
     window.addEventListener('error', function(e) {
-      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message + (e.lineno ? ' (line ' + e.lineno + ')') : ''] } }, '*');
+      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message + (e.lineno ? ' (line ' + e.lineno + ')') : ''] } }, '__SANDBOX_TARGET_ORIGIN__');
     });
     window.addEventListener('unhandledrejection', function(e) {
-      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: ['Unhandled Promise Rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))] } }, '*');
+      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: ['Unhandled Promise Rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))] } }, '__SANDBOX_TARGET_ORIGIN__');
     });
   })();
 <\/script>`
@@ -113,6 +113,8 @@ export function Sandbox({ data }: SandboxProps) {
   /** 运行计数器，作为 iframe 的 key 强制重新挂载 */
   const [runCount, setRunCount] = useState(0)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  /** JS 模式下执行代码的 iframe 引用，用于 message 事件来源校验（M-01） */
+  const iframeRef = useRef<HTMLIFrameElement | null>(null)
 
   const language = data.language ?? 'js'
   const isPreviewMode = language === 'html' || language === 'css'
@@ -167,16 +169,19 @@ ${userCode}
 </html>`
       }
       // JS 模式：捕获 console 并执行
+      // 安全加固 L-02：postMessage targetOrigin 使用父页面真实 origin，防止页面被恶意嵌入时日志泄露
+      const targetOrigin = JSON.stringify(window.location.origin)
+      const consoleHook = JS_CONSOLE_HOOK.replace(/'__SANDBOX_TARGET_ORIGIN__'/g, targetOrigin)
       return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
 <body>
-${JS_CONSOLE_HOOK}
+${consoleHook}
 <script>
   try {
 ${userCode}
   } catch (e) {
-    window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message] } }, '*');
+    window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message] } }, ${targetOrigin});
   }
 <\/script>
 </body>
@@ -206,6 +211,8 @@ ${userCode}
   useEffect(() => {
     if (isPreviewMode) return
     const handleMessage = (e: MessageEvent) => {
+      // 安全加固 M-01：校验消息来源，拒绝跨源消息注入伪造日志
+      if (e.source !== iframeRef.current?.contentWindow) return
       if (e.data && e.data.__sandbox === true && e.data.log) {
         setLogs((prev) => [...prev, e.data.log])
       }
@@ -311,6 +318,7 @@ ${userCode}
               {hasRun && (
                 <iframe
                   key={`exec-${runCount}`}
+                  ref={iframeRef}
                   title="sandbox-exec"
                   srcDoc={iframeDoc}
                   sandbox="allow-scripts"

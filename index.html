@@ -5,8 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="前端开发知识体系 - 25 个模块、13 种可视化组件、470+ 知识点的交互式学习平台" />
+    <!--
+      安全加固 L-01：Content-Security-Policy 纵深防御
+      - script-src 'unsafe-inline'：Sandbox 组件的 srcDoc iframe 继承父页面 CSP，需允许内联脚本以执行用户代码
+      - frame-ancestors 需通过 HTTP 响应头设置（meta 不支持），部署时建议补充：Content-Security-Policy: frame-ancestors 'none'
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; frame-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'self';"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      安全加固 L-03：Google Fonts CSS 内容随 User-Agent 动态变化（woff2/ttf），SRI 哈希不适用。
+      当前通过 CSP 的 style-src/font-src 白名单限制只信任 Google 域名，提供来源完整性保障。
+      完整 SRI 修复需本地化字体（演进方向）：下载 woff2 到 /public/fonts，用 @font-face 引用。
+    -->
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"

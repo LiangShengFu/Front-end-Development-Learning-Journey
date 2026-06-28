@@ -561,7 +561,6 @@ export const htmlFundamentalsModule: ModuleMeta = {
       order: 7,
       title: 'HTML 发展历程',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -714,7 +713,6 @@ export const htmlFundamentalsModule: ModuleMeta = {
       order: 9,
       title: '语义化文本元素（em/strong/blockquote 等）',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'flipcard',
       blocks: [
         {
@@ -778,7 +776,6 @@ export const htmlFundamentalsModule: ModuleMeta = {
       order: 10,
       title: '语义化 vs 非语义化对比',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -1927,7 +1924,6 @@ if (errors.length === 0) {
       order: 22,
       title: '综合实战：搭建博客文章页',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p21proj-1',
@@ -2034,7 +2030,6 @@ if (errors.length === 0) {
       order: 23,
       title: '综合实战：带验证的注册表单',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p21b-1',
@@ -2257,7 +2252,6 @@ if (errors.length === 0) {
       order: 26,
       title: '小测验：HTML 基础',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

@@ -200,17 +200,6 @@ describe('React 基础模块', () => {
     expect(table!.rows.length).toBeGreaterThanOrEqual(10)
   })
 
-  // ---- 维度 A4：新增/实战知识点标注 isNew ----
-  it('综合实战与新增知识点应标注 isNew', () => {
-    const titles = reactFundamentalsModule.points
-      .filter((p) => p.isNew === true)
-      .map((p) => p.title)
-    // 至少包含两个综合实战与 React 19 新特性
-    expect(titles).toContain('综合实战：受控注册表单')
-    expect(titles).toContain('综合实战：Hooks 数据获取与列表')
-    expect(titles).toContain('React 19 新特性')
-  })
-
   // ---- 维度 D：综合实战沙盒存在 ----
   it('应包含至少 2 个综合实战沙盒（受控表单 + 数据获取列表）', () => {
     const practiceTitles = reactFundamentalsModule.points

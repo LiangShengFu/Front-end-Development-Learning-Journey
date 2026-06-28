@@ -33,7 +33,7 @@ describe('数据结构与前端算法模块', () => {
       .flatMap((p) => p.blocks)
       .filter((b) => b.type === 'demo').length
     expect(dataStructureAlgorithmModule.visualizationCount).toBe(demoBlocks)
-    expect(dataStructureAlgorithmModule.visualizationCount).toBe(16)
+    expect(dataStructureAlgorithmModule.visualizationCount).toBe(26)
   })
 
   it('知识点序号应从 1 到 30 连续', () => {
@@ -234,12 +234,6 @@ describe('数据结构与前端算法模块', () => {
     expect(flipData.cards.length).toBeGreaterThanOrEqual(10)
     const tables = cheatsheet!.blocks.filter((b) => b.type === 'table')
     expect(tables.length).toBeGreaterThanOrEqual(2)
-  })
-
-  // ---- 维度 A4：新增/实战知识点标注 isNew ----
-  it('新增知识点应标注 isNew', () => {
-    const newPoints = dataStructureAlgorithmModule.points.filter((p) => p.isNew === true)
-    expect(newPoints.length).toBeGreaterThanOrEqual(15)
   })
 
   // ---- 算法可视化组件覆盖 ----

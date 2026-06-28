@@ -40,7 +40,6 @@ export const cssEngineeringModule: ModuleMeta = {
       order: 1,
       title: '样式方案发展历程',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -514,7 +513,6 @@ $primary: blue !default;
       order: 6,
       title: 'Tailwind 自定义主题配置',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'codestepper',
       blocks: [
         {
@@ -793,7 +791,6 @@ export function Button({ variant = 'primary', children }) {
       order: 9,
       title: 'CSS-in-JS（styled-components/emotion）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -1060,7 +1057,6 @@ import * as Dialog from '@radix-ui/react-dialog'
       order: 12,
       title: 'CSS 架构（BEM/ITCSS/SMACSS）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'architecture',
       blocks: [
         {
@@ -1188,7 +1184,6 @@ import * as Dialog from '@radix-ui/react-dialog'
       order: 13,
       title: 'CSS 变量与主题系统',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1337,7 +1332,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 14,
       title: '容器查询 @container',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p14-1',
@@ -1434,7 +1428,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 15,
       title: '@layer 层叠层',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'codestepper',
       blocks: [
         {
@@ -1530,7 +1523,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 16,
       title: 'CSS 工程化知识图谱',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -1617,7 +1609,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 17,
       title: '综合实战：用 BEM 命名规范重构卡片组件',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1709,7 +1700,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 18,
       title: '综合实战：Tailwind 搭建响应式导航栏',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1793,7 +1783,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 19,
       title: '面试题',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -2222,7 +2211,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 20,
       title: '知识点速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p20-1',
@@ -2269,7 +2257,6 @@ document.documentElement.style.setProperty('--color-primary', '#ef4444')
       order: 21,
       title: 'CSS 工程化小测验',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

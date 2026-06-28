@@ -26,7 +26,7 @@ export const dataStructureAlgorithmModule: ModuleMeta = {
   icon: '24',
   summary: '栈队列链表树图堆、Trie 并查集、排序查找 DP 贪心回溯、前端手写题与框架算法原理。',
   knowledgePointCount: 30,
-  visualizationCount: 16,
+  visualizationCount: 26,
   points: [
     // ========================================================================
     // 知识点 1：数据结构与算法总览
@@ -103,7 +103,6 @@ export const dataStructureAlgorithmModule: ModuleMeta = {
       order: 2,
       title: 'JavaScript 底层认知基础',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p2-1',
@@ -195,7 +194,6 @@ console.log(arr1) // [1, 2, 3, 4]`,
       order: 3,
       title: '算法复杂度分析基础',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p3-1',
@@ -548,6 +546,16 @@ function mergeTwoLists(l1, l2) {
           text: '数组支持 O(1) 随机访问但插入删除 O(n)；哈希表通过哈希函数实现 O(1) 平均查找。JS 的 Object/Map/Set/WeakMap 各有适用场景。',
         },
         {
+          id: 'p6-9',
+          type: 'demo',
+          visualizationType: 'hash-table-visualizer',
+          data: {
+            bucketCount: 7,
+            strategy: 'chaining',
+            keys: ['apple', 'banana', 'cherry', 'date', 'elderberry', 'fig', 'grape'],
+          },
+        },
+        {
           id: 'p6-2',
           type: 'demo',
           visualizationType: 'comparetable',
@@ -763,13 +771,22 @@ function isValidBST(root, min = -Infinity, max = Infinity) {
       order: 8,
       title: '堆（优先队列）',
       difficulty: 3,
-      isNew: true,
+      visualizationType: 'heap-visualizer',
       blocks: [
         {
           id: 'p8-1',
           type: 'paragraph',
           lead: true,
           text: '堆是完全二叉树 + 堆序性：大顶堆父≥子，小顶堆父≤子。用数组存储（下标 i 的父节点在 (i-1)/2），堆顶即最值，适合 TopK 与优先级调度。',
+        },
+        {
+          id: 'p8-7',
+          type: 'demo',
+          visualizationType: 'heap-visualizer',
+          data: {
+            initialHeap: [5, 2, 7, 1, 9, 3],
+            heapType: 'min-heap',
+          },
         },
         {
           id: 'p8-2',
@@ -1001,13 +1018,21 @@ function topologicalSort(numCourses, prerequisites) {
       order: 10,
       title: 'Trie 字典树',
       difficulty: 3,
-      isNew: true,
+      visualizationType: 'trie-visualizer',
       blocks: [
         {
           id: 'p10-1',
           type: 'paragraph',
           lead: true,
           text: 'Trie（前缀树）是专门处理字符串前缀匹配的树形结构。公共前缀共享节点，前缀查询 O(L) 且与数据量无关，适合自动补全与路由匹配。',
+        },
+        {
+          id: 'p10-7',
+          type: 'demo',
+          visualizationType: 'trie-visualizer',
+          data: {
+            words: ['app', 'apple', 'apply', 'bat', 'bath'],
+          },
         },
         {
           id: 'p10-2',
@@ -1098,13 +1123,31 @@ class Trie {
       order: 11,
       title: '并查集',
       difficulty: 3,
-      isNew: true,
+      visualizationType: 'union-find-visualizer',
       blocks: [
         {
           id: 'p11-1',
           type: 'paragraph',
           lead: true,
           text: '并查集（Union-Find）专门处理「连通性判断」与「集合合并」。近 O(1) 的查找与合并，适合动态连通性问题。',
+        },
+        {
+          id: 'p11-7',
+          type: 'demo',
+          visualizationType: 'union-find-visualizer',
+          data: {
+            nodeCount: 8,
+            edges: [
+              { u: 0, v: 1 },
+              { u: 2, v: 3 },
+              { u: 4, v: 5 },
+              { u: 1, v: 2 },
+              { u: 6, v: 7 },
+              { u: 4, v: 6 },
+              { u: 3, v: 4 },
+              { u: 0, v: 7 },
+            ],
+          },
         },
         {
           id: 'p11-2',
@@ -1323,13 +1366,23 @@ function merge(l, r) {
       order: 13,
       title: '查找算法',
       difficulty: 3,
-      visualizationType: 'codestepper',
+      visualizationType: 'binary-search-visualizer',
       blocks: [
         {
           id: 'p13-1',
           type: 'paragraph',
           lead: true,
           text: '二分查找是 O(log n) 的搜索利器，前提是数据有序。掌握左边界、右边界、旋转数组三种变体，以及区间开闭的边界技巧。',
+        },
+        {
+          id: 'p13-7',
+          type: 'demo',
+          visualizationType: 'binary-search-visualizer',
+          data: {
+            variant: 'classic',
+            array: [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+            target: 11,
+          },
         },
         {
           id: 'p13-2',
@@ -1444,12 +1497,23 @@ function searchRotated(arr, target) {
       order: 14,
       title: '双指针与滑动窗口',
       difficulty: 3,
+      visualizationType: 'sliding-window-visualizer',
       blocks: [
         {
           id: 'p14-1',
           type: 'paragraph',
           lead: true,
           text: '双指针把嵌套循环 O(n²) 降到 O(n)，是数组/字符串题的高频技巧。滑动窗口是双指针的进阶，专门解决子数组/子串连续区间问题。',
+        },
+        {
+          id: 'p14-7',
+          type: 'demo',
+          visualizationType: 'sliding-window-visualizer',
+          data: {
+            problem: 'max-sum-k',
+            array: [2, 1, 5, 1, 3, 2, 4, 6, 1, 2],
+            k: 3,
+          },
         },
         {
           id: 'p14-2',
@@ -1578,13 +1642,22 @@ function minWindow(s, t) {
       order: 15,
       title: '回溯与 DFS/BFS',
       difficulty: 3,
-      isNew: true,
+      visualizationType: 'backtracking-tree-visualizer',
       blocks: [
         {
           id: 'p15-1',
           type: 'paragraph',
           lead: true,
           text: '回溯本质是「决策树」的深度优先遍历，核心三要素：路径（已选）、选择列表（当前可选项）、终止条件。掌握通用模板后，组合/排列/子集/分割/棋盘五类题型一通百通。',
+        },
+        {
+          id: 'p15-8',
+          type: 'demo',
+          visualizationType: 'backtracking-tree-visualizer',
+          data: {
+            problem: 'permutations',
+            n: 3,
+          },
         },
         {
           id: 'p15-2',
@@ -1734,13 +1807,22 @@ function bfs(root) {
       order: 16,
       title: '分治算法',
       difficulty: 2,
-      isNew: true,
+      visualizationType: 'divide-conquer-tree-visualizer',
       blocks: [
         {
           id: 'p16-1',
           type: 'paragraph',
           lead: true,
           text: '分治三步走：分解（拆成子问题）→ 解决（递归处理）→ 合并（合并子结果）。归并排序、快排、二分查找都是分治经典。前端常用于大任务拆分与时间分片渲染。',
+        },
+        {
+          id: 'p16-6',
+          type: 'demo',
+          visualizationType: 'divide-conquer-tree-visualizer',
+          data: {
+            example: 'merge-sort',
+            inputArray: [3, 1, 4, 1, 5, 9, 2, 6],
+          },
         },
         {
           id: 'p16-2',
@@ -1827,7 +1909,6 @@ function majorityElement(nums) {
       order: 17,
       title: '贪心算法',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p17-1',
@@ -1925,7 +2006,6 @@ function candy(ratings) {
       order: 18,
       title: '动态规划（DP）',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p18-1',
@@ -2050,6 +2130,16 @@ function knapsack01(W, weights, values) {
           title: '典型例题',
           text: 'LC70 爬楼梯 / LC198 打家劫舍 / LC300 最长递增子序列 / LC1143 最长公共子序列 / LC322 零钱兑换 / LC416 分割等和子集 / LC72 编辑距离 / LC188 买卖股票最佳时机 IV。',
         },
+        {
+          id: 'p18-8',
+          type: 'demo',
+          visualizationType: 'dynamic-programming-visualizer',
+          data: {
+            problem: 'lcs',
+            text1: 'abcde',
+            text2: 'ace',
+          },
+        },
       ],
     },
 
@@ -2060,7 +2150,6 @@ function knapsack01(W, weights, values) {
       order: 19,
       title: '位运算',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p19-1',
@@ -2155,7 +2244,6 @@ function revokePermission(userPerm, perm) {
       order: 20,
       title: 'JavaScript 高频手写算法',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'handwriting-challenge',
       blocks: [
         {
@@ -2350,7 +2438,6 @@ const pipe = (...fns) => x => fns.reduce((acc, fn) => fn(acc), x)`,
       order: 21,
       title: '浏览器与渲染相关算法',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p21-1',
@@ -2464,7 +2551,6 @@ function processLargeData(items) {
       order: 22,
       title: '前端框架核心算法原理',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p22-1',
@@ -2644,7 +2730,6 @@ class RouteTrie {
       order: 23,
       title: '业务场景算法',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p23-1',
@@ -2820,13 +2905,22 @@ function stringifyQuery(obj) {
       order: 24,
       title: '字符串专项算法',
       difficulty: 2,
-      isNew: true,
+      visualizationType: 'string-algorithm-visualizer',
       blocks: [
         {
           id: 'p24-1',
           type: 'paragraph',
           lead: true,
           text: '字符串是前端最高频的数据类型。掌握反转、回文、替换等基础操作，以及双指针/滑动窗口在字符串上的应用，KMP 了解即可。前端场景：表单校验、富文本处理、关键词匹配。',
+        },
+        {
+          id: 'p24-6',
+          type: 'demo',
+          visualizationType: 'string-algorithm-visualizer',
+          data: {
+            mode: 'reverse',
+            text: 'hello world',
+          },
         },
         {
           id: 'p24-2',
@@ -2938,7 +3032,6 @@ function buildNext(p) {
       order: 25,
       title: '分阶段刷题路线',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p25-1',
@@ -2998,7 +3091,6 @@ function buildNext(p) {
       order: 26,
       title: '面试答题方法论',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p26-1',
@@ -3083,7 +3175,6 @@ function buildNext(p) {
       order: 27,
       title: '全域易错点汇总',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p27-1',
@@ -3158,7 +3249,6 @@ function buildNext(p) {
       order: 28,
       title: '数据结构与算法速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p28-1',
@@ -3227,7 +3317,6 @@ function buildNext(p) {
       order: 29,
       title: '面试题精选',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p29-1',
@@ -3377,7 +3466,6 @@ function buildNext(p) {
       order: 30,
       title: '小测验',
       difficulty: 2,
-      isNew: true,
       blocks: [
         {
           id: 'p30-1',

@@ -40,7 +40,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 1,
       title: '前端测试总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -94,7 +93,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 2,
       title: '测试金字塔模型',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'test-pyramid-visualizer',
       blocks: [
         {
@@ -133,7 +131,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 3,
       title: 'Vitest 匹配器参考',
       difficulty: 3,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -222,7 +219,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 4,
       title: 'Mock 三种范式',
       difficulty: 3,
-      isNew: false,
       visualizationType: 'mock-flow-visualizer',
       blocks: [
         {
@@ -261,7 +257,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 5,
       title: 'Testing Library 查询优先级',
       difficulty: 3,
-      isNew: false,
       visualizationType: 'testing-library-query-priority',
       blocks: [
         {
@@ -296,7 +291,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 6,
       title: '组件测试 render-act-assert',
       difficulty: 3,
-      isNew: false,
       visualizationType: 'component-test-playground',
       blocks: [
         {
@@ -335,7 +329,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 7,
       title: 'Playwright vs Cypress',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -408,7 +401,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 8,
       title: 'Playwright E2E 执行流',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'e2e-test-flow-visualizer',
       blocks: [
         {
@@ -443,7 +435,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 9,
       title: 'E2E HTTP 测试流（测试视角）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'http-request-response-flow',
       blocks: [
         {
@@ -524,7 +515,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 10,
       title: '中间件测试流（测试视角）',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'express-middleware-flow',
       blocks: [
         {
@@ -603,7 +593,6 @@ export const testingSystemModule: ModuleMeta = {
       order: 11,
       title: '测试知识点速查',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -723,7 +712,6 @@ export default {
       order: 12,
       title: '前端测试小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

@@ -37,7 +37,6 @@ export const visualizationArchitectureModule: ModuleMeta = {
       order: 1,
       title: '数据可视化总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -96,7 +95,6 @@ export const visualizationArchitectureModule: ModuleMeta = {
       order: 2,
       title: 'Canvas API 2D 绘图',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'canvas-playground',
       blocks: [
         {
@@ -177,7 +175,6 @@ tick()`,
       order: 3,
       title: 'SVG 矢量图形与 Canvas 对比',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'svg-vs-canvas-compare',
       blocks: [
         {
@@ -243,7 +240,6 @@ canvas.addEventListener('click', (e) => {
       order: 4,
       title: 'D3.js 数据绑定与三态模式',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'd3-data-binding-flow',
       blocks: [
         {
@@ -310,7 +306,6 @@ update.exit()
       order: 5,
       title: 'ECharts 配置驱动开发',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'echarts-config-visualizer',
       blocks: [
         {
@@ -379,7 +374,6 @@ window.addEventListener('resize', () => chart.resize())`,
       order: 6,
       title: 'Three.js 与 WebGL 3D 可视化',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -483,7 +477,6 @@ animate()`,
       order: 7,
       title: '可视化方案选型对比',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -546,7 +539,6 @@ animate()`,
       order: 8,
       title: '数据可视化知识点速查',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -611,7 +603,6 @@ animate()`,
       order: 9,
       title: '前端架构总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -680,7 +671,6 @@ animate()`,
       order: 10,
       title: '组件设计模式',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'design-pattern-showcase',
       blocks: [
         {
@@ -756,7 +746,6 @@ function TabPanel({ index, children }) {
       order: 11,
       title: '状态管理与 CSS 架构方法论',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -838,7 +827,6 @@ function TabPanel({ index, children }) {
       order: 12,
       title: '分层架构与 SOLID 设计原则',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -945,7 +933,6 @@ function useTheme() { /* 只负责主题切换 */ }`,
       order: 13,
       title: '跨模块复用：Canvas 动画与组件测试',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'debounce-throttle-visualizer',
       blocks: [
         {
@@ -986,7 +973,6 @@ function useTheme() { /* 只负责主题切换 */ }`,
       order: 14,
       title: '前端架构速查与小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {

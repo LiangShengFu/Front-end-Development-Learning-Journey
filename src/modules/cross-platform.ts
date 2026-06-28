@@ -38,7 +38,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 1,
       title: '跨平台开发总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -97,7 +96,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 2,
       title: '移动端适配沙盒：rem / vw / 安全区域 / 1px 问题',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'mobile-adaptation-sandbox',
       blocks: [
         {
@@ -172,7 +170,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 3,
       title: 'Hybrid 通信方案对比：RN Bridge/JSI vs 小程序双线程',
       difficulty: 3,
-      isNew: false,
       visualizationType: 'dual-thread-model-visualizer',
       blocks: [
         {
@@ -238,7 +235,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 4,
       title: 'React Native 新旧架构对比：Bridge vs Fabric + JSI',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'rn-architecture-comparator',
       blocks: [
         {
@@ -315,7 +311,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 5,
       title: 'React Native / Expo 开发流程时间线',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -361,7 +356,6 @@ export const crossPlatformModule: ModuleMeta = {
       order: 6,
       title: 'Expo Router：文件约定式路由树',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'expo-router-tree-visualizer',
       blocks: [
         {
@@ -493,7 +487,6 @@ export default function Profile() {
       order: 7,
       title: 'Capacitor 插件 Web-to-Native 桥接',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'capacitor-plugin-bridge',
       blocks: [
         {
@@ -629,7 +622,6 @@ await Haptics.impact({ style: ImpactStyle.Medium })`,
       order: 8,
       title: 'Capacitor vs React Native 方案对比',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -673,7 +665,6 @@ await Haptics.impact({ style: ImpactStyle.Medium })`,
       order: 9,
       title: 'Service Worker 缓存策略：CacheFirst / SWR / NetworkOnly',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'service-worker-cache-strategies',
       blocks: [
         {
@@ -778,7 +769,6 @@ new NetworkOnly({
       order: 10,
       title: 'PWA 推送通知端到端流程',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'pwa-push-flow-visualizer',
       blocks: [
         {
@@ -897,7 +887,6 @@ self.addEventListener('notificationclick', (event) => {
       order: 11,
       title: '跨平台方案加权评分选型器',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'cross-platform-selector',
       blocks: [
         {
@@ -989,7 +978,6 @@ self.addEventListener('notificationclick', (event) => {
       order: 12,
       title: '七大跨平台方案综合对比',
       difficulty: 2,
-      isNew: false,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -1032,7 +1020,6 @@ self.addEventListener('notificationclick', (event) => {
       order: 13,
       title: '跨平台开发核心要点速查',
       difficulty: 1,
-      isNew: false,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1122,7 +1109,6 @@ self.addEventListener('notificationclick', (event) => {
       order: 14,
       title: '跨平台开发小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

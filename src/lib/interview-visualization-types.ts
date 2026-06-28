@@ -31,6 +31,7 @@ export type QuestionDomain =
   | 'javascript'
   | 'css'
   | 'react'
+  | 'vue'
   | 'network'
   | 'security'
   | 'engineering'

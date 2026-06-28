@@ -41,7 +41,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 1,
       title: '浏览器原理与网络总览',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'knowledgegraph',
       blocks: [
         {
@@ -93,7 +92,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 2,
       title: '浏览器多进程架构',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'comparetable',
       blocks: [
         {
@@ -152,7 +150,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 3,
       title: '浏览器渲染流水线',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'rendering-pipeline-visualizer',
       blocks: [
         {
@@ -182,7 +179,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 4,
       title: '重排 vs 重绘 vs 合成',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'reflow-repaint-comparator',
       blocks: [
         {
@@ -284,7 +280,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 6,
       title: 'HTTP 请求响应完整流程',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'http-request-response-flow',
       blocks: [
         {
@@ -403,7 +398,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 9,
       title: 'HTTP 缓存决策树',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'cache-decision-tree',
       blocks: [
         {
@@ -437,7 +431,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 10,
       title: 'TCP 三次握手与四次挥手',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'tcp-handshake-visualizer',
       blocks: [
         {
@@ -467,7 +460,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 11,
       title: 'HTTPS 与 TLS 握手',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'https-handshake-flow',
       blocks: [
         {
@@ -501,7 +493,6 @@ export const browserNetworkModule: ModuleMeta = {
       order: 12,
       title: 'HTTP/3 与 QUIC 多路复用',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'quic-multiplexing-visualizer',
       blocks: [
         {

@@ -1557,7 +1557,6 @@ String.prototype.isWellFormed(); // 检查 UTF-16 完整性`,
       order: 17,
       title: '综合实战：手写防抖与节流工具函数',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1652,7 +1651,6 @@ const throttled = throttle(log, 300);`,
       order: 18,
       title: '综合实战：实现发布订阅 EventEmitter',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1748,7 +1746,6 @@ bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
       order: 19,
       title: '面试题',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1913,7 +1910,6 @@ bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
       order: 20,
       title: '知识点速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p20-1',
@@ -1955,7 +1951,6 @@ bus.emit('login', { name: 'TS' });  // 应无输出（已取消订阅）`,
       order: 21,
       title: '小测验',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

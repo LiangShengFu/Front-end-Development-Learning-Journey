@@ -80,6 +80,16 @@ import { BinaryTreeWalker } from '../interactive/algorithm/BinaryTreeWalker'
 import { SortingRaceArena } from '../interactive/algorithm/SortingRaceArena'
 import { BfsPathFinder } from '../interactive/algorithm/BfsPathFinder'
 import { HandwritingChallenge } from '../interactive/algorithm/HandwritingChallenge'
+import { HeapVisualizer } from '../interactive/algorithm/HeapVisualizer'
+import { TrieVisualizer } from '../interactive/algorithm/TrieVisualizer'
+import { UnionFindVisualizer } from '../interactive/algorithm/UnionFindVisualizer'
+import { DivideConquerTreeVisualizer } from '../interactive/algorithm/DivideConquerTreeVisualizer'
+import { StringAlgorithmVisualizer } from '../interactive/algorithm/StringAlgorithmVisualizer'
+import { HashTableVisualizer } from '../interactive/algorithm/HashTableVisualizer'
+import { BinarySearchVisualizer } from '../interactive/algorithm/BinarySearchVisualizer'
+import { SlidingWindowVisualizer } from '../interactive/algorithm/SlidingWindowVisualizer'
+import { BacktrackingTreeVisualizer } from '../interactive/algorithm/BacktrackingTreeVisualizer'
+import { DynamicProgrammingVisualizer } from '../interactive/algorithm/DynamicProgrammingVisualizer'
 import { FiberWorkLoopSimulator } from '../interactive/react-advanced/FiberWorkLoopSimulator'
 import { MemoEffectComparator } from '../interactive/react-advanced/MemoEffectComparator'
 import { VirtualListSimulator } from '../interactive/react-advanced/VirtualListSimulator'
@@ -351,6 +361,26 @@ function renderVisualization(type: VisualizationType, data: VisualizationBlock['
       return <BfsPathFinder data={data as any} />
     case 'handwriting-challenge':
       return <HandwritingChallenge data={data as any} />
+    case 'heap-visualizer':
+      return <HeapVisualizer data={data as any} />
+    case 'trie-visualizer':
+      return <TrieVisualizer data={data as any} />
+    case 'union-find-visualizer':
+      return <UnionFindVisualizer data={data as any} />
+    case 'divide-conquer-tree-visualizer':
+      return <DivideConquerTreeVisualizer data={data as any} />
+    case 'string-algorithm-visualizer':
+      return <StringAlgorithmVisualizer data={data as any} />
+    case 'hash-table-visualizer':
+      return <HashTableVisualizer data={data as any} />
+    case 'binary-search-visualizer':
+      return <BinarySearchVisualizer data={data as any} />
+    case 'sliding-window-visualizer':
+      return <SlidingWindowVisualizer data={data as any} />
+    case 'backtracking-tree-visualizer':
+      return <BacktrackingTreeVisualizer data={data as any} />
+    case 'dynamic-programming-visualizer':
+      return <DynamicProgrammingVisualizer data={data as any} />
     case 'fiber-work-loop-simulator':
       return <FiberWorkLoopSimulator data={data as any} />
     case 'memo-effect-comparator':

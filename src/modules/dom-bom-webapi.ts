@@ -1287,7 +1287,6 @@ requestAnimationFrame(loop)`,
       order: 21,
       title: '综合实战：事件委托动态待办列表',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1379,7 +1378,6 @@ const addBtn = document.querySelector('#add-btn')
       order: 22,
       title: '综合实战：手写简易 History SPA 路由',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1487,7 +1485,6 @@ render()  // 首次加载渲染当前路径`,
       order: 23,
       title: '面试题',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1636,7 +1633,6 @@ render()  // 首次加载渲染当前路径`,
       order: 24,
       title: '知识点速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p24-1',
@@ -1683,7 +1679,6 @@ render()  // 首次加载渲染当前路径`,
       order: 25,
       title: 'DOM / BOM / Web API 小测验',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

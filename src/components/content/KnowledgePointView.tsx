@@ -27,11 +27,6 @@ export function KnowledgePointView({ point }: KnowledgePointViewProps) {
             {String(point.order).padStart(2, '0')}
           </span>
           <h3 className="text-display-xs text-ink">{point.title}</h3>
-          {point.isNew && (
-            <span className="rounded-pill border border-accent-sunset/40 px-sm py-xxs font-mono text-caption-mono-sm uppercase tracking-[1.2px] text-accent-sunset">
-              新增
-            </span>
-          )}
         </div>
 
         {/* Meta */}

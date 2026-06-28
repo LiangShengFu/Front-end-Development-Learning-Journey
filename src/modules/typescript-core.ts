@@ -1472,7 +1472,6 @@ const result = await post<CreateUserDto, {id: number}>(
       order: 15,
       title: '综合实战：手写工具类型库',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {
@@ -1575,7 +1574,6 @@ interface User { id: number; name: string; age: number }
       order: 16,
       title: '综合实战：类型安全的 API 响应解析器',
       difficulty: 4,
-      isNew: true,
       visualizationType: 'sandbox',
       blocks: [
         {

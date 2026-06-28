@@ -826,8 +826,6 @@ export interface KnowledgePoint {
   title: string
   /** 难度 1-5 */
   difficulty: Difficulty
-  /** 是否为新增知识点 */
-  isNew?: boolean
   /** 对应的可视化组件类型（可选） */
   visualizationType?: VisualizationType
   /** 该知识点的详细内容块 */

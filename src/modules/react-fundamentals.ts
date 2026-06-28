@@ -600,7 +600,6 @@ useEffect(() => {
       order: 11,
       title: '综合实战：受控注册表单',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p11-1',
@@ -974,7 +973,6 @@ function ThemedButton() {
       order: 17,
       title: 'React 19 新特性',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1137,7 +1135,6 @@ function ThemedButton() {
       order: 21,
       title: '综合实战：Hooks 数据获取与列表',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p21-1',
@@ -1267,7 +1264,6 @@ function ThemedButton() {
       order: 22,
       title: 'React 面试题精选',
       difficulty: 3,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1423,7 +1419,6 @@ function ThemedButton() {
       order: 23,
       title: 'React 基础速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p23-1',
@@ -1473,7 +1468,6 @@ function ThemedButton() {
       order: 24,
       title: 'React 基础小测验',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'quiz',
       blocks: [
         {

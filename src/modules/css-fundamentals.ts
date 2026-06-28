@@ -98,7 +98,6 @@ export const cssFundamentalsModule: ModuleMeta = {
       order: 2,
       title: 'CSS 发展历程',
       difficulty: 1,
-      isNew: true,
       visualizationType: 'timeline',
       blocks: [
         {
@@ -1625,7 +1624,6 @@ background:
       order: 20,
       title: '综合实战：响应式卡片布局页',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p20proj-1',
@@ -1738,7 +1736,6 @@ background:
       order: 21,
       title: '综合实战：主题化导航栏',
       difficulty: 3,
-      isNew: true,
       blocks: [
         {
           id: 'p21proj-1',
@@ -1844,7 +1841,6 @@ background:
       order: 22,
       title: '面试题',
       difficulty: 2,
-      isNew: true,
       visualizationType: 'accordion',
       blocks: [
         {
@@ -1936,7 +1932,6 @@ background:
       order: 23,
       title: '知识点速查表',
       difficulty: 1,
-      isNew: true,
       blocks: [
         {
           id: 'p23cs-1',
