@@ -57,6 +57,10 @@ const moduleLoadersEn: Record<string, () => Promise<{ default: ModuleMeta }>> = 
     import('../modules/dom-bom-webapi.en').then((m) => ({ default: m.domBomWebApiModule })),
   'debugging-tools': () =>
     import('../modules/debugging-tools.en').then((m) => ({ default: m.debuggingToolsModule })),
+  'css-engineering': () =>
+    import('../modules/css-engineering.en').then((m) => ({ default: m.cssEngineeringModule })),
+  'typescript-core': () =>
+    import('../modules/typescript-core.en').then((m) => ({ default: m.typescriptCoreModule })),
 }
 
 /** 模块内容缓存（key: `${locale}:${slug}`） */
