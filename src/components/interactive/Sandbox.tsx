@@ -15,7 +15,7 @@
  *
  * 遵循设计规范：canvas-mid 代码区，hairline 边框。
  */
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, useCallback, useMemo } from 'react'
 import type { SandboxData } from '../../lib/types'
 import { cn } from '../../lib/utils'
 
@@ -78,27 +78,105 @@ const BASE_PREVIEW_STYLE = `
 /** JS 模式下注入的 console 捕获脚本 */
 const JS_CONSOLE_HOOK = `<script>
   (function() {
+    // 安全的对象序列化：处理循环引用、函数、Symbol、DOM 节点等
+    function safeStringify(obj, depth) {
+      depth = depth || 0;
+      if (depth > 3) return '[深度限制]';
+      if (obj === null) return 'null';
+      if (obj === undefined) return 'undefined';
+      var type = typeof obj;
+      if (type === 'function') {
+        var fnStr = String(obj);
+        return fnStr.length > 80 ? fnStr.slice(0, 80) + '...' : fnStr;
+      }
+      if (type === 'symbol') return obj.toString();
+      if (type === 'bigint') return obj.toString() + 'n';
+      if (type === 'string') return obj;
+      if (type === 'number' || type === 'boolean') return String(obj);
+      if (obj instanceof Error) return obj.name + ': ' + obj.message;
+      if (obj instanceof RegExp) return obj.toString();
+      if (obj instanceof Date) return obj.toISOString();
+      if (obj instanceof Element || obj instanceof HTMLElement) {
+        var tag = '<' + obj.tagName.toLowerCase();
+        if (obj.id) tag += ' #' + obj.id;
+        if (obj.className && typeof obj.className === 'string') tag += '.' + obj.className.split(/\\s+/).filter(Boolean).join('.');
+        tag += '>';
+        return tag;
+      }
+      if (type === 'object') {
+        if (obj instanceof Array || Object.prototype.toString.call(obj) === '[object Array]') {
+          if (obj.length > 100) return '[Array(' + obj.length + ')]';
+          var arr = [];
+          for (var i = 0; i < obj.length; i++) {
+            try { arr.push(safeStringify(obj[i], depth + 1)); }
+            catch(e) { arr.push('[不可访问]'); }
+          }
+          return '[' + arr.join(', ') + ']';
+        }
+        if (obj instanceof Map) return 'Map(' + obj.size + ')';
+        if (obj instanceof Set) return 'Set(' + obj.size + ')';
+        if (obj instanceof WeakMap) return 'WeakMap {}';
+        if (obj instanceof WeakSet) return 'WeakSet {}';
+        if (obj instanceof Promise) return 'Promise';
+        // 普通对象：尝试 JSON.stringify，失败则手动序列化（避免循环引用崩溃）
+        try {
+          var json = JSON.stringify(obj, function(key, val) {
+            if (typeof val === 'function') return '[Function]';
+            if (typeof val === 'symbol') return val.toString();
+            if (val === undefined) return 'undefined';
+            return val;
+          }, 0);
+          if (json && json.length > 500) return json.slice(0, 500) + '...';
+          return json;
+        } catch(e) {
+          // 循环引用兜底：手动遍历对象键
+          var pairs = [];
+          var keys = [];
+          try { keys = Object.keys(obj); } catch(e2) { return '[不可枚举对象]'; }
+          for (var k = 0; k < keys.length && k < 20; k++) {
+            try {
+              var v = obj[keys[k]];
+              var vs = typeof v === 'object' && v !== null ? '[Object]' : safeStringify(v, depth + 1);
+              pairs.push(keys[k] + ': ' + vs);
+            } catch(e3) { pairs.push(keys[k] + ': [不可访问]'); }
+          }
+          return '{' + pairs.join(', ') + (keys.length > 20 ? ', ...' : '') + '}';
+        }
+      }
+      try { return String(obj); } catch(e) { return '[不可序列化]'; }
+    }
     var methods = ['log', 'error', 'warn', 'info'];
     methods.forEach(function(method) {
       var orig = console[method];
       console[method] = function() {
         var args = Array.prototype.slice.call(arguments).map(function(a) {
-          try {
-            if (a === null) return 'null';
-            if (a === undefined) return 'undefined';
-            if (typeof a === 'object') return JSON.stringify(a);
-            return String(a);
-          } catch(e) { return String(a); }
+          try { return safeStringify(a); }
+          catch(e) { return '[序列化失败]'; }
         });
-        window.parent.postMessage({ __sandbox: true, log: { type: method, args: args } }, '__SANDBOX_TARGET_ORIGIN__');
-        orig.apply(console, arguments);
+        try {
+          window.parent.postMessage({ __sandbox: true, log: { type: method, args: args } }, '__SANDBOX_TARGET_ORIGIN__');
+        } catch(postErr) {
+          // postMessage 失败时降级到原始 console（至少能看到输出）
+        }
+        try { orig.apply(console, arguments); } catch(e) {}
       };
     });
     window.addEventListener('error', function(e) {
-      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message + (e.lineno ? ' (line ' + e.lineno + ')') : ''] } }, '__SANDBOX_TARGET_ORIGIN__');
+      var msg = e.message || 'Script error';
+      var detail = msg;
+      if (e.filename) detail += ' (' + e.filename;
+      if (e.lineno) detail += (e.filename ? ':' : ' (') + e.lineno + (e.colno ? ':' + e.colno : '');
+      if (e.filename || e.lineno) detail += ')';
+      // 跨源脚本错误（sandbox 限制）只暴露 "Script error."
+      if (msg === 'Script error.' && !e.filename) {
+        detail = 'Script error.（跨源限制：sandbox 模式下无法获取详细错误信息，请检查代码是否有语法错误或运行时异常）';
+      }
+      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [detail] } }, '__SANDBOX_TARGET_ORIGIN__');
     });
     window.addEventListener('unhandledrejection', function(e) {
-      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: ['Unhandled Promise Rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))] } }, '__SANDBOX_TARGET_ORIGIN__');
+      var reason = e.reason;
+      var msg = reason && reason.message ? reason.message : String(reason);
+      window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: ['Unhandled Promise Rejection: ' + msg] } }, '__SANDBOX_TARGET_ORIGIN__');
     });
   })();
 </script>`
@@ -170,8 +248,14 @@ ${userCode}
       }
       // JS 模式：捕获 console 并执行
       // 安全加固 L-02：postMessage targetOrigin 使用父页面真实 origin，防止页面被恶意嵌入时日志泄露
-      const targetOrigin = JSON.stringify(window.location.origin)
+      // file:// 协议下 window.location.origin 是字符串 "null"，JSON.stringify 后为 "null"，postMessage 能匹配
+      // 非 file:// 时使用真实 origin；跨源场景回退到 '*'
+      const origin = window.location.origin
+      const targetOrigin = origin && origin !== 'null' ? JSON.stringify(origin) : "'*'"
       const consoleHook = JS_CONSOLE_HOOK.replace(/'__SANDBOX_TARGET_ORIGIN__'/g, targetOrigin)
+      // 转义用户代码中的 </script 序列，防止提前关闭 script 标签导致脚本不执行
+      // 替换为 <\/script：在 HTML 解析器看来不是标签关闭符，在 JS 字符串中 \/ 等价于 /，语义不变
+      const escapedUserCode = userCode.replace(/<\/script/gi, '<\\/script')
       return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
@@ -179,9 +263,9 @@ ${userCode}
 ${consoleHook}
 <script>
   try {
-${userCode}
+${escapedUserCode}
   } catch (e) {
-    window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [e.message] } }, ${targetOrigin});
+    window.parent.postMessage({ __sandbox: true, log: { type: 'error', args: [String(e && e.message ? e.message : e)] } }, ${targetOrigin});
   }
 </script>
 </body>
@@ -208,11 +292,15 @@ ${userCode}
   }, [data.initialCode, buildIframeDoc])
 
   // 监听 iframe 内的 console 消息（JS 模式）
-  useEffect(() => {
+  // 使用 useLayoutEffect 确保监听器在浏览器绘制前注册，避免 iframe 首次 postMessage 时监听器未就绪的竞态
+  useLayoutEffect(() => {
     if (isPreviewMode) return
     const handleMessage = (e: MessageEvent) => {
       // 安全加固 M-01：校验消息来源，拒绝跨源消息注入伪造日志
-      if (e.source !== iframeRef.current?.contentWindow) return
+      // 注意：sandbox="allow-scripts" 的 iframe 是跨源的，但仍可比较 contentWindow 引用
+      // iframeRef.current 为 null 时拒绝所有消息（iframe 未挂载）
+      const cw = iframeRef.current?.contentWindow
+      if (!cw || e.source !== cw) return
       if (e.data && e.data.__sandbox === true && e.data.log) {
         setLogs((prev) => [...prev, e.data.log])
       }
@@ -314,7 +402,9 @@ ${userCode}
             />
           ) : (
             <div className="flex h-[320px] flex-col">
-              {/* JS 模式：隐藏 iframe 执行代码，key 强制每次运行重新挂载 */}
+              {/* JS 模式：隐藏 iframe 执行代码，key 强制每次运行重新挂载
+                  使用视觉隐藏（absolute + 屏幕外）而非 display:none，
+                  确保 iframe 在所有浏览器中可靠加载 srcDoc 并执行脚本 */}
               {hasRun && (
                 <iframe
                   key={`exec-${runCount}`}
@@ -322,7 +412,15 @@ ${userCode}
                   title="sandbox-exec"
                   srcDoc={iframeDoc}
                   sandbox="allow-scripts"
-                  className="hidden"
+                  style={{
+                    position: 'absolute',
+                    width: '1px',
+                    height: '1px',
+                    left: '-9999px',
+                    top: '0',
+                    border: '0',
+                    overflow: 'hidden',
+                  }}
                   aria-hidden
                 />
               )}
